@@ -1,0 +1,23 @@
+{
+    "_id": "",
+    "title": "",
+    "description": "",
+    "creation_date": "",
+    "due_date": "",
+    "done": false,
+    "responsibe_id": "",
+    "subtasks": [
+        {
+            "_id": "",
+            "title": "",
+            "type": "",
+            "done": false
+        },
+        {
+            "_id": "",
+            "title": "",
+            "type": "",
+            "done": false
+        }
+    ]
+}
