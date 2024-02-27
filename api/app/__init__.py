@@ -5,3 +5,5 @@ app = Flask(__name__)
 api = Api(app)
 
 from app.auth.login.login_routes import LoginResource
+from app.auth.register.register_routes import RegisterResource
+from app.user.user_routes import UserResource
