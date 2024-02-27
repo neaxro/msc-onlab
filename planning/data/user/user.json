@@ -1,0 +1,11 @@
+{
+    "_id": {
+      "$oid": ""
+    },
+    "first_name": "",
+    "last_name": "",
+    "username": "Axl",
+    "email": "",
+    "profile_picture": "",
+    "password": ""
+  }
