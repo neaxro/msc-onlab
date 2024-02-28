@@ -5,10 +5,13 @@ from app.parsers import *
 
 class UserService:
     def __init__(self):
-        self.mongodb = os.getenv("MONGODB_CONNECTION_URL")
-        self.client = MongoClient(self.mongodb)
-        self.db = self.client['msc_onlab']
-        self.user_collection = self.db['users']
+        mongodb_url = os.getenv("MONGODB_CONNECTION_URL")
+        db_name = os.getenv("MONGODB_DATABASE_NAME")
+        user_collection_name = os.getenv("MONGODB_COLLECTION_USERS")
+        
+        self.client = MongoClient(mongodb_url)
+        self.db = self.client[db_name]
+        self.user_collection = self.db[user_collection_name]
     
     def validate_json_format(self, json_data):
         required_fields = ["_id", "first_name", "last_name", "username", "email", "password"]

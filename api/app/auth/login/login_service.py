@@ -6,10 +6,13 @@ from app.user.user_service import UserService
 
 class LoginService:
     def __init__(self):
-        self.mongodb = os.getenv("MONGODB_CONNECTION_URL")
-        self.client = MongoClient(self.mongodb)
-        self.login_db = self.client['proba']
-        self.login_collection = self.login_db['ember']
+        mongodb_url = os.getenv("MONGODB_CONNECTION_URL")
+        db_name = os.getenv("MONGODB_DATABASE_NAME")
+        user_collection_name = os.getenv("MONGODB_COLLECTION_USERS")
+        
+        self.client = MongoClient(mongodb_url)
+        self.db = self.client[db_name]
+        self.user_collection = self.db[user_collection_name]
         
         self.user_service = UserService()
     
