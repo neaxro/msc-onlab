@@ -16,4 +16,25 @@ class HouseholdService:
     def get_all(self):
         households = self.household_collection.find()
         
-        return households
+        return parse_json(households)
+    
+    def get_all_brief(self):
+        pipeline = [
+            {
+                "$project": {
+                    "_id": 1,
+                    "title": 1,
+                    "no_people": { "$size": "$people" },
+                    "no_active_tasks": { "$size": { "$filter": { "input": "$tasks", "as": "task", "cond": { "$eq": ["$$task.done", False] } } } }
+                }
+            }
+        ]
+        
+        households = self.household_collection.aggregate(pipeline)
+        
+        return parse_json(households)
+    
+    def get_by_id(self, id):
+        household = self.household_collection.find({'_id': ObjectId(id)})
+        
+        return parse_json(household)
