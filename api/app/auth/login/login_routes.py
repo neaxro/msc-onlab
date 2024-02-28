@@ -3,10 +3,16 @@ from app import api, app
 import json
 
 from app.auth.login.login_service import LoginService
+from app.decorators.token_requires import *
 
 class LoginResource(Resource):
     def __init__(self):
         self.login_service = LoginService()
+    
+    # Example for token data
+    @token_required
+    def get(self, user_data):
+        return user_data
     
     def post(self):
         request_type = request.headers.get('Content-Type')
