@@ -70,6 +70,15 @@ Egy feladathoz több alfeladatot létre lehet hozni amikkel nyomon tudjuk követ
 | Update                     | PATCH | /household/{household_id}        | 200, 400    |
 | Delete                     | DELETE| /household/{household_id}        | 200, 400    |
 
+## Invitation
+> Response codes may change by the time
+
+> Sends invitation email to the email address and the given url will redirects the use to the application.
+
+| Detail                                | Mode  | URI                                    | HTTP Codes  |
+|---------------------------------------|-------|----------------------------------------|-------------|
+Adds the user to the household and redirects to the phone application | POST | /invite/<invitation_token> | 200, 500
+
 ## Task
 > Response codes may change by the time
 
