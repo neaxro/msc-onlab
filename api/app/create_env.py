@@ -6,3 +6,4 @@ def create_env_variables():
     os.environ["MONGODB_COLLECTION_USERS"] = "users"
     os.environ["MONGODB_COLLECTION_HOUSEHOLDS"] = "households"
     os.environ["TOKEN_SECRET_KEY"] = "boti_kerge_lesz"
+    os.environ["APP_FOLDER_PATH"] = os.path.dirname(os.path.abspath(__file__))
