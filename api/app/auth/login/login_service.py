@@ -1,6 +1,6 @@
 import os, datetime, jwt
 from pymongo import MongoClient
-from app.parsers import *
+from app.utils.parsers import *
 
 from app.user.user_service import UserService
 

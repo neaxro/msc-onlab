@@ -4,15 +4,24 @@ import json
 
 from app.auth.login.login_service import LoginService
 from app.decorators.token_requires import *
+from app.utils.templater import Templater
 
 class LoginResource(Resource):
     def __init__(self):
         self.login_service = LoginService()
+        self.templater = Templater()
     
     # Example for token data
     @token_required
     def get(self, user_data):
-        return user_data
+        return app.response_class(
+                    response=self.templater.get_basic_succes_template(
+                        status="Checked",
+                        data=user_data
+                    ),
+                    status=200,
+                    mimetype='application/json'
+                )
     
     def post(self):
         request_type = request.headers.get('Content-Type')
@@ -23,18 +32,21 @@ class LoginResource(Resource):
                 self.login_service.validate_json_format(body)
                 
                 token = self.login_service.login_user(body)
-                
-                result = { 'token': str(token) }
-                
+                                
                 return app.response_class(
-                    response=json.dumps(result),
+                    response=self.templater.get_basic_succes_template(
+                        status="Logged in",
+                        data={ 'token': str(token) }
+                    ),
                     status=200,
                     mimetype='application/json'
                 )
             
             except Exception as e:
                 return app.response_class(
-                    response=str(e),
+                    response=self.templater.get_basic_error_template(
+                        error_message=str(e)
+                    ),
                     status=500,
                     mimetype='application/json'
                 )

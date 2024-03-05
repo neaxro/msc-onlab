@@ -1,7 +1,8 @@
 import os, datetime
 from pymongo import MongoClient
 from bson import ObjectId
-from app.parsers import *
+from app.utils.parsers import *
+from app.utils.time_management import *
 
 class HouseholdService:
     def __init__(self):
@@ -69,13 +70,10 @@ class HouseholdService:
         
         return parse_json(household)
     
-    def insert_household(self, household_data: json):
-        date_format = "%Y. %m. %d. %H:%M:%S"
-        date = datetime.datetime.utcnow()
-        
+    def insert_household(self, household_data: json):        
         new_household = {
             "title": household_data['title'],
-            "creation_date": datetime.datetime.strftime(date, date_format),
+            "creation_date": utcnow(),
             "people": [],
             "tasks": []
         }

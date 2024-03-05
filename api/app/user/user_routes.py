@@ -3,27 +3,41 @@ from app import api, app
 import json
 
 from app.user.user_service import UserService
+from app.utils.templater import Templater
 
 class UserResource(Resource):
     def __init__(self):
         self.user_service = UserService()
+        self.templater = Templater()
     
     def get(self, id=None):
         try:
             if id is not None:
                 result = self.user_service.get_user_by_id(id)
-                return result
+                
+                return app.response_class(
+                        response=self.templater.get_basic_succes_template(
+                            status="Success",
+                            data=result
+                        ),
+                        status=200,
+                        mimetype='application/json'
+                    )
         
             else:
                 return app.response_class(
-                                response="No id provided!",
-                                status=404,
-                                mimetype='application/json'
-                            )
+                    response=self.templater.get_basic_error_template(
+                            error_message="No id provided."
+                        ),
+                    status=404,
+                    mimetype='application/json'
+                )
             
         except Exception as e:
             return app.response_class(
-                    response=str(e),
+                    response=self.templater.get_basic_error_template(
+                        error_message=str(e)
+                    ),
                     status=500,
                     mimetype='application/json'
                 )
@@ -40,21 +54,28 @@ class UserResource(Resource):
                 
                 if result.matched_count > 0:
                     return app.response_class(
-                        response="Updated",
+                        response=self.templater.get_basic_succes_template(
+                            status="Updated",
+                            data=f"{result.modified_count} modified"
+                        ),
                         status=200,
                         mimetype='application/json'
                     )
                 
                 else:
                     return app.response_class(
-                        response="No mach",
+                        response=self.templater.get_basic_error_template(
+                            error_message="No mach."
+                        ),
                         status=404,
                         mimetype='application/json'
                     )
             
             except Exception as e:
                 return app.response_class(
-                    response=str(e),
+                    response=self.templater.get_basic_error_template(
+                        error_message=str(e)
+                    ),
                     status=500,
                     mimetype='application/json'
                 )

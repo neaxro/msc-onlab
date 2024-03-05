@@ -1,7 +1,7 @@
 import os
 from pymongo import MongoClient
 from bson import ObjectId
-from app.parsers import *
+from app.utils.parsers import *
 
 class UserService:
     def __init__(self):
