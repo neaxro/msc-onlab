@@ -9,6 +9,10 @@ from app import app
 
 # Decorator to check if the request is authorized
 def token_required(f):
+    """
+    Checks if token is provided and it is valid.
+    Function must have a \"token_data\" parameter where the token's data will be present.
+    """
     @wraps(f)
     def decorated(*args, **kwargs):
         templater = Templater()
@@ -43,6 +47,6 @@ def token_required(f):
                     mimetype='application/json'
                 )
 
-        return f(*args, **kwargs, user_data=data)
+        return f(*args, **kwargs, token_data=data)
 
     return decorated
