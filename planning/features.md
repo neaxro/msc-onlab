@@ -84,14 +84,20 @@ Adds the user to the household and redirects to the phone application | POST | /
 
 | Detail                                | Mode  | URI                                    | HTTP Codes  | State |
 |---------------------------------------|:-------:|----------------------------------------|-------------|:----:|
-| Get all in household (brief)          | GET   | /household/{household_id}/task         | 200, 500    | :construction:
-| Get all in household (detailed)       | GET   | /household/{household_id}/task/detailed| 200, 500    | :construction:
-| Create                                | POST  | /household/{household_id}/task         | 200, 500    | :construction:
-| Update                                | PATCH | /household/{household_id}/task/{task_id}| 200, 500    | :construction:
-| Delete                                | DELETE| /household/{household_id}/task/{task_id}| 200, 500    | :construction:
-| Assign user to task                   | PATCH | /household/{household_id}/task/{task_id}/assign/{user_id}| 200, 500    | :construction:
-| Unassign user from task               | PATCH | /household/{household_id}/task/{task_id}/unassign          | 200, 500    | :construction:
-| Get subtask                           | GET   | /task/{task_id}/subtask/{subtask_id}                       | 200, 500    | :construction:
-| Add subtask to task                   | POST  | /task/{task_id}/subtask                                 | 200, 500    | :construction:
-| Remove subtask from task              | DELETE| /task/{task_id}/subtask/{subtask_id}                       | 200, 500    | :construction:
-| Update subtask                        | PATCH | /task/{task_id}/subtask/{subtask_id}                       | 200, 500    | :construction:
+| Get all in household (brief)          | GET   | /task/all/household/{household_id}         | 200, 500    | :construction:
+| Get all in household (detailed)       | GET   | /task/all/household/{household_id}/detailed| 200, 500    | :construction:
+| Create                                | POST  | /task/add-to/{household_id}         | 200, 500    | :construction:
+| Update                                | PATCH | /task/{task_id}| 200, 500    | :construction:
+| Delete                                | DELETE| /task/{task_id}| 200, 500    | :construction:
+| Assign user to task                   | PATCH | /task/{task_id}/assign/{user_id}| 200, 500    | :construction:
+| Unassign user from task               | PATCH | /task/{task_id}/unassign          | 200, 500    | :construction:
+
+### :information_source: Subtask
+> Response codes may change by the time
+
+| Detail                                | Mode  | URI                                    | HTTP Codes  | State |
+|---------------------------------------|:-------:|----------------------------------------|-------------|:----:|
+| Get subtask                           | GET   | /subtask/{subtask_id}                       | 200, 500    | :construction:
+| Add subtask to task                   | POST  | /subtask/add-to/{task_id}                                 | 200, 500    | :construction:
+| Remove subtask from task              | DELETE| /subtask/{subtask_id}/remove-from/{task_id}                       | 200, 500    | :construction:
+| Update subtask                        | PATCH | /subtask/{subtask_id}                       | 200, 500    | :construction:
