@@ -23,13 +23,14 @@ class LoginService:
             if not json_data.get(field):
                 raise Exception(f"Field '{field}' is required and cannot be empty.")
     
-    def _generate_token(self, username):
+    def _generate_token(self, username, id):
         expiration_time_hours = 2
         secret_key = os.environ['TOKEN_SECRET_KEY']
             
         expiration_time = datetime.datetime.utcnow() + datetime.timedelta(hours=expiration_time_hours)
         token = jwt.encode(
             {
+                'id': id,
                 'username': username,
                 'exp': expiration_time
             },
@@ -44,12 +45,13 @@ class LoginService:
         password = json_data.get('password')
         
         user = self.user_service.get_user_by_username(username)
+        id = user.get('_id', {}).get('$oid')
         
         if user is None:
             raise Exception("User does not exist!")
 
         if user['password'] == password:
-            token = self._generate_token(username)
+            token = self._generate_token(username, id)
             return token
         
         else:
