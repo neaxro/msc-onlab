@@ -2,6 +2,7 @@ from jinja2 import Template, Environment, FileSystemLoader
 from datetime import datetime
 import json, os
 from app.utils.time_management import *
+from app.utils.parsers import *
 
 class Templater:
     def __init__(self):
@@ -38,4 +39,21 @@ class Templater:
         }
         
         return template.render(values)
+    
+    def get_task_template(self, task_data) -> dict:
+        template_name = "task.j2"
+        template = self._load_template(template_name)
         
+        values = {
+            "title": task_data['title'],
+            "description": task_data['description'],
+            "creation_datetime": utcnow(),
+            "due_date": task_data['due_date'],
+            "responsible_id": task_data['responsible_id'],
+            "subtasks": task_data['subtasks']
+        }
+        
+        t = template.render(values)
+        print(t)
+                
+        return json.loads(t)
