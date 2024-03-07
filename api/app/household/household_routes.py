@@ -3,13 +3,15 @@ from app import api, app
 
 from app.household.household_service import HouseholdService
 from app.utils.templater import Templater
+from app.decorators.token_requires import token_required
 
 class HouseholdResource(Resource):
     def __init__(self):
         self.household_service = HouseholdService()
         self.templater = Templater()
     
-    def get(self, detailed='brief', id=None):
+    @token_required
+    def get(self, token_data, detailed='brief', id=None):
         try:
             if id is not None:
                 household = self.household_service.get_by_id(id)
@@ -53,7 +55,8 @@ class HouseholdResource(Resource):
                     mimetype='application/json'
                 )
     
-    def post(self):
+    @token_required
+    def post(self, token_data):
         request_type = request.headers.get('Content-Type')
         if request_type == 'application/json':
             body = request.get_json()
@@ -91,7 +94,8 @@ class HouseholdResource(Resource):
                     mimetype='application/json'
                 )
     
-    def patch(self, id):        
+    @token_required
+    def patch(self, id, token_data):        
         request_type = request.headers.get('Content-Type')
         if request_type == 'application/json':
             body = request.get_json()
@@ -128,7 +132,9 @@ class HouseholdResource(Resource):
                     status=500,
                     mimetype='application/json'
                 )
-    def delete(self, id):
+    
+    @token_required
+    def delete(self, id, token_data):
         try:            
             result = self.household_service.delete_household(id)
             

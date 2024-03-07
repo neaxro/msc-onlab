@@ -4,13 +4,15 @@ import json
 
 from app.user.user_service import UserService
 from app.utils.templater import Templater
+from app.decorators.token_requires import *
 
 class UserResource(Resource):
     def __init__(self):
         self.user_service = UserService()
         self.templater = Templater()
     
-    def get(self, id=None):
+    @token_required
+    def get(self, token_data, id=None):
         try:
             if id is not None:
                 result = self.user_service.get_user_by_id(id)
@@ -42,7 +44,8 @@ class UserResource(Resource):
                     mimetype='application/json'
                 )
     
-    def patch(self):
+    @token_required
+    def patch(self, token_data):
         request_type = request.headers.get('Content-Type')
         if request_type == 'application/json':
             body = request.get_json()

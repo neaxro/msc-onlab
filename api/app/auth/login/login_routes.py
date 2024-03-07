@@ -13,11 +13,11 @@ class LoginResource(Resource):
     
     # Example for token data
     @token_required
-    def get(self, user_data):
+    def get(self, token_data):
         return app.response_class(
                     response=self.templater.get_basic_succes_template(
                         status="Checked",
-                        data=user_data
+                        data=token_data
                     ),
                     status=200,
                     mimetype='application/json'
