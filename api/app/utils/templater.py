@@ -52,8 +52,5 @@ class Templater:
             "responsible_id": task_data['responsible_id'],
             "subtasks": task_data['subtasks']
         }
-        
-        t = template.render(values)
-        print(t)
                 
-        return json.loads(t)
+        return json.loads(template.render(values))

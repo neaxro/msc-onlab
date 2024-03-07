@@ -3,6 +3,8 @@ from pymongo import MongoClient
 from bson import ObjectId
 from app.utils.parsers import *
 from app.utils.time_management import *
+from app.utils.validators import validate_non_empty_array
+from app.utils.templater import Templater
 
 class TaskService:
     def __init__(self):
@@ -13,3 +15,18 @@ class TaskService:
         self.client = MongoClient(mongodb_url)
         self.db = self.client[db_name]
         self.task_collection = self.db[task_collection_name]
+        
+        self.templater = Templater()
+    
+    def validate_json_format_insert(self, json_data):
+        required_fields = ["title", "description", "due_date"]
+
+        for field in required_fields:
+            if field not in json_data or not json_data[field]:
+                raise Exception(f"Field '{field}' is missing or empty in the JSON data.")
+
+    def insert_task(self, task_data: json):
+        new_task = self.templater.get_task_template(task_data)
+                
+        result = self.task_collection.insert_one(new_task)
+        return result
