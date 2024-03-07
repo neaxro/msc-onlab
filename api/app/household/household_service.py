@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 from app.utils.parsers import *
 from app.utils.time_management import *
+from app.utils.validators import validate_non_empty_array
 
 class HouseholdService:
     def __init__(self):
@@ -22,14 +23,10 @@ class HouseholdService:
                 raise Exception(f"Field '{field}' is missing or empty in the JSON data.")
 
         if "people" in json_data:
-            self._validate_non_empty_array(json_data["people"], "people")
+            validate_non_empty_array(json_data["people"], "people")
         if "tasks" in json_data:
-            self._validate_non_empty_array(json_data["tasks"], "tasks")
+            validate_non_empty_array(json_data["tasks"], "tasks")
 
-    def _validate_non_empty_array(self, array, field_name):
-        if not array or not all(item for item in array):
-            raise Exception(f"Field '{field_name}' must be a non-empty array with non-empty elements.")
-    
     def validate_json_format_modify(self, json_data):
         required_fields = ["title"]
 
