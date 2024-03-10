@@ -100,3 +100,15 @@ class HouseholdService:
         result = self.household_collection.delete_one({'_id': ObjectId(id)})
         
         return result
+    
+    def insert_task_to_household(self, household_id, task):
+        result = self.household_collection.update_one(
+            filter={
+                "_id": ObjectId(household_id)
+            },
+            update={
+                "$push": { "tasks": task }
+            }
+        )
+        
+        return result

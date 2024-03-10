@@ -10,17 +10,17 @@ class TaskResource(Resource):
         self.task_service = TaskService()
         self.templater = Templater()
     
-    def get(self):
+    def get(self, household_id=None):
         return app.response_class(
             response=self.templater.get_basic_succes_template(
                 status="Success",
-                data="Tasks data..."
+                data=f"Household id: {household_id}"
             ),
             status=200,
             mimetype='application/json'
         )
     
-    def post(self):
+    def post(self, household_id=None):
         request_type = request.headers.get('Content-Type')
         if request_type == 'application/json':
             body = request.get_json()
@@ -28,13 +28,13 @@ class TaskResource(Resource):
             try:
                 self.task_service.validate_json_format_insert(body)
                 
-                result = self.task_service.insert_task(body)
+                result = self.task_service.insert_task(household_id, body)
                 
                 if result.acknowledged:
                     return app.response_class(
                         response=self.templater.get_basic_succes_template(
-                            status="Created",
-                            data=str(result.inserted_id)
+                            status="Added",
+                            data=f"Modified {result.modified_count}"
                         ),
                         status=200,
                         mimetype='application/json'

@@ -12,7 +12,7 @@ api.add_resource(LoginResource, '/auth/login')
 api.add_resource(RegisterResource, '/auth/register')
 api.add_resource(UserResource, '/user', '/user/<id>')
 api.add_resource(HouseholdResource, '/household', '/household/<detailed>', '/household/id/<id>')
-api.add_resource(TaskResource, '/task')
+api.add_resource(TaskResource, '/task', '/task/add-to/<household_id>')
 
 if __name__ == '__main__':
     create_env_variables()
