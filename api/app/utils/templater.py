@@ -55,3 +55,17 @@ class Templater:
         }
                 
         return json.loads(template.render(values))
+    
+    def get_brief_task_list(self, task_list) -> dict:
+        template_name = "brief_tasks.j2"
+        template = self._load_template(template_name)
+        
+        values = {
+            "tasks": task_list
+        }
+        
+        print(values)
+        rendered = template.render(values)
+        print(rendered)
+        
+        return json.loads(rendered)
