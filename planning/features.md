@@ -63,8 +63,8 @@ Egy feladathoz több alfeladatot létre lehet hozni amikkel nyomon tudjuk követ
 
 | Detail                     | Mode  | URI                              | HTTP Codes  | State |
 |----------------------------|:-------:|----------------------------------|-------------|:----------:|
-| Get all (brief)            | GET   | /household                       | 200, 500    | :white_check_mark: |
-| Get all (detailed)         | GET   | /household/detailed              | 200, 500    | :white_check_mark: |
+| Get all (brief)            | GET   | /household/all                       | 200, 500    | :white_check_mark: |
+| Get all (detailed)         | GET   | /household/all/detailed              | 200, 500    | :white_check_mark: |
 | Get by id (detailed)       | GET   | /household/id/{household_id}        | 200, 500    | :white_check_mark: |
 | Create                     | POST  | /household                       | 200, 500    | :white_check_mark: |
 | Update                     | PATCH | /household/id/{household_id}        | 200, 500    | :white_check_mark: |
@@ -84,9 +84,9 @@ Adds the user to the household and redirects to the phone application | POST | /
 
 | Detail                                | Mode  | URI                                    | HTTP Codes  | State |
 |---------------------------------------|:-------:|----------------------------------------|-------------|:----:|
-| Get all in household (brief)          | GET   | /task/all/household/{household_id}         | 200, 500    | :construction:
-| Get all in household (detailed)       | GET   | /task/all/household/{household_id}/detailed| 200, 500    | :construction:
-| Create                                | POST  | /task/add-to/{household_id}         | 200, 500    | :construction:
+| Get all in household (brief)          | GET   | /task/all/household/{household_id}         | 200, 500    | :white_check_mark:
+| Get all in household (detailed)       | GET   | /task/all/household/{household_id}/detailed| 200, 500    | :white_check_mark:
+| Create                                | POST  | /task/add-to/{household_id}         | 200, 500    | :white_check_mark:
 | Update                                | PATCH | /task/{task_id}| 200, 500    | :construction:
 | Delete                                | DELETE| /task/{task_id}| 200, 500    | :construction:
 | Assign user to task                   | PATCH | /task/{task_id}/assign/{user_id}| 200, 500    | :construction:
