@@ -64,8 +64,4 @@ class Templater:
             "tasks": task_list
         }
         
-        print(values)
-        rendered = template.render(values)
-        print(rendered)
-        
-        return json.loads(rendered)
+        return json.loads(template.render(values))
