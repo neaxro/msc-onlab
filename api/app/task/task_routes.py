@@ -11,10 +11,12 @@ class TaskResource(Resource):
         self.templater = Templater()
     
     def get(self, household_id=None):
+        tasks = self.task_service.get_all_brief(household_id)
+        
         return app.response_class(
             response=self.templater.get_basic_succes_template(
                 status="Success",
-                data=f"Household id: {household_id}"
+                data=tasks
             ),
             status=200,
             mimetype='application/json'

@@ -35,3 +35,30 @@ class TaskService:
         
         result = self.household_service.insert_task_to_household(household_id, new_task)
         return result
+
+    def get_all(self, houeshold_id):
+        tasks = self.household_collection.find_one(
+            {
+                "_id": ObjectId(houeshold_id)
+            },
+            {
+                "tasks": 1,
+                "_id": 0
+            }
+        )
+        
+        return parse_json(tasks.get("tasks"))
+    
+    def get_all_brief(self, houeshold_id):
+        tasks = self.household_collection.find_one(
+            {
+                "_id": ObjectId(houeshold_id)
+            },
+            {
+                "tasks": 1,
+            }
+        ).get("tasks")
+        
+        transformed_tasks = self.templater.get_brief_task_list(tasks)
+        
+        return parse_json(transformed_tasks)
