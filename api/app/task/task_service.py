@@ -28,7 +28,9 @@ class TaskService:
             if field not in json_data or not json_data[field]:
                 raise Exception(f"Field '{field}' is missing or empty in the JSON data.")
 
-    def insert_task(self, household_id, task_data: json):        
+    def insert_task(self, household_id, task_data: json):    
+        task_data['oid'] = str(ObjectId())
+                    
         new_task = self.templater.get_task_template(task_data)
         
         result = self.household_service.insert_task_to_household(household_id, new_task)

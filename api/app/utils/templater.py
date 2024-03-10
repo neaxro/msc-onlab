@@ -45,6 +45,7 @@ class Templater:
         template = self._load_template(template_name)
         
         values = {
+            "oid": task_data['oid'],
             "title": task_data['title'],
             "description": task_data['description'],
             "creation_datetime": utcnow(),
