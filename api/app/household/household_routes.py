@@ -13,47 +13,24 @@ class HouseholdResource(Resource):
     @token_required
     def get(self, token_data, detailed='brief', id=None):
         try:
-            if id is not None:
-                household = self.household_service.get_by_id(id)
-                return app.response_class(
-                        response=self.templater.get_basic_succes_template(
-                            status="Done",
-                            data=household
-                        ),
-                        status=200,
-                        mimetype='application/json'
-                    )
-            
-            elif detailed == 'detailed':
-                households = self.household_service.get_all()
-                return app.response_class(
-                        response=self.templater.get_basic_succes_template(
-                            status="Done",
-                            data=households
-                        ),
-                        status=200,
-                        mimetype='application/json'
-                    )
-            
-            else:
-                households = self.household_service.get_all_brief()
-                return app.response_class(
-                        response=self.templater.get_basic_succes_template(
-                            status="Done",
-                            data=households
-                        ),
-                        status=200,
-                        mimetype='application/json'
-                    )
+            households = self.household_service.get_all_brief()
+            return app.response_class(
+                response=self.templater.get_basic_succes_template(
+                    status="Done",
+                    data=households
+                ),
+                status=200,
+                mimetype='application/json'
+            )
 
         except Exception as e:
             return app.response_class(
-                    response=self.templater.get_basic_error_template(
-                        error_message=str(e)
-                    ),
-                    status=500,
-                    mimetype='application/json'
-                )
+                response=self.templater.get_basic_error_template(
+                    error_message=str(e)
+                ),
+                status=500,
+                mimetype='application/json'
+            )
     
     @token_required
     def post(self, token_data):
