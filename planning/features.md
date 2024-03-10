@@ -2,51 +2,48 @@
 [TOC]
 
 # :page_facing_up: App Description
-Cross platform applikáció (Android, iOS) amiben háztartással kapcsolatos feladatokat lehet létrehozni és emberekhez rendelni.
-Bejelentkezés után létre lehet hozni / hozz lehet csatlakozni / ki lehet választani háztartást.
-Háztartás kiválasztása után lehet saját/globális (összes) feladatokat megtekinteni. Feladatot lehet létrehozni, törölni, módosítani és felhasználót lehet hozzá társítani akinek a feladatot el kell végeznie.
-Egy feladathoz több alfeladatot létre lehet hozni amikkel nyomon tudjuk követni, hogy az adott feladat milyen állapotban van. Amikor készen van egy feladat azt be lehet fejezni.
+Cross-platform application (Android, iOS) for creating and assigning household tasks. After logging in, you can create/join/select a household. Once a household is selected, you can view your own/global (all) tasks within a household. You can create, delete, modify tasks and associate users to tasks. Subtasks can be created for a task to track its progress. When a task is completed, it can be marked as done.
 
-## :open_file_folder: Menü felépítése
-- Háztartás kiválasztása
-  - Háztartás részletes nézete
-  - Létrehozása
-  - Törlése
-  - Módosítása
-- Minden feladat
-  - Új létrehozása
-  - Feladat módosítása
-  - Feladat törlése
-  - Felhasználóra szűrés / mindenki
-- Saját feladataim
-  - Feladat befejezése
-  - Feladat részletes megtekintése
-    - Alfeladatok módosítása
-- Régi feladatok
-  - Felhasználóra szűrés
-  - Feladat visszaállítása (újra aktív lesz, pl.: véletlen fejezte be)
+## :open_file_folder: Menu Structure
+- Select Household
+  - Detailed View of Household
+  - Create
+  - Delete
+  - Modify
+- All Tasks
+  - Create New
+  - Modify Task
+  - Delete Task
+  - Filter by User / All Users
+- My Tasks
+  - Complete Task
+  - View Task Details
+    - Modify Subtasks
+- Old Tasks
+  - Filter by User
+  - Restore Task (set as active again, e.g., accidentally marked as done)
 
 # :pushpin: Features
-- Bejelentkezés
-- Regisztráció
-- Feladat
-  - megtekintése
-    - rövid (listázáshoz)
-    - részletes (módosításhoz)
-  - létrehozása
-  - törlése
-  - módosítása
-  - felhasználóhoz rendelése
-  - alfeladat
-    - létrehozása
-    - törlése
-    - módosítása (pl.: done)
-- Háztartás
-  - létrehozása
-  - törlése
-  - módosítása
-  - megtekintése
-  - felhasználó hozzáadása (pin kóddal)
+- Login
+- Registration
+- Task
+  - View
+    - Short (for listing)
+    - Detailed (for modification)
+  - Create
+  - Delete
+  - Modify
+  - Assign to user
+  - Subtask
+    - Create
+    - Delete
+    - Modify (e.g., done)
+- Household
+  - Create
+  - Delete
+  - Modify
+  - View
+  - Add User (with url/email)
 
 # :chart_with_upwards_trend: API endpoints
 
