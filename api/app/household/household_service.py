@@ -42,7 +42,16 @@ class HouseholdService:
                 raise Exception(f"Field '{field}' is missing in the JSON data.")
     
     def get_all(self):
-        households = self.household_collection.find()
+        households = self.household_collection.aggregate([
+            {
+                '$lookup': {
+                    'from': 'users',
+                    'localField': 'people',
+                    'foreignField': 'tasks._id.oid',
+                    'as': 'people'
+                }
+            }
+        ])
         
         return parse_json(households)
     
