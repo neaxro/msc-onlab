@@ -1,4 +1,4 @@
-import os, datetime
+import os, datetime, jwt
 from pymongo import MongoClient
 from bson import ObjectId
 from app.utils.parsers import *
@@ -108,6 +108,31 @@ class HouseholdService:
             },
             update={
                 "$push": { "tasks": task }
+            }
+        )
+        
+        return result
+    
+    def get_user_ids_in_household(self, household_id):
+        result = self.household_collection.find_one(
+            {
+                "_id": ObjectId(household_id)
+            },
+            {
+                "people": 1,
+                "_id": 0
+            }
+        ).get('people', [])
+        
+        return result
+    
+    def insert_user_to_household(self, household_id, user_id):
+        result = self.household_collection.update_one(
+            filter={
+                "_id": ObjectId(household_id)
+            },
+            update={
+                "$push": { "people": user_id }
             }
         )
         
