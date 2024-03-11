@@ -74,7 +74,8 @@ Cross-platform application (Android, iOS) for creating and assigning household t
 
 | Detail                                | Mode  | URI                                    | HTTP Codes  | State |
 |----------------------------|:-------:|----------------------------------|-------------|:----------:|
-Adds the user to the household and redirects to the phone application | POST | /invite/<invitation_token> | 200, 500 | :construction:
+Sends invitations to the invited users via email | POST | /household/invite/ | 200, 500 | :white_check_mark:
+Adds the user to the token's specified household | POST | /household/accept-invite/<invitation_token> | 200, 500 | :white_check_mark:
 
 ## :date: Task
 > Response codes may change by the time
