@@ -11,16 +11,26 @@ class TaskResource(Resource):
         self.templater = Templater()
     
     def get(self, household_id=None):
-        tasks = self.task_service.get_all_brief(household_id)
+        try:
+            tasks = self.task_service.get_all_brief(household_id)
+            
+            return app.response_class(
+                response=self.templater.get_basic_succes_template(
+                    status="Success",
+                    data=tasks
+                ),
+                status=200,
+                mimetype='application/json'
+            )
         
-        return app.response_class(
-            response=self.templater.get_basic_succes_template(
-                status="Success",
-                data=tasks
-            ),
-            status=200,
-            mimetype='application/json'
-        )
+        except Exception as e:
+                return app.response_class(
+                    response=self.templater.get_basic_error_template(
+                        error_message=str(e)
+                    ),
+                    status=500,
+                    mimetype='application/json'
+                )
     
     def post(self, household_id=None):
         request_type = request.headers.get('Content-Type')

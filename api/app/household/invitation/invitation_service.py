@@ -10,17 +10,8 @@ from app.household.household_service import HouseholdService
 from app.utils.templater import Templater
 
 class InvitationService:
-    def __init__(self):
-        mongodb_url = os.getenv("MONGODB_CONNECTION_URL")
-        db_name = os.getenv("MONGODB_DATABASE_NAME")
-        invitation_collection_name = os.getenv("MONGODB_COLLECTION_INVITATIONS")
-        
-        self.client = MongoClient(mongodb_url)
-        self.db = self.client[db_name]
-        self.invitation_collection = self.db[invitation_collection_name]
-        
+    def __init__(self):        
         self.templater = Templater()
-        
         self.user_service = UserService()
         self.household_service = HouseholdService()
     

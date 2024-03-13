@@ -72,7 +72,7 @@ class HouseholdResource(Resource):
                 )
     
     @token_required
-    def patch(self, id, token_data):        
+    def patch(self, household_id, token_data):
         request_type = request.headers.get('Content-Type')
         if request_type == 'application/json':
             body = request.get_json()
@@ -80,7 +80,7 @@ class HouseholdResource(Resource):
             try:
                 self.household_service.validate_json_format_modify(body)
                 
-                result = self.household_service.replace_household(id, body)
+                result = self.household_service.replace_household(household_id, body)
                 
                 if result.matched_count > 0:
                     return app.response_class(
@@ -111,9 +111,9 @@ class HouseholdResource(Resource):
                 )
     
     @token_required
-    def delete(self, id, token_data):
+    def delete(self, household_id, token_data):
         try:            
-            result = self.household_service.delete_household(id)
+            result = self.household_service.delete_household(household_id)
             
             if result.deleted_count > 0:
                 return app.response_class(

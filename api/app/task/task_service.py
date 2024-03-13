@@ -46,6 +46,9 @@ class TaskService:
                 "_id": 0
             }
         )
+
+        if tasks is None:
+            raise Exception(f"Household does not exist with ID: {houeshold_id}")
         
         return parse_json(tasks.get("tasks"))
     
@@ -57,8 +60,11 @@ class TaskService:
             {
                 "tasks": 1,
             }
-        ).get("tasks")
+        )
         
-        transformed_tasks = self.templater.get_brief_task_list(tasks)
+        if tasks is None:
+            raise Exception(f"Household does not exist with ID: {houeshold_id}")
+        
+        transformed_tasks = self.templater.get_brief_task_list(tasks.get("tasks"))
         
         return parse_json(transformed_tasks)
