@@ -156,3 +156,19 @@ class TaskService:
         )
         
         return result
+    
+    def assign_user_to_task(self, task_id, user_id):
+        result = self.household_collection.update_one(
+            {"tasks._id": ObjectId(task_id)},
+            {"$set": {"tasks.$.responsible_id": ObjectId(user_id)}}
+        )
+        
+        return result
+    
+    def unassign_user_to_task(self, task_id):
+        result = self.household_collection.update_one(
+            {"tasks._id": ObjectId(task_id)},
+            {"$set": {"tasks.$.responsible_id": None}}
+        )
+        
+        return result
