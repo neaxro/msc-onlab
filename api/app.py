@@ -13,8 +13,8 @@ from app.household.invitation.invitation_create_routes import InvitationCreateRe
 from app.household.invitation.invitation_accept_routes import InvitationAcceptResource
 from app.household.household_user_routes import HouseholdUserResource
 
-from app.task.task_routes import TaskResource
-from app.task.task_detailed_routes import TaskDetailedResource
+from app.household.tasks.task_routes import TaskResource
+from app.household.tasks.task_detailed_routes import TaskDetailedResource
 
 # Auth resources
 api.add_resource(LoginResource, '/auth/login')
@@ -30,9 +30,12 @@ api.add_resource(InvitationCreateResource, '/household/invite/')
 api.add_resource(InvitationAcceptResource, '/household/accept-invite/<invitation_token>')
 api.add_resource(HouseholdUserResource, '/household', '/household/id/<household_id>/users')
 
+api.add_resource(TaskResource, '/household', '/household/id/<household_id>/tasks', '/household/id/<household_id>/tasks/id/<task_id>')
+api.add_resource(TaskDetailedResource, '/household', '/household/id/<household_id>/tasks/all/detailed', '/household/id/<household_id>/tasks/id/<task_id>/detailed')
+
 # Task resources
-api.add_resource(TaskResource, '/task', '/task/all/household/<household_id>', '/task/add-to/<household_id>')
-api.add_resource(TaskDetailedResource, '/task', '/task/all/household/<household_id>/detailed')
+#api.add_resource(TaskResource, '/household', '/task/all/household/<household_id>', '/task/add-to/<household_id>')
+#api.add_resource(TaskDetailedResource, '/household', '/task/all/household/<household_id>/detailed')
 
 if __name__ == '__main__':
     create_env_variables()

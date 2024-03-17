@@ -3,6 +3,7 @@ from datetime import datetime
 import json, os
 from app.utils.time_management import *
 from app.utils.parsers import *
+from bson import ObjectId
 
 class Templater:
     def __init__(self):
@@ -39,29 +40,3 @@ class Templater:
         }
         
         return template.render(values)
-    
-    def get_task_template(self, task_data) -> dict:
-        template_name = "task.j2"
-        template = self._load_template(template_name)
-        
-        values = {
-            "oid": task_data['oid'],
-            "title": task_data['title'],
-            "description": task_data['description'],
-            "creation_datetime": utcnow(),
-            "due_date": task_data['due_date'],
-            "responsible_id": task_data['responsible_id'],
-            "subtasks": task_data['subtasks']
-        }
-                
-        return json.loads(template.render(values))
-    
-    def get_brief_task_list(self, task_list) -> dict:
-        template_name = "brief_tasks.j2"
-        template = self._load_template(template_name)
-        
-        values = {
-            "tasks": task_list
-        }
-        
-        return json.loads(template.render(values))

@@ -8,4 +8,4 @@ from app.auth.login.login_routes import LoginResource
 from app.auth.register.register_routes import RegisterResource
 from app.user.user_routes import UserResource
 from app.household.household_routes import HouseholdResource
-from app.task.task_routes import TaskResource
+from app.household.tasks.task_routes import TaskResource

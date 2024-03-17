@@ -1,7 +1,7 @@
 from flask_restful import Resource, request
 from app import api, app
 
-from app.task.task_service import TaskService
+from app.household.tasks.task_service import TaskService
 from app.utils.templater import Templater
 from app.decorators.token_requires import token_required
 

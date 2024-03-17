@@ -117,7 +117,6 @@ class HouseholdService:
             household_id=result.inserted_id,
             user_id=user_token_data['id']
         )
-        
         return result
     
     def replace_household(self, id: str, household_data: json):
