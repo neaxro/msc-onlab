@@ -63,6 +63,7 @@ Cross-platform application (Android, iOS) for creating and assigning household t
 | Get all (brief)            | GET   | /household/all                       | 200, 500    | :white_check_mark: |
 | Get all (detailed)         | GET   | /household/all/detailed              | 200, 500    | :white_check_mark: |
 | Get by id (detailed)       | GET   | /household/id/{household_id}/detailed        | 200, 500    | :white_check_mark: |
+| Get users in household     | GET   | /household/id/{household_id}/users        | 200, 500    | :white_check_mark: |
 | Create                     | POST  | /household                       | 200, 500    | :white_check_mark: |
 | Update                     | PATCH | /household/id/{household_id}        | 200, 500    | :white_check_mark: |
 | Delete                     | DELETE| /household/id/{household_id}        | 200, 500    | :white_check_mark: |
