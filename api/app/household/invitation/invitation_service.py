@@ -21,12 +21,12 @@ class InvitationService:
         invited_user_id,
         email_address
         ):
-        expiration_time_minutes = 10
+        expiration_time_hours = 48
         secret_key = os.environ['TOKEN_SECRET_KEY']
         
         
         
-        expiration_time = datetime.utcnow() + timedelta(minutes=expiration_time_minutes)
+        expiration_time = datetime.utcnow() + timedelta(hours=expiration_time_hours)
         token = jwt.encode(
             {
                 'sender_id': sender_id,
