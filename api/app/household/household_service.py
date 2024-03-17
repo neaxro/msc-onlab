@@ -179,3 +179,58 @@ class HouseholdService:
         )
         
         return result
+
+    def get_household_by_id(self, household_id):
+        household = self.household_collection.find_one(
+            {
+                '_id': ObjectId(household_id)
+            }
+        )
+        
+        if household is None:
+            raise Exception(f"Household does not exist with ID: {household_id}")
+        
+        return household
+
+    def get_users_from_household(self, household_id):
+        
+        household = self.get_household_by_id(household_id)
+        
+        result = self.household_collection.aggregate([
+            {
+                '$match': {
+                '_id': ObjectId(household_id)
+                }
+            },
+            {
+                '$project': {
+                '_id': 0,
+                'people': 1
+                }
+            },
+            {
+                '$lookup': {
+                    'from': "users",
+                    'localField': "people",
+                    'foreignField': "_id",
+                    'as': "people"
+                }
+            },
+            {
+                '$unwind': {
+                    'path': '$people',
+                }
+            },
+            {
+                '$project': {
+                    "_id": "$people._id",
+                    "first_name": "$people.first_name",
+                    "last_name": "$people.last_name",
+                    "username": "$people.username",
+                    "email": "$people.email",
+                    "profile_picture": "$people.profile_picture",
+                }
+            }
+        ])
+        
+        return parse_json(result)
