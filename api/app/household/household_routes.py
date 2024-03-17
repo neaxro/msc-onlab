@@ -11,7 +11,7 @@ class HouseholdResource(Resource):
         self.templater = Templater()
     
     @token_required
-    def get(self, token_data, detailed='brief', id=None):
+    def get(self, token_data):
         try:
             households = self.household_service.get_all_brief()
             return app.response_class(
