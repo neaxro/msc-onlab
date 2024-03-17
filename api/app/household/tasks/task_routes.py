@@ -55,7 +55,7 @@ class TaskResource(Resource):
                 else:
                     return app.response_class(
                         response=self.templater.get_basic_error_template(
-                            error_message=str(e)
+                            error_message="Error occured."
                         ),
                         status=404,
                         mimetype='application/json'
@@ -69,3 +69,36 @@ class TaskResource(Resource):
                     status=500,
                     mimetype='application/json'
                 )
+    
+    @token_required
+    def delete(self, token_data, household_id, task_id):
+        try:
+            result = self.task_service.delete_task_from_household(household_id, task_id)
+            
+            if result.modified_count > 0:
+                return app.response_class(
+                    response=self.templater.get_basic_succes_template(
+                        status="Deleted",
+                        data=f"Deleted {result.modified_count}"
+                    ),
+                    status=200,
+                    mimetype='application/json'
+                )
+            
+            else:
+                return app.response_class(
+                    response=self.templater.get_basic_error_template(
+                        error_message="Error occured."
+                    ),
+                    status=404,
+                    mimetype='application/json'
+                )
+        
+        except Exception as e:
+            return app.response_class(
+                response=self.templater.get_basic_error_template(
+                    error_message=str(e)
+                ),
+                status=500,
+                mimetype='application/json'
+            )

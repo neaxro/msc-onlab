@@ -148,3 +148,11 @@ class TaskService:
         ])
                 
         return parse_json(tasks)
+    
+    def delete_task_from_household(self, household_id, task_id):
+        result = self.household_collection.update_one(
+            {"_id": ObjectId(household_id)},
+            {"$pull": {"tasks": {"_id": ObjectId(task_id)}}}
+        )
+        
+        return result
