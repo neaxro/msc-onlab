@@ -10,7 +10,8 @@ class UnassignResource(Resource):
         self.task_service = TaskService()
         self.templater = Templater()
     
-    def patch(self, task_id):
+    @token_required
+    def patch(self, token_data, task_id):
         try:
             result = self.task_service.unassign_user_to_task(task_id)
             

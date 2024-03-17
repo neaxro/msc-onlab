@@ -10,7 +10,8 @@ class TaskResource(Resource):
         self.task_service = TaskService()
         self.templater = Templater()
     
-    def get(self, household_id=None):
+    @token_required
+    def get(self, token_data, household_id=None):
         try:
             tasks = self.task_service.get_all_brief(household_id)
             
@@ -32,7 +33,8 @@ class TaskResource(Resource):
                     mimetype='application/json'
                 )
     
-    def post(self, household_id=None):
+    @token_required
+    def post(self, token_data, household_id=None):
         request_type = request.headers.get('Content-Type')
         if request_type == 'application/json':
             body = request.get_json()

@@ -10,7 +10,8 @@ class AssignResource(Resource):
         self.task_service = TaskService()
         self.templater = Templater()
     
-    def patch(self, task_id, user_id):
+    @token_required
+    def patch(self, token_data, task_id, user_id):
         try:
             result = self.task_service.assign_user_to_task(task_id, user_id)
             
