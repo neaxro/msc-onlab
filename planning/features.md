@@ -87,9 +87,9 @@ Adds the user to the token's specified household | POST | /household/accept-invi
 | Get all in household (detailed)       | GET   | /household/id/{household_id}/tasks/all/detailed| 200, 500    | :white_check_mark:
 | Create                                | POST  | /household/id/{household_id}/tasks         | 200, 500    | :white_check_mark:
 | Update                                | PATCH | /task/{task_id}| 200, 500    | :construction:
-| Delete                                | DELETE| /task/{task_id}| 200, 500    | :construction:
-| Assign user to task                   | PATCH | /task/{task_id}/assign/{user_id}| 200, 500    | :construction:
-| Unassign user from task               | PATCH | /task/{task_id}/unassign          | 200, 500    | :construction:
+| Delete                                | DELETE| /household/id/{household_id}/tasks/id/{task_id}| 200, 500    | :white_check_mark:
+| Assign user to task                   | PATCH | /tasks/id/{task_id}/assign-to/{user_id}| 200, 500    | :white_check_mark:
+| Unassign user from task               | PATCH | /tasks/id/{task_id}/unassign-user         | 200, 500    | :white_check_mark:
 
 #### :information_source: Subtask
 > Response codes may change by the time
