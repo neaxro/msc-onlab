@@ -68,7 +68,7 @@ Cross-platform application (Android, iOS) for creating and assigning household t
 | Update                     | PATCH | /household/id/{household_id}        | 200, 500    | :white_check_mark: |
 | Delete                     | DELETE| /household/id/{household_id}        | 200, 500    | :white_check_mark: |
 
-## :love_letter: Invitation
+### :love_letter: Invitation
 > Response codes may change by the time
 
 > Sends invitation email to the email address and the given url will redirects the use to the application.
@@ -78,20 +78,20 @@ Cross-platform application (Android, iOS) for creating and assigning household t
 Sends invitations to the invited users via email | POST | /household/invite/ | 200, 500 | :white_check_mark:
 Adds the user to the token's specified household | POST | /household/accept-invite/<invitation_token> | 200, 500 | :white_check_mark:
 
-## :date: Task
+### :date: Task
 > Response codes may change by the time
 
 | Detail                                | Mode  | URI                                    | HTTP Codes  | State |
 |---------------------------------------|:-------:|----------------------------------------|-------------|:----:|
-| Get all in household (brief)          | GET   | /task/all/household/{household_id}         | 200, 500    | :white_check_mark:
-| Get all in household (detailed)       | GET   | /task/all/household/{household_id}/detailed| 200, 500    | :white_check_mark:
-| Create                                | POST  | /task/add-to/{household_id}         | 200, 500    | :white_check_mark:
+| Get all in household (brief)          | GET   | /household/id/{household_id}/tasks         | 200, 500    | :white_check_mark:
+| Get all in household (detailed)       | GET   | /household/id/{household_id}/tasks/all/detailed| 200, 500    | :white_check_mark:
+| Create                                | POST  | /household/id/{household_id}/tasks         | 200, 500    | :white_check_mark:
 | Update                                | PATCH | /task/{task_id}| 200, 500    | :construction:
 | Delete                                | DELETE| /task/{task_id}| 200, 500    | :construction:
 | Assign user to task                   | PATCH | /task/{task_id}/assign/{user_id}| 200, 500    | :construction:
 | Unassign user from task               | PATCH | /task/{task_id}/unassign          | 200, 500    | :construction:
 
-### :information_source: Subtask
+#### :information_source: Subtask
 > Response codes may change by the time
 
 | Detail                                | Mode  | URI                                    | HTTP Codes  | State |
