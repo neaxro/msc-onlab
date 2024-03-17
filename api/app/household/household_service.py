@@ -103,7 +103,7 @@ class HouseholdService:
         except Exception:
             raise Exception(f"Household does not exist with ID: {household_id}")
     
-    def insert_household(self, household_data: json):        
+    def insert_household(self, household_data: json, user_token_data):        
         new_household = {
             "title": household_data['title'],
             "creation_date": utcnow(),
@@ -112,6 +112,12 @@ class HouseholdService:
         }
         
         result = self.household_collection.insert_one(new_household)
+
+        add_user_result = self.insert_user_to_household(
+            household_id=result.inserted_id,
+            user_id=user_token_data['id']
+        )
+        
         return result
     
     def replace_household(self, id: str, household_data: json):

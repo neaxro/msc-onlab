@@ -41,7 +41,7 @@ class HouseholdResource(Resource):
             try:
                 self.household_service.validate_json_format_insert(body)
                 
-                result = self.household_service.insert_household(body)
+                result = self.household_service.insert_household(body, token_data)
                 
                 if result.acknowledged:
                     return app.response_class(
