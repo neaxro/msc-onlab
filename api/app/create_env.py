@@ -1,5 +1,6 @@
 import os
 
+# TODO: Refactore env vars to app.config["..."] style 
 def create_env_variables():
     os.environ["MONGODB_CONNECTION_URL"] = "mongodb://localhost:27017"
     os.environ["MONGODB_DATABASE_NAME"] = "msc_onlab"
