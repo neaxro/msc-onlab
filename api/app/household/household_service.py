@@ -47,8 +47,13 @@ class HouseholdService:
                 '$lookup': {
                     'from': 'users',
                     'localField': 'people',
-                    'foreignField': 'tasks._id.oid',
+                    'foreignField': '_id',
                     'as': 'people'
+                }
+            },
+            {
+                '$project': {
+                    "people.password": 0
                 }
             }
         ])
@@ -71,10 +76,32 @@ class HouseholdService:
         
         return parse_json(households)
     
-    def get_by_id(self, id):
-        household = self.household_collection.find_one({'_id': ObjectId(id)})
+    def get_by_id(self, household_id):        
+        household = self.household_collection.aggregate([
+            {
+                '$match': {
+                    '_id': ObjectId(household_id),
+                }
+            },
+            {
+                '$lookup': {
+                    'from': "users",
+                    'localField': "people",
+                    'foreignField': "_id",
+                    'as': "people",
+                }
+            },
+            {
+                '$project': {
+                    'people.password': 0,
+                }
+            }
+        ])
         
-        return parse_json(household)
+        try:
+            return parse_json(household.next())
+        except Exception:
+            raise Exception(f"Household does not exist with ID: {household_id}")
     
     def insert_household(self, household_data: json):        
         new_household = {
@@ -141,7 +168,7 @@ class HouseholdService:
                 "_id": ObjectId(household_id)
             },
             update={
-                "$push": { "people": user_id }
+                "$push": { "people": ObjectId(user_id) }
             }
         )
         
