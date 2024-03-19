@@ -86,7 +86,7 @@ Adds the user to the token's specified household | POST | /household/accept-invi
 | Get all in household (brief)          | GET   | /household/id/{household_id}/tasks         | 200, 500    | :white_check_mark:
 | Get all in household (detailed)       | GET   | /household/id/{household_id}/tasks/all/detailed| 200, 500    | :white_check_mark:
 | Create                                | POST  | /household/id/{household_id}/tasks         | 200, 500    | :white_check_mark:
-| Update                                | PATCH | /task/{task_id}| 200, 500    | :construction:
+| Update                                | PATCH | /household/id/{household_id}/tasks/id/{task_id}| 200, 500    | :white_check_mark:
 | Delete                                | DELETE| /household/id/{household_id}/tasks/id/{task_id}| 200, 500    | :white_check_mark:
 | Assign user to task                   | PATCH | /tasks/id/{task_id}/assign-to/{user_id}| 200, 500    | :white_check_mark:
 | Unassign user from task               | PATCH | /tasks/id/{task_id}/unassign-user         | 200, 500    | :white_check_mark:
