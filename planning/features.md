@@ -83,6 +83,7 @@ Adds the user to the token's specified household | POST | /household/accept-invi
 
 | Detail                                | Mode  | URI                                    | HTTP Codes  | State |
 |---------------------------------------|:-------:|----------------------------------------|-------------|:----:|
+| Get by task_id                        | GET   | /household/id/tasks/id/{task_id}/detailed  | 200, 500    | :white_check_mark:
 | Get all in household (brief)          | GET   | /household/id/{household_id}/tasks         | 200, 500    | :white_check_mark:
 | Get all in household (detailed)       | GET   | /household/id/{household_id}/tasks/all/detailed| 200, 500    | :white_check_mark:
 | Create                                | POST  | /household/id/{household_id}/tasks         | 200, 500    | :white_check_mark:
