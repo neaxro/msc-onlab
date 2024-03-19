@@ -27,6 +27,13 @@ class TaskService:
         for field in required_fields:
             if field not in json_data or not json_data[field]:
                 raise Exception(f"Field '{field}' is missing or empty in the JSON data.")
+    
+    def validate_json_format_update(self, json_data):
+        required_fields = ["creation_date", "description", "done", "due_date", "responsible_id", "subtasks", "title"]
+
+        for field in required_fields:
+            if field not in json_data:
+                raise Exception(f"Field '{field}' is missing or empty in the JSON data.")
 
     def insert_task(self, household_id, task_data: json):
                 
@@ -169,6 +176,21 @@ class TaskService:
         result = self.household_collection.update_one(
             {"tasks._id": ObjectId(task_id)},
             {"$set": {"tasks.$.responsible_id": None}}
+        )
+        
+        return result
+    
+    def update_task(self, household_id, task_id, task_data):
+        
+        task_data['_id'] = ObjectId(task_id)
+        task_data['responsible_id'] = ObjectId(task_data['responsible_id'])
+        
+        for subtask in task_data['subtasks']:
+            subtask['_id'] = ObjectId(subtask['_id'])
+                
+        result = self.household_collection.update_one(
+            {"_id": ObjectId(household_id), "tasks._id": ObjectId(task_id)},
+            {"$set": {"tasks.$": task_data}}
         )
         
         return result
