@@ -55,6 +55,41 @@ class TaskService:
         result = self.household_service.insert_task_to_household(household_id, new_task)
         return result
 
+    def get_by_id(self, task_id):
+        task = self.household_collection.aggregate([
+            {
+                '$match': {
+                    "tasks._id": ObjectId(task_id),
+                },
+            },
+            {
+                '$unwind': {
+                    'path': "$tasks",
+                },
+            },
+            {   "$match": {
+                    "tasks._id": ObjectId(task_id)
+                }
+            },
+            {
+                '$project': {
+                    'creation_date': "$tasks.creation_date",
+                    'description': "$tasks.description",
+                    'done': "$tasks.done",
+                    'due_date': "$tasks.due_date",
+                    'responsible_id': "$tasks.responsible_id",
+                    'subtasks': "$tasks.subtasks",
+                    'title': "$tasks.title",
+                    '_id': "$tasks._id",
+                },
+            },
+        ])
+        
+        try:
+            return parse_json(task.next())
+        except Exception:
+            raise Exception(f"Task does not exist with ID: {task_id}")        
+
     def get_all(self, houeshold_id):
         tasks = self.household_collection.aggregate([
             {

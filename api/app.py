@@ -35,7 +35,7 @@ api.add_resource(HouseholdUserResource, '/household', '/household/id/<household_
 
 # Task resources
 api.add_resource(TaskResource, '/household', '/household/id/<household_id>/tasks', '/household/id/<household_id>/tasks/id/<task_id>')
-api.add_resource(TaskDetailedResource, '/household', '/household/id/<household_id>/tasks/all/detailed', '/household/id/<household_id>/tasks/id/<task_id>/detailed')
+api.add_resource(TaskDetailedResource, '/household', '/household/id/<household_id>/tasks/all/detailed', '/household/tasks/id/<task_id>/detailed')
 api.add_resource(AssignResource, '/tasks/id/<task_id>/assign-to/<user_id>')
 api.add_resource(UnassignResource, '/tasks/id/<task_id>/unassign-user')
 

@@ -10,14 +10,17 @@ class TaskDetailedResource(Resource):
         self.task_service = TaskService()
         self.templater = Templater()
     
-    def get(self, household_id=None):
+    def get(self, household_id=None, task_id=None):
         try:
-            tasks = self.task_service.get_all(household_id)
+            if household_id is not None:
+                result = self.task_service.get_all(household_id)
+            elif task_id is not None:
+                result = self.task_service.get_by_id(task_id)
             
             return app.response_class(
                 response=self.templater.get_basic_succes_template(
                     status="Success",
-                    data=tasks
+                    data=result
                 ),
                 status=200,
                 mimetype='application/json'
