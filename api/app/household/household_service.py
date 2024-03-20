@@ -122,9 +122,6 @@ class HouseholdService:
     def replace_household(self, id: str, household_data: json):
 
         household = self.get_by_id(id)
-        
-        if household is None:
-            raise Exception('Household does not exist!')
                 
         household.pop('_id', None)
         
@@ -138,6 +135,8 @@ class HouseholdService:
         return result
     
     def delete_household(self, id: str):
+        household = self.get_by_id(id)
+        
         result = self.household_collection.delete_one({'_id': ObjectId(id)})
         
         return result

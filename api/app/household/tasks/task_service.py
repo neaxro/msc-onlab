@@ -7,6 +7,7 @@ from app.utils.validators import validate_non_empty_array
 from app.utils.templater import Templater
 
 from app.household.household_service import HouseholdService
+from app.user.user_service import UserService
 
 class TaskService:
     def __init__(self):
@@ -20,6 +21,7 @@ class TaskService:
         
         self.templater = Templater()
         self.household_service = HouseholdService()
+        self.user_service = UserService()
     
     def validate_json_format_insert(self, json_data):
         required_fields = ["title", "description", "due_date"]
@@ -192,6 +194,8 @@ class TaskService:
         return parse_json(tasks)
     
     def delete_task_from_household(self, household_id, task_id):
+        task = self.get_by_id(task_id)
+        
         result = self.household_collection.update_one(
             {"_id": ObjectId(household_id)},
             {"$pull": {"tasks": {"_id": ObjectId(task_id)}}}
@@ -200,6 +204,12 @@ class TaskService:
         return result
     
     def assign_user_to_task(self, task_id, user_id):
+        task = self.get_by_id(task_id)
+        user = self.user_service.get_user_by_id(user_id)
+        
+        if user is None:
+            raise Exception(f"User does not exist with ID: {user_id}")
+
         result = self.household_collection.update_one(
             {"tasks._id": ObjectId(task_id)},
             {"$set": {"tasks.$.responsible_id": ObjectId(user_id)}}
@@ -208,6 +218,8 @@ class TaskService:
         return result
     
     def unassign_user_to_task(self, task_id):
+        task = self.get_by_id(task_id)
+        
         result = self.household_collection.update_one(
             {"tasks._id": ObjectId(task_id)},
             {"$set": {"tasks.$.responsible_id": None}}
@@ -216,6 +228,7 @@ class TaskService:
         return result
     
     def update_task(self, household_id, task_id, task_data):
+        task = self.get_by_id(task_id)
         
         task_data['_id'] = ObjectId(task_id)
         task_data['responsible_id'] = ObjectId(task_data['responsible_id'])

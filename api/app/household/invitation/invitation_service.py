@@ -16,15 +16,14 @@ class InvitationService:
         self.household_service = HouseholdService()
     
     def _create_invitation_token(self,
-        sender_id,
-        household_id,
-        invited_user_id,
-        email_address
+            sender_id,
+            household_id,
+            invited_user_id,
+            email_address
         ):
+        
         expiration_time_hours = 48
         secret_key = os.environ['TOKEN_SECRET_KEY']
-        
-        
         
         expiration_time = datetime.utcnow() + timedelta(hours=expiration_time_hours)
         token = jwt.encode(
@@ -56,7 +55,6 @@ class InvitationService:
                 household_id=household_id,
                 email_address=email,
                 invited_user_id=user_id
-                
             )
             
             print('#######################################################')

@@ -47,7 +47,7 @@ class HouseholdResource(Resource):
                     return app.response_class(
                         response=self.templater.get_basic_succes_template(
                             status="Created",
-                            data=str(result.inserted_id)
+                            data={'_id': str(result.inserted_id)}
                         ),
                         status=200,
                         mimetype='application/json'
@@ -56,7 +56,7 @@ class HouseholdResource(Resource):
                 else:
                     return app.response_class(
                         response=self.templater.get_basic_error_template(
-                            error_message=str(e)
+                            error_message="Error occured."
                         ),
                         status=404,
                         mimetype='application/json'
@@ -86,7 +86,7 @@ class HouseholdResource(Resource):
                     return app.response_class(
                         response=self.templater.get_basic_succes_template(
                             status="Updated",
-                            data=f"{str(result.modified_count)} modified"
+                            data=f"Modified {result.modified_count}."
                         ),
                         status=200,
                         mimetype='application/json'

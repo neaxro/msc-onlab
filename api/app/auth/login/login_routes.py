@@ -11,18 +11,6 @@ class LoginResource(Resource):
         self.login_service = LoginService()
         self.templater = Templater()
     
-    # Example for token data
-    @token_required
-    def get(self, token_data):
-        return app.response_class(
-                    response=self.templater.get_basic_succes_template(
-                        status="Checked",
-                        data=token_data
-                    ),
-                    status=200,
-                    mimetype='application/json'
-                )
-    
     def post(self):
         request_type = request.headers.get('Content-Type')
         if request_type == 'application/json':
