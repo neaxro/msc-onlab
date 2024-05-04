@@ -97,7 +97,7 @@ Adds the user to the token's specified household | POST | /household/accept-invi
 
 | Detail                                | Mode  | URI                                    | HTTP Codes  | State |
 |---------------------------------------|:-------:|----------------------------------------|-------------|:----:|
-| Get subtask                           | GET   | /subtask/{subtask_id}                       | 200, 500    | :construction:
-| Add subtask to task                   | POST  | /subtask/add-to/{task_id}                                 | 200, 500    | :construction:
-| Remove subtask from task              | DELETE| /subtask/{subtask_id}/remove-from/{task_id}                       | 200, 500    | :construction:
-| Update subtask                        | PATCH | /subtask/{subtask_id}                       | 200, 500    | :construction:
+| Get subtask                           | GET   | /subtask/{subtask_id}                       | 200, 500    | :white_check_mark:
+| Add subtask to task                   | POST  | /subtask/add-to/{task_id}                                 | 200, 500    | :white_check_mark:
+| Remove subtask from task              | DELETE| /subtask/{subtask_id}/remove-from/{task_id}                       | 200, 500    | :white_check_mark:
+| Update subtask                        | PATCH | /subtask/{subtask_id}/for/{task_id}                       | 200, 500    | :white_check_mark:
