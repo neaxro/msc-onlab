@@ -3,7 +3,7 @@ name: test_and_coverage_backend
 run-name: Testing and creating Coverage for Backend
 
 on:
-  push:   #TODO: set back to "pull_request" when finished work
+  pull_request:
     paths:
       - 'api/**'
       - 'Dockerfile'
