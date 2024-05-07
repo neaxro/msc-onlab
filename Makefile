@@ -7,14 +7,10 @@ build_test:
 build:
 	docker build -t msc-onlab-backend:latest .
 
-venv:
-	# Start virtual environment
-	. api/.venv/bin/activate
-
-test: venv
+test:
 	pytest api/
 
-coverage: venv
+coverage:
 	coverage run -m pytest api/
 
 up:
