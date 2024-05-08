@@ -1,8 +1,17 @@
 packages:
-	pip install -r requirements.txt
+	pip install -r api/requirements.txt
+
+build_test:
+	docker build -t local-testing:latest .
 
 build:
-	docker build -t local-testing .
+	docker build -t msc-onlab-backend:latest .
+
+test:
+	pytest api/
+
+coverage:
+	coverage run -m pytest api/
 
 up:
 	# Start virtual environment

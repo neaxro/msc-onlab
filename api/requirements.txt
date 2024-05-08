@@ -3,3 +3,6 @@ Flask-RESTful
 PyJWT
 pymongo
 Jinja2
+pytest
+pytest-cov
+coveralls
