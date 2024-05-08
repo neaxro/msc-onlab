@@ -1,16 +1,22 @@
 ---
-name: docker_images
+name: docker
 run-name: Build and Push docker image for backend
 on:
-  workflow_call:
-    secrets:
-      DOCKERHUB_USERNAME:
-        required: true
-      DOCKERHUB_TOKEN:
-        required: true
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'api/**'
+      - 'Dockerfile'
+      - 'version.txt'
 
 jobs:
-  build_and_push:
+  test:
+    uses: ./.github/workflows/test-backend.yml
+
+  build_image:
+    needs:
+      - test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
