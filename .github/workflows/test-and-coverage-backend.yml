@@ -1,0 +1,18 @@
+---
+name: CI
+run-name: Test and Creating Coverage for Backend
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  test:
+    uses: ./.github/workflows/test-backend.yml
+
+  coverage:
+    uses: ./.github/workflows/coverage-backend.yml
+    secrets:
+      COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}

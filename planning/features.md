@@ -1,88 +1,103 @@
 # Table of contents
 [TOC]
 
-# App Description
-Cross platform applikáció (Android, iOS) amiben háztartással kapcsolatos feladatokat lehet létrehozni és emberekhez rendelni.
-Bejelentkezés után létre lehet hozni / hozz lehet csatlakozni / ki lehet választani háztartást.
-Háztartás kiválasztása után lehet saját/globális (összes) feladatokat megtekinteni. Feladatot lehet létrehozni, törölni, módosítani és felhasználót lehet hozzá társítani akinek a feladatot el kell végeznie.
-Egy feladathoz több alfeladatot létre lehet hozni amikkel nyomon tudjuk követni, hogy az adott feladat milyen állapotban van. Amikor készen van egy feladat azt be lehet fejezni.
+# :page_facing_up: App Description
+Cross-platform application (Android, iOS) for creating and assigning household tasks. After logging in, you can create/join/select a household. Once a household is selected, you can view your own/global (all) tasks within a household. You can create, delete, modify tasks and associate users to tasks. Subtasks can be created for a task to track its progress. When a task is completed, it can be marked as done.
 
-## Menü felépítése
-- Háztartás kiválasztása
-  - Háztartás részletes nézete
-  - Létrehozása
-  - Törlése
-  - Módosítása
-- Minden feladat
-  - Új létrehozása
-  - Feladat módosítása
-  - Feladat törlése
-  - Felhasználóra szűrés / mindenki
-- Saját feladataim
-  - Feladat befejezése
-  - Feladat részletes megtekintése
-    - Alfeladatok módosítása
-- Régi feladatok
-  - Felhasználóra szűrés
-  - Feladat visszaállítása (újra aktív lesz, pl.: véletlen fejezte be)
+## :open_file_folder: Menu Structure
+- Select Household
+  - Detailed View of Household
+  - Create
+  - Delete
+  - Modify
+- All Tasks
+  - Create New
+  - Modify Task
+  - Delete Task
+  - Filter by User / All Users
+- My Tasks
+  - Complete Task
+  - View Task Details
+    - Modify Subtasks
+- Old Tasks
+  - Filter by User
+  - Restore Task (set as active again, e.g., accidentally marked as done)
 
-# Features
-- Bejelentkezés
-- Regisztráció
-- Feladat
-  - megtekintése
-    - rövid (listázáshoz)
-    - részletes (módosításhoz)
-  - létrehozása
-  - törlése
-  - módosítása
-  - felhasználóhoz rendelése
-  - alfeladat
-    - létrehozása
-    - törlése
-    - módosítása (pl.: done)
-- Háztartás
-  - létrehozása
-  - törlése
-  - módosítása
-  - megtekintése
-  - felhasználó hozzáadása (pin kóddal)
+# :pushpin: Features
+- Login
+- Registration
+- Task
+  - View
+    - Short (for listing)
+    - Detailed (for modification)
+  - Create
+  - Delete
+  - Modify
+  - Assign to user
+  - Subtask
+    - Create
+    - Delete
+    - Modify (e.g., done)
+- Household
+  - Create
+  - Delete
+  - Modify
+  - View
+  - Add User (with url/email)
 
-# API endpoints
+# :chart_with_upwards_trend: API endpoints
 
-## Login
+## :door: Login
 > Response codes may change by the time
 
-| Detail          | Mode | URI        | HTTP Codes  |
-|-----------------|------|------------|-------------|
-| Login           | PUT  | /login     | 200, 400    |
-| Register        | PUT  | /register  | 200, 400    |
+| Detail          | Mode | URI        | HTTP Codes  | State |
+|-----------------|:----:|------------|-------------|:-----:|
+| Login           | PUT  | /login     | 200, 500    | :white_check_mark:
+| Register        | PUT  | /register  | 200, 500    | :white_check_mark:
 
-## Household
+## :house: Household
 > Response codes may change by the time
 
-| Detail                     | Mode  | URI                              | HTTP Codes  |
-|----------------------------|-------|----------------------------------|-------------|
-| Get all (brief)            | GET   | /household                       | 200, 400    |
-| Get all (detailed)         | GET   | /household/detailed              | 200, 400    |
-| Get by id (detailed)       | GET   | /household/{household_id}        | 200, 400    |
-| Create                     | POST  | /household                       | 200, 400    |
-| Update                     | PATCH | /household/{household_id}        | 200, 400    |
-| Delete                     | DELETE| /household/{household_id}        | 200, 400    |
+| Detail                     | Mode  | URI                              | HTTP Codes  | State |
+|----------------------------|:-------:|----------------------------------|-------------|:----------:|
+| Get all (brief)            | GET   | /household/all                       | 200, 500    | :white_check_mark: |
+| Get all (detailed)         | GET   | /household/all/detailed              | 200, 500    | :white_check_mark: |
+| Get by id (detailed)       | GET   | /household/id/{household_id}/detailed        | 200, 500    | :white_check_mark: |
+| Get users in household     | GET   | /household/id/{household_id}/users        | 200, 500    | :white_check_mark: |
+| Create                     | POST  | /household                       | 200, 500    | :white_check_mark: |
+| Update                     | PATCH | /household/id/{household_id}        | 200, 500    | :white_check_mark: |
+| Delete                     | DELETE| /household/id/{household_id}        | 200, 500    | :white_check_mark: |
 
-## Task
+### :love_letter: Invitation
 > Response codes may change by the time
 
-| Detail                                | Mode  | URI                                    | HTTP Codes  |
-|---------------------------------------|-------|----------------------------------------|-------------|
-| Get all in household (brief)          | GET   | /household/{household_id}/task         | 200, 400    |
-| Get all in household (detailed)       | GET   | /household/{household_id}/task/detailed| 200, 400    |
-| Create                                | POST  | /household/{household_id}/task         | 200, 400    |
-| Update                                | PATCH | /household/{household_id}/task/{task_id}| 200, 400    |
-| Delete                                | DELETE| /household/{household_id}/task/{task_id}| 200, 400    |
-| Assign user to task                   | PATCH | /household/{household_id}/task/{task_id}/assign/{user_id}| 200, 400    |
-| Unassign user from task               | PATCH | /household/{household_id}/task/{task_id}/unassign          | 200, 400    |
-| Get subtask                           | GET   | /task/{task_id}/subtask/{subtask_id}                       | 200, 400    |
-| Add subtask to task                   | POST  | /task/{task_id}/subtask                                 | 200, 400    |
-| Remove subtask from task              | DELETE| /task/{task_id}/subtask/{subtask_id}                       | 200, 400    |
-| Update subtask                        | PATCH | /task/{task_id}/subtask/{subtask_id}                       | 200, 400    |
+> Sends invitation email to the email address and the given url will redirects the use to the application.
+
+| Detail                                | Mode  | URI                                    | HTTP Codes  | State |
+|----------------------------|:-------:|----------------------------------|-------------|:----------:|
+Sends invitations to the invited users via email | POST | /household/invite/ | 200, 500 | :white_check_mark:
+Adds the user to the token's specified household | POST | /household/accept-invite/<invitation_token> | 200, 500 | :white_check_mark:
+
+### :date: Task
+> Response codes may change by the time
+
+| Detail                                | Mode  | URI                                    | HTTP Codes  | State |
+|---------------------------------------|:-------:|----------------------------------------|-------------|:----:|
+| Get by task_id                        | GET   | /household/id/tasks/id/{task_id}/detailed  | 200, 500    | :white_check_mark:
+| Get all in household (brief)          | GET   | /household/id/{household_id}/tasks         | 200, 500    | :white_check_mark:
+| Get all in household (detailed)       | GET   | /household/id/{household_id}/tasks/all/detailed| 200, 500    | :white_check_mark:
+| Create                                | POST  | /household/id/{household_id}/tasks         | 200, 500    | :white_check_mark:
+| Update                                | PATCH | /household/id/{household_id}/tasks/id/{task_id}| 200, 500    | :white_check_mark:
+| Delete                                | DELETE| /household/id/{household_id}/tasks/id/{task_id}| 200, 500    | :white_check_mark:
+| Assign user to task                   | PATCH | /tasks/id/{task_id}/assign-to/{user_id}| 200, 500    | :white_check_mark:
+| Unassign user from task               | PATCH | /tasks/id/{task_id}/unassign-user         | 200, 500    | :white_check_mark:
+
+#### :information_source: Subtask
+> Response codes may change by the time
+
+| Detail                                | Mode  | URI                                    | HTTP Codes  | State |
+|---------------------------------------|:-------:|----------------------------------------|-------------|:----:|
+| Get subtask                           | GET   | /subtask/{subtask_id}                       | 200, 500    | :white_check_mark:
+| Add subtask to task                   | POST  | /subtask/add-to/{task_id}                                 | 200, 500    | :white_check_mark:
+| Remove subtask from task              | DELETE| /subtask/{subtask_id}/remove-from/{task_id}                       | 200, 500    | :white_check_mark:
+| Update subtask                        | PATCH | /subtask/{subtask_id}/for/{task_id}                       | 200, 500    | :white_check_mark:
