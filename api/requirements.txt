@@ -6,3 +6,4 @@ Jinja2
 pytest
 pytest-cov
 coveralls
+mongomock
