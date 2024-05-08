@@ -1,5 +1,5 @@
 ---
-name: docker
+name: build
 run-name: Build and Push docker image for backend
 on:
   push:
