@@ -1,19 +1,33 @@
 import os, mongomock
 from app.db.app_database import AppDatabase
+from pymongo import MongoClient
+from pymongo.database import Database
+from pymongo.collection import Collection
 from test.environment.classes import *
 
 class MockedDatabase(AppDatabase):
     def __init__(self):
-        db_name = os.getenv("MONGODB_TEST_DATABASE_NAME")
-        household_collection_name = os.getenv("MONGODB_COLLECTION_HOUSEHOLDS")
-        user_collection_name = os.getenv("MONGODB_COLLECTION_USERS")
-        
-        self.client = mongomock.MongoClient()
-        self.db = self.client[db_name]
-        self.household_collection = self.db[household_collection_name]
-        self.user_collection = self.db[user_collection_name]
+        self.db_name = os.getenv("MONGODB_TEST_DATABASE_NAME")
+        self.household_collection_name = os.getenv("MONGODB_COLLECTION_HOUSEHOLDS")
+        self.user_collection_name = os.getenv("MONGODB_COLLECTION_USERS")
         
         self.setup_all()
+    
+    @property
+    def client(self) -> MongoClient:
+        return mongomock.MongoClient()
+    
+    @property
+    def db(self) -> Database:
+        return self.client[self.db_name]
+    
+    @property
+    def user_collection(self) -> Collection:
+        return self.db[self.user_collection_name]
+    
+    @property
+    def household_collection(self) -> Collection:
+        return self.db[self.household_collection_name]
 
     def setup_users(self):
         """Creates test users in the users collection in the test database.
