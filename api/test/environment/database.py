@@ -10,12 +10,16 @@ class MockedDatabase(AppDatabase):
         self.db_name = os.getenv("MONGODB_TEST_DATABASE_NAME")
         self.household_collection_name = os.getenv("MONGODB_COLLECTION_HOUSEHOLDS")
         self.user_collection_name = os.getenv("MONGODB_COLLECTION_USERS")
+        self._client = None
         
         self.setup_all()
     
     @property
     def client(self) -> MongoClient:
-        return mongomock.MongoClient()
+        if self._client is None:
+            self._client = mongomock.MongoClient()
+        
+        return self._client
     
     @property
     def db(self) -> Database:
