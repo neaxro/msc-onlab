@@ -1,18 +1,11 @@
-import os
-from pymongo import MongoClient
-from bson import ObjectId
+from app.db.app_database import AppDatabase
+from app.db.mongo import MongoDatabase
 from app.utils.parsers import *
 
 class RegisterService:
-    def __init__(self):
-        mongodb_url = os.getenv("MONGODB_CONNECTION_URL")
-        db_name = os.getenv("MONGODB_DATABASE_NAME")
-        user_collection_name = os.getenv("MONGODB_COLLECTION_USERS")
-        
-        self.client = MongoClient(mongodb_url)
-        self.db = self.client[db_name]
-        self.user_collection = self.db[user_collection_name]
-        
+    def __init__(self, database: AppDatabase = MongoDatabase()):
+        self.database = database
+
     def validate_json_format(self, json_data):
         required_fields = ["first_name", "last_name", "username", "email", "password"]
 

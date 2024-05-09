@@ -1,29 +1,22 @@
-import os, datetime
-from pymongo import MongoClient
 from bson import ObjectId
 from app.utils.parsers import *
 from app.utils.time_management import *
-from app.utils.validators import validate_non_empty_array
 from app.utils.templater import Templater
+from app.db.app_database import AppDatabase
+from app.db.mongo import MongoDatabase
 
 from app.household.household_service import HouseholdService
 from app.household.tasks.task_service import TaskService
 from app.user.user_service import UserService
 
 class SubtaskService:
-    def __init__(self):
-        mongodb_url = os.getenv("MONGODB_CONNECTION_URL")
-        db_name = os.getenv("MONGODB_DATABASE_NAME")
-        household_collection_name = os.getenv("MONGODB_COLLECTION_HOUSEHOLDS")
-
-        self.client = MongoClient(mongodb_url)
-        self.db = self.client[db_name]
-        self.household_collection = self.db[household_collection_name]
-
+    def __init__(self, database: AppDatabase = MongoDatabase()):
+        self.database = database
+        self.household_service = HouseholdService(database)
+        self.task_service = TaskService(database)
+        self.user_service = UserService(database)
+        
         self.templater = Templater()
-        self.household_service = HouseholdService()
-        self.task_service = TaskService()
-        self.user_service = UserService()
 
     def validate_json_format_insert(self, json_data):
         required_fields = ["title", "type"]
@@ -40,7 +33,7 @@ class SubtaskService:
                 raise Exception(f"Field '{field}' is missing or empty in the JSON data.")
 
     def get_by_id(self, subtask_id):
-        subtask = self.household_collection.aggregate([
+        subtask = self.database.household_collection.aggregate([
             {
                 "$unwind": "$tasks"
             },
@@ -78,7 +71,7 @@ class SubtaskService:
         }
 
         # Update operation to add the new subtask
-        result = self.household_collection.update_one(
+        result = self.database.household_collection.update_one(
             {
                 "tasks._id": task_oid
             },
@@ -101,7 +94,7 @@ class SubtaskService:
         subtask_oid = ObjectId(subtask_id)
 
         # Update operation to remove the subtask
-        result = self.household_collection.update_one(
+        result = self.database.household_collection.update_one(
             {
                 "tasks._id": task_oid
             },
@@ -128,7 +121,7 @@ class SubtaskService:
         subtask_data['_id'] = subtask_oid
 
         # Update operation to update the subtask
-        result = self.household_collection.update_one(
+        result = self.database.household_collection.update_one(
             {
                 "tasks._id": task_oid,
                 "tasks.subtasks._id": subtask_oid

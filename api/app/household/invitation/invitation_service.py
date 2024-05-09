@@ -1,19 +1,19 @@
 import os, jwt
 from datetime import timedelta, datetime
-from pymongo import MongoClient
-from bson import ObjectId
 from app.utils.parsers import *
 from app.utils.time_management import *
-from app.utils.validators import validate_non_empty_array
 from app.user.user_service import UserService
 from app.household.household_service import HouseholdService
 from app.utils.templater import Templater
+from app.db.app_database import AppDatabase
+from app.db.mongo import MongoDatabase
 
 class InvitationService:
-    def __init__(self):        
+    def __init__(self, database: AppDatabase = MongoDatabase()):
+        self.database = database
+        self.user_service = UserService(database)
+        self.household_service = HouseholdService(database)
         self.templater = Templater()
-        self.user_service = UserService()
-        self.household_service = HouseholdService()
     
     def _create_invitation_token(self,
             sender_id,

@@ -1,27 +1,20 @@
-import os, datetime
-from pymongo import MongoClient
 from bson import ObjectId
 from app.utils.parsers import *
 from app.utils.time_management import *
-from app.utils.validators import validate_non_empty_array
 from app.utils.templater import Templater
+from app.db.app_database import AppDatabase
+from app.db.mongo import MongoDatabase
 
 from app.household.household_service import HouseholdService
 from app.user.user_service import UserService
 
 class TaskService:
-    def __init__(self):
-        mongodb_url = os.getenv("MONGODB_CONNECTION_URL")
-        db_name = os.getenv("MONGODB_DATABASE_NAME")
-        household_collection_name = os.getenv("MONGODB_COLLECTION_HOUSEHOLDS")
+    def __init__(self, database: AppDatabase = MongoDatabase()):
+        self.database = database
         
-        self.client = MongoClient(mongodb_url)
-        self.db = self.client[db_name]
-        self.household_collection = self.db[household_collection_name]
-        
+        self.household_service = HouseholdService(database)
+        self.user_service = UserService(database)
         self.templater = Templater()
-        self.household_service = HouseholdService()
-        self.user_service = UserService()
     
     def validate_json_format_insert(self, json_data):
         required_fields = ["title", "description", "due_date"]
@@ -58,7 +51,7 @@ class TaskService:
         return result
 
     def get_by_id(self, task_id):
-        task = self.household_collection.aggregate([
+        task = self.database.household_collection.aggregate([
             {
                 '$match': {
                     "tasks._id": ObjectId(task_id),
@@ -93,7 +86,7 @@ class TaskService:
             raise Exception(f"Task does not exist with ID: {task_id}")        
 
     def get_all(self, houeshold_id):
-        tasks = self.household_collection.aggregate([
+        tasks = self.database.household_collection.aggregate([
             {
                 '$match': {
                     '_id': ObjectId(houeshold_id),
@@ -170,7 +163,7 @@ class TaskService:
     def get_all_brief(self, household_id):
         houeshold = self.household_service.get_household_by_id(household_id)
         
-        tasks = self.household_collection.aggregate([
+        tasks = self.database.household_collection.aggregate([
             {
                 '$match': {
                     '_id': ObjectId(household_id),
@@ -196,7 +189,7 @@ class TaskService:
     def delete_task_from_household(self, household_id, task_id):
         task = self.get_by_id(task_id)
         
-        result = self.household_collection.update_one(
+        result = self.database.household_collection.update_one(
             {"_id": ObjectId(household_id)},
             {"$pull": {"tasks": {"_id": ObjectId(task_id)}}}
         )
@@ -210,7 +203,7 @@ class TaskService:
         if user is None:
             raise Exception(f"User does not exist with ID: {user_id}")
 
-        result = self.household_collection.update_one(
+        result = self.database.household_collection.update_one(
             {"tasks._id": ObjectId(task_id)},
             {"$set": {"tasks.$.responsible_id": ObjectId(user_id)}}
         )
@@ -220,7 +213,7 @@ class TaskService:
     def unassign_user_to_task(self, task_id):
         task = self.get_by_id(task_id)
         
-        result = self.household_collection.update_one(
+        result = self.database.household_collection.update_one(
             {"tasks._id": ObjectId(task_id)},
             {"$set": {"tasks.$.responsible_id": None}}
         )
@@ -236,7 +229,7 @@ class TaskService:
         for subtask in task_data['subtasks']:
             subtask['_id'] = ObjectId(subtask['_id'])
                 
-        result = self.household_collection.update_one(
+        result = self.database.household_collection.update_one(
             {"_id": ObjectId(household_id), "tasks._id": ObjectId(task_id)},
             {"$set": {"tasks.$": task_data}}
         )

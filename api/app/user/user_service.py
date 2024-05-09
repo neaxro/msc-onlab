@@ -1,18 +1,12 @@
-import os
-from pymongo import MongoClient
 from bson import ObjectId
 from app.utils.parsers import *
+from app.db.app_database import AppDatabase
+from app.db.mongo import MongoDatabase
 
 class UserService:
-    def __init__(self):
-        mongodb_url = os.getenv("MONGODB_CONNECTION_URL")
-        db_name = os.getenv("MONGODB_DATABASE_NAME")
-        user_collection_name = os.getenv("MONGODB_COLLECTION_USERS")
-        
-        self.client = MongoClient(mongodb_url)
-        self.db = self.client[db_name]
-        self.user_collection = self.db[user_collection_name]
-    
+    def __init__(self, database: AppDatabase = MongoDatabase()):
+        self.database = database
+            
     def validate_json_format(self, json_data):
         required_fields = ["_id", "first_name", "last_name", "username", "email", "password"]
 
@@ -21,18 +15,18 @@ class UserService:
                 raise Exception(f"Field '{field}' is missing in the JSON data.")
       
     def get_user_by_username(self, username: str) -> json:
-        user = self.user_collection.find_one({"username": username})        
+        user = self.database.user_collection.find_one({"username": username})
         return parse_json(user)
     
     def get_user_by_id(self, id: str) -> json:
-        user = self.user_collection.find_one({"_id": ObjectId(id)})
+        user = self.database.user_collection.find_one({"_id": ObjectId(id)})
         return parse_json(user)
     
     def insert_user(self, data: json):
         existing_user = self.get_user_by_username(data['username'])
         
         if existing_user is None:
-            result = self.user_collection.insert_one(data)
+            result = self.database.user_collection.insert_one(data)
             return result
 
         else:
@@ -51,7 +45,7 @@ class UserService:
         
         data.pop('_id', None)
         
-        result = self.user_collection.replace_one(
+        result = self.database.user_collection.replace_one(
             filter={"_id": ObjectId(id)},
             replacement=data
         )

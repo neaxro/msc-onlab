@@ -1,20 +1,16 @@
 import os, datetime, jwt
 from pymongo import MongoClient
+from app.db.app_database import AppDatabase
+from app.db.mongo import MongoDatabase
 from bson import ObjectId
 from app.utils.parsers import *
 from app.utils.time_management import *
 from app.utils.validators import validate_non_empty_array
 
 class HouseholdService:
-    def __init__(self):
-        mongodb_url = os.getenv("MONGODB_CONNECTION_URL")
-        db_name = os.getenv("MONGODB_DATABASE_NAME")
-        household_collection_name = os.getenv("MONGODB_COLLECTION_HOUSEHOLDS")
+    def __init__(self, database: AppDatabase = MongoDatabase()):
+        self.database = database
         
-        self.client = MongoClient(mongodb_url)
-        self.db = self.client[db_name]
-        self.household_collection = self.db[household_collection_name]
-    
     def validate_json_format(self, json_data):
         required_fields = ["_id", "title", "creation_date", "people", "tasks"]
 
@@ -42,7 +38,7 @@ class HouseholdService:
                 raise Exception(f"Field '{field}' is missing in the JSON data.")
     
     def get_all(self):
-        households = self.household_collection.aggregate([
+        households = self.database.household_collection.aggregate([
             {
                 '$lookup': {
                     'from': 'users',
@@ -72,12 +68,12 @@ class HouseholdService:
             }
         ]
         
-        households = self.household_collection.aggregate(pipeline)
+        households = self.database.household_collection.aggregate(pipeline)
         
         return parse_json(households)
     
     def get_by_id(self, household_id):        
-        household = self.household_collection.aggregate([
+        household = self.database.household_collection.aggregate([
             {
                 '$match': {
                     '_id': ObjectId(household_id),
@@ -111,7 +107,7 @@ class HouseholdService:
             "tasks": []
         }
         
-        result = self.household_collection.insert_one(new_household)
+        result = self.database.household_collection.insert_one(new_household)
 
         add_user_result = self.insert_user_to_household(
             household_id=result.inserted_id,
@@ -127,7 +123,7 @@ class HouseholdService:
         
         household['title'] = household_data['title']
             
-        result = self.household_collection.replace_one(
+        result = self.database.household_collection.replace_one(
             filter={"_id": ObjectId(id)},
             replacement=dict(household)
         )
@@ -137,12 +133,12 @@ class HouseholdService:
     def delete_household(self, id: str):
         household = self.get_by_id(id)
         
-        result = self.household_collection.delete_one({'_id': ObjectId(id)})
+        result = self.database.household_collection.delete_one({'_id': ObjectId(id)})
         
         return result
     
     def insert_task_to_household(self, household_id, task):
-        result = self.household_collection.update_one(
+        result = self.database.household_collection.update_one(
             filter={
                 "_id": ObjectId(household_id)
             },
@@ -154,7 +150,7 @@ class HouseholdService:
         return result
     
     def get_user_ids_in_household(self, household_id):
-        result = self.household_collection.find_one(
+        result = self.database.household_collection.find_one(
             {
                 "_id": ObjectId(household_id)
             },
@@ -167,7 +163,7 @@ class HouseholdService:
         return result
     
     def insert_user_to_household(self, household_id, user_id):
-        result = self.household_collection.update_one(
+        result = self.database.household_collection.update_one(
             filter={
                 "_id": ObjectId(household_id)
             },
@@ -179,7 +175,7 @@ class HouseholdService:
         return result
 
     def get_household_by_id(self, household_id):
-        household = self.household_collection.find_one(
+        household = self.database.household_collection.find_one(
             {
                 '_id': ObjectId(household_id)
             }
@@ -194,7 +190,7 @@ class HouseholdService:
         
         household = self.get_household_by_id(household_id)
         
-        result = self.household_collection.aggregate([
+        result = self.database.household_collection.aggregate([
             {
                 '$match': {
                 '_id': ObjectId(household_id)
