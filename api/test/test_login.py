@@ -51,14 +51,14 @@ def test_json_validation(client):
     date = utcnow()
     assert date is not None
 
-def test_user_service(database):
+def test_user_service_1(database):
     user_service = UserService(database)
     
     user = user_service.get_user_by_id("65dcf20484273f26b75734f0")
     
     assert user is not None
 
-def test_user_service(database):
+def test_user_service_2(database):
     user_service = UserService(database)
     
     user = user_service.get_user_by_id("65dcf20484273f26b75734f9")
