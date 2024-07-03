@@ -158,3 +158,23 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+
+# KMP app gitignore
+
+build
+captures
+.gradle
+.idea
+bin
+gen
+out
+*.iml
+.directory
+node_modules
+local.properties
+android/mobile/release/*
+ios.xcworkspace/
+
+.DS_Store
+.externalNativeBuild
