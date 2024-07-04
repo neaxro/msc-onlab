@@ -42,6 +42,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.material)
+            implementation(compose.materialIconsExtended)
         }
     }
 }
@@ -84,6 +85,7 @@ android {
 }
 dependencies {
     implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.ui.android)
 }
 /*
 dependencies {

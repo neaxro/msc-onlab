@@ -1,11 +1,22 @@
 package ui.composables
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Error
+import androidx.compose.material.icons.rounded.Warning
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 
 
 @Composable
-fun MaxLengthOutlinedTextField(
+fun SmartOutlinedTextField(
     value: String,
     label: @Composable() (() -> Unit),
     onValueChange: (String) -> Unit,
@@ -14,13 +25,9 @@ fun MaxLengthOutlinedTextField(
     maxLength: Int,
     readOnly: Boolean,
     enabled: Boolean,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     modifier: Modifier = Modifier
 ){
-    /*
-    TextField(
-
-    )
-
     OutlinedTextField(
         value = value,
         onValueChange = {
@@ -33,11 +40,7 @@ fun MaxLengthOutlinedTextField(
         singleLine = singleLine,
         supportingText = {
             Text(
-                text = stringResource(
-                    R.string.composable_min_max_length_indicator,
-                    value.length,
-                    maxLength
-                ),
+                text = "${value.length}/$maxLength",
                 textAlign = TextAlign.End,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -46,19 +49,20 @@ fun MaxLengthOutlinedTextField(
             if (isError) {
                 Icon(
                     imageVector = Icons.Rounded.Error,
-                    contentDescription = stringResource(R.string.composable_invalid_value),
+                    contentDescription = "Invalid value",
                     tint = Color.Red
                 )
             } else if (value.isNotEmpty()) {
                 Icon(
                     imageVector = Icons.Rounded.Check,
-                    contentDescription = stringResource(R.string.composable_valid_value),
+                    contentDescription = "Valid value",
                     tint = Color.Green
                 )
             }
         },
         readOnly = readOnly,
         enabled = enabled,
+        keyboardOptions = keyboardOptions,
         modifier = modifier
-    )*/
+    )
 }
