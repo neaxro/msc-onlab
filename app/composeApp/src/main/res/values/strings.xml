@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="composable_min_max_length_indicator">%1$s/%2$s</string>
+    <string name="app_name">msc-onlab</string>
 </resources>
