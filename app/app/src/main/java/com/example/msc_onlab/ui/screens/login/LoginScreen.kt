@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +38,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.msc_onlab.MyViewModel
 import com.example.msc_onlab.R
 import com.example.msc_onlab.ui.common.SmartOutlinedTextField
 import com.example.msc_onlab.ui.common.SmartPasswordOutlinedTextField
@@ -45,8 +48,11 @@ import com.example.msc_onlab.ui.theme.Shapes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
+    viewModel: MyViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ){
+    val viewModelName = viewModel.name.collectAsState().value
+
     var username by remember { mutableStateOf<String>("") }
     var password by remember { mutableStateOf<String>("") }
 
@@ -55,7 +61,7 @@ fun LoginScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text("Login")
+                    Text(viewModelName)
                 }
             )
         }
@@ -145,6 +151,8 @@ fun LoginScreen(
                 onClick = {
                     username = ""
                     password = ""
+
+                    viewModel.updateName()
                 },
                 modifier = Modifier.width(250.dp),
                 shape = Shapes.small
