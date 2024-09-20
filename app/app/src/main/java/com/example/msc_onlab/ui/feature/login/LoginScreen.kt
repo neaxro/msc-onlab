@@ -39,20 +39,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.msc_onlab.MyViewModel
 import com.example.msc_onlab.R
-import com.example.msc_onlab.ui.common.SmartOutlinedTextField
-import com.example.msc_onlab.ui.common.SmartPasswordOutlinedTextField
+import com.example.msc_onlab.ui.feature.common.SmartOutlinedTextField
+import com.example.msc_onlab.ui.feature.common.SmartPasswordOutlinedTextField
+import com.example.msc_onlab.ui.feature.login.LoginViewModel
 import com.example.msc_onlab.ui.theme.Shapes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    viewModel: MyViewModel = hiltViewModel(),
+    viewModel: LoginViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ){
-    val viewModelName = viewModel.name.collectAsState().value
-
     var username by remember { mutableStateOf<String>("") }
     var password by remember { mutableStateOf<String>("") }
 
@@ -61,7 +59,7 @@ fun LoginScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(viewModelName)
+                    Text("Login")
                 }
             )
         }
@@ -151,8 +149,6 @@ fun LoginScreen(
                 onClick = {
                     username = ""
                     password = ""
-
-                    viewModel.updateName()
                 },
                 modifier = Modifier.width(250.dp),
                 shape = Shapes.small

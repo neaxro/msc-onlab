@@ -1,4 +1,4 @@
-package com.example.msc_onlab.ui.common
+package com.example.msc_onlab.ui.feature.common
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
