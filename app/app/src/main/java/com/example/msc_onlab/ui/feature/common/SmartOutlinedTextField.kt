@@ -7,6 +7,7 @@ import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ fun SmartOutlinedTextField(
     label: @Composable() (() -> Unit),
     onValueChange: (String) -> Unit,
     isError: Boolean,
+    errorMessage: String = "",
     singleLine: Boolean,
     maxLength: Int,
     readOnly: Boolean,
@@ -41,11 +43,20 @@ fun SmartOutlinedTextField(
         isError = isError,
         singleLine = singleLine,
         supportingText = {
+            if(isError){
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = errorMessage,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+            else{
             Text(
                 text = "${value.length}/$maxLength",
                 textAlign = TextAlign.End,
                 modifier = Modifier.fillMaxWidth()
             )
+                }
         },
         trailingIcon = {
             if (isError) {
@@ -65,6 +76,7 @@ fun SmartOutlinedTextField(
         readOnly = readOnly,
         enabled = enabled,
         keyboardOptions = keyboardOptions,
-        modifier = modifier
+        modifier = modifier,
+
     )
 }

@@ -7,6 +7,7 @@ import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ fun SmartPasswordOutlinedTextField(
     onPasswordChange: (String) -> Unit = {},
     label: @Composable() (() -> Unit)?,
     isError: Boolean = false,
+    errorMessage: String = "",
     readOnly: Boolean = false,
     enabled: Boolean = true,
     maxLength: Int = 30,
@@ -70,6 +72,13 @@ fun SmartPasswordOutlinedTextField(
         supportingText = {
             if(supportingText != null){
                 supportingText()
+            }
+            else if (isError){
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = errorMessage,
+                    color = MaterialTheme.colorScheme.error
+                )
             }
             else{
                 Text(
