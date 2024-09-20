@@ -1,5 +1,6 @@
 package com.example.msc_onlab.data.di
 
+import android.app.Application
 import com.example.msc_onlab.data.remote.LoginApi
 import com.example.msc_onlab.data.repository.LoginRepository
 import com.example.msc_onlab.data.repository.LoginRepositoryImpl
@@ -16,10 +17,12 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideLoginRepository(
-        loginApi: LoginApi
+        loginApi: LoginApi,
+        app: Application,
     ): LoginRepository{
         return LoginRepositoryImpl(
-            loginApi = loginApi
+            api = loginApi,
+            app = app
         )
     }
 }

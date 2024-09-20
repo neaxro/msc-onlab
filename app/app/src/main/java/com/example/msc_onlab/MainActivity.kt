@@ -22,6 +22,8 @@ class MainActivity : ComponentActivity() {
             MsconlabTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     LoginScreen(
+                        onSuccessLogin = {},
+                        navigateToRegister = {},
                         modifier = Modifier.padding(innerPadding)
                     )
                 }

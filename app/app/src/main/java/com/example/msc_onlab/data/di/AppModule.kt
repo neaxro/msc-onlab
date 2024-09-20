@@ -1,11 +1,11 @@
 package com.example.msc_onlab.data.di
 
-import com.example.msc_onlab.data.remote.LoginApi
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Module
@@ -14,10 +14,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMyApi(): LoginApi{
-        return Retrofit.Builder()
-            .baseUrl("http://test.com")
-            .build()
-            .create(LoginApi::class.java)
+    fun provideAppContext(
+        @ApplicationContext context: Context
+    ): Context {
+        return context
     }
 }

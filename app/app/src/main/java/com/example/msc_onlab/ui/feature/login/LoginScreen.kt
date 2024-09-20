@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -40,8 +42,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.msc_onlab.R
+import com.example.msc_onlab.helpers.isError
+import com.example.msc_onlab.ui.feature.common.MySnackBarHost
+import com.example.msc_onlab.ui.feature.common.MyTopAppBar
 import com.example.msc_onlab.ui.feature.common.SmartOutlinedTextField
 import com.example.msc_onlab.ui.feature.common.SmartPasswordOutlinedTextField
+import com.example.msc_onlab.ui.feature.login.LoginAction
+import com.example.msc_onlab.ui.feature.login.LoginState
 import com.example.msc_onlab.ui.feature.login.LoginViewModel
 import com.example.msc_onlab.ui.theme.Shapes
 
@@ -49,20 +56,34 @@ import com.example.msc_onlab.ui.theme.Shapes
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
+    onSuccessLogin: () -> Unit,
+    navigateToRegister: () -> Unit,
     modifier: Modifier = Modifier
 ){
-    var username by remember { mutableStateOf<String>("") }
-    var password by remember { mutableStateOf<String>("") }
+    val context = LocalContext.current
+
+    val loginData = viewModel.loginData.collectAsState().value
+    val errors = viewModel.errors.collectAsState().value
+
+    LaunchedEffect(viewModel.loginState){
+        viewModel.loginState.collect{ newState ->
+            if(newState is LoginState.LoggedIn){
+                onSuccessLogin()
+            }
+        }
+    }
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text("Login")
-                }
+            MyTopAppBar(
+                title = "Login",
+                screenState = viewModel.screenState.collectAsState()
             )
-        }
+        },
+        snackbarHost = {
+            MySnackBarHost(screenState = viewModel.screenState)
+        },
+        modifier = modifier.fillMaxSize(),
     ) { padding ->
 
         Column(
@@ -95,17 +116,18 @@ fun LoginScreen(
 
             // Username
             SmartOutlinedTextField(
-                value = username,
+                value = loginData.username,
                 label = {
                     Icon(
                         imageVector = Icons.Rounded.AccountCircle,
                         contentDescription = "Login"
                     )
                 },
-                onValueChange = {
-                    username = it
+                onValueChange = { newUsername ->
+                    viewModel.evoke(LoginAction.UpdateUsername(username = newUsername))
                 },
-                isError = false,
+                isError = errors.userName.isError(),
+                errorMessage = errors.userName.message,
                 singleLine = true,
                 maxLength = 30,
                 readOnly = false,
@@ -122,9 +144,9 @@ fun LoginScreen(
 
             // Password
             SmartPasswordOutlinedTextField(
-                password = password,
-                onPasswordChange = {
-                    password = it
+                password = loginData.password,
+                onPasswordChange = { newPassword ->
+                    viewModel.evoke(LoginAction.UpdatePassword(password = newPassword))
                 },
                 label = {
                     Icon(
@@ -132,7 +154,8 @@ fun LoginScreen(
                         contentDescription = "Password"
                     )
                 },
-                isError = false,
+                isError = errors.password.isError(),
+                errorMessage = errors.password.message,
                 readOnly = false,
                 enabled = true,
                 keyboardOptions = KeyboardOptions(
@@ -147,8 +170,7 @@ fun LoginScreen(
 
             Button(
                 onClick = {
-                    username = ""
-                    password = ""
+                    viewModel.evoke(LoginAction.Login)
                 },
                 modifier = Modifier.width(250.dp),
                 shape = Shapes.small
@@ -174,7 +196,7 @@ fun LoginScreen(
                 )
                 TextButton(
                     onClick = {
-
+                        navigateToRegister()
                     },
 
                     ){
