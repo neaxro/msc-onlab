@@ -1,6 +1,7 @@
 package com.example.msc_onlab.data.di
 
 import com.example.msc_onlab.data.remote.LoginApi
+import com.example.msc_onlab.data.remote.RegisterApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,11 +18,21 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideMyApi(): LoginApi{
+    fun provideLoginApi(): LoginApi{
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
             .build()
             .create(LoginApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRegisterApi(): RegisterApi{
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(BASE_URL)
+            .build()
+            .create(RegisterApi::class.java)
     }
 }

@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.msc_onlab.ui.feature.register.RegisterScreen
+import com.example.msc_onlab.ui.navigation.MyAppNavHost
 import com.example.msc_onlab.ui.theme.MsconlabTheme
 import dagger.hilt.android.AndroidEntryPoint
 import ui.screens.login.loginScreen.LoginScreen
@@ -20,13 +22,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MsconlabTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LoginScreen(
-                        onSuccessLogin = {},
-                        navigateToRegister = {},
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                MyAppNavHost()
             }
         }
     }

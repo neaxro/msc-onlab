@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -92,6 +93,10 @@ dependencies {
 
     // Gson
     implementation("com.squareup.retrofit2:converter-gson:2.2.0")
+
+    // Typesafe navigation
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 }
 
 // Allow references to generated code

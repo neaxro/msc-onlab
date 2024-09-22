@@ -17,7 +17,6 @@ import androidx.compose.material.icons.rounded.Password
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -26,10 +25,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -42,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.msc_onlab.R
+import com.example.msc_onlab.helpers.Constants
 import com.example.msc_onlab.helpers.isError
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
@@ -87,13 +83,16 @@ fun LoginScreen(
     ) { padding ->
 
         Column(
-            modifier = modifier
-                .padding(top = padding.calculateTopPadding() + 10.dp)
-                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+                .fillMaxSize()
+                .padding(top = padding.calculateTopPadding() + 10.dp),
             verticalArrangement = Arrangement.Top
         ) {
 
+            Spacer(
+                modifier = Modifier.padding(vertical = 15.dp)
+            )
 
             Card(
                 modifier = Modifier.size(180.dp),
@@ -129,13 +128,12 @@ fun LoginScreen(
                 isError = errors.userName.isError(),
                 errorMessage = errors.userName.message,
                 singleLine = true,
-                maxLength = 30,
+                maxLength = Constants.MAX_USERNAME_LENGTH,
                 readOnly = false,
                 enabled = true,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next
                 ),
-                modifier = Modifier.width(250.dp)
             )
 
             Spacer(
@@ -161,7 +159,7 @@ fun LoginScreen(
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password,
                 ),
-                modifier = Modifier.width(250.dp)
+                maxLength = Constants.MAX_PASSWORD_LENGTH
             )
 
             Spacer(

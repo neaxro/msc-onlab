@@ -1,6 +1,7 @@
 package com.example.msc_onlab.ui.feature.common
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
@@ -13,7 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 
 
 @Composable
@@ -22,12 +25,13 @@ fun SmartOutlinedTextField(
     label: @Composable() (() -> Unit),
     onValueChange: (String) -> Unit,
     isError: Boolean,
-    errorMessage: String = "",
+    errorMessage: String,
     singleLine: Boolean,
     maxLength: Int,
     readOnly: Boolean,
     enabled: Boolean,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    placeholder: @Composable() (() -> Unit)? = null,
     modifier: Modifier = Modifier,
 ){
     OutlinedTextField(
@@ -76,7 +80,7 @@ fun SmartOutlinedTextField(
         readOnly = readOnly,
         enabled = enabled,
         keyboardOptions = keyboardOptions,
-        modifier = modifier,
-
+        modifier = modifier.width(250.dp),
+        placeholder = placeholder,
     )
 }

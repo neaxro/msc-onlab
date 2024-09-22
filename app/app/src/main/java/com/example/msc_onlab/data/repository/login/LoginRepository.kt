@@ -1,4 +1,4 @@
-package com.example.msc_onlab.data.repository
+package com.example.msc_onlab.data.repository.login
 
 import com.example.msc_onlab.data.model.login.LoginData
 import com.example.msc_onlab.data.model.login.LoginResponse

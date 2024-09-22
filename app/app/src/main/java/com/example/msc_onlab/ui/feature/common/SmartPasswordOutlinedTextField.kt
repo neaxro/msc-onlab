@@ -1,6 +1,7 @@
 package com.example.msc_onlab.ui.feature.common
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Visibility
@@ -19,19 +20,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun SmartPasswordOutlinedTextField(
     password: String,
     onPasswordChange: (String) -> Unit = {},
     label: @Composable() (() -> Unit)?,
-    isError: Boolean = false,
-    errorMessage: String = "",
-    readOnly: Boolean = false,
-    enabled: Boolean = true,
-    maxLength: Int = 30,
+    isError: Boolean,
+    errorMessage: String,
+    readOnly: Boolean,
+    enabled: Boolean,
+    maxLength: Int,
     supportingText: @Composable() (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    placeholder: @Composable() (() -> Unit)? = null,
     modifier: Modifier = Modifier,
 ){
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -88,6 +91,7 @@ fun SmartPasswordOutlinedTextField(
                 )
             }
         },
-        modifier = modifier
+        modifier = modifier.width(250.dp),
+        placeholder = placeholder,
     )
 }
