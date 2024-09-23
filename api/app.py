@@ -28,7 +28,7 @@ api.add_resource(RegisterResource, '/auth/register')
 api.add_resource(UserResource, '/user', '/user/<id>')
 
 # Household resources
-api.add_resource(HouseholdResource, '/household', '/household/all', '/household/id/<household_id>')
+api.add_resource(HouseholdResource, '/household', '/household/all/<user_id>', '/household/id/<household_id>')
 api.add_resource(HouseholdDetailedResource, '/household', '/household/all/detailed', '/household/id/<household_id>/detailed')
 api.add_resource(InvitationCreateResource, '/household/invite/')
 api.add_resource(InvitationAcceptResource, '/household/accept-invite/<invitation_token>')
