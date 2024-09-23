@@ -28,8 +28,9 @@ fun MyBottomNavigationBar(
         tonalElevation = 5.dp
     ) {
         items.forEach { item ->
-            val selected = false
-            //val selected = item.screen.baseRoute == backStackEntry.value?.destination.
+            val bse = backStackEntry.value?.destination?.route
+            val current = item.screen::class.qualifiedName
+            val selected = current == bse
 
             NavigationBarItem(
                 selected = selected,
