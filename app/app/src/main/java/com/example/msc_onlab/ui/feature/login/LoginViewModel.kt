@@ -5,10 +5,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.msc_onlab.data.model.login.LoginData
+import com.example.msc_onlab.data.model.login.LoginResponse
 import com.example.msc_onlab.data.repository.login.LoginRepository
 import com.example.msc_onlab.domain.wrappers.Resource
 import com.example.msc_onlab.domain.wrappers.ScreenState
 import com.example.msc_onlab.helpers.DataFieldErrors
+import com.example.msc_onlab.helpers.LoggedPersonData
 import com.example.msc_onlab.helpers.sha256
 import com.example.msc_onlab.helpers.validateUserPassword
 import com.example.msc_onlab.helpers.validateUsername
@@ -50,11 +52,14 @@ class LoginViewModel @Inject constructor(
             when(result){
                 is Resource.Success -> {
                     _screenState.value = ScreenState.Success()
-                    _loginState.value = LoginState.LoggedIn
 
                     Log.i("LOGIN_STATUS", "Logged!")
                     Log.i("LOGIN_STATUS", result.data!!.toString())
 
+                    val loginResponse: LoginResponse = result.data!!
+                    LoggedPersonData.TOKEN = loginResponse.data.token
+
+                    _loginState.value = LoginState.LoggedIn
                 }
                 is Resource.Error -> {
                     Log.i("LOGIN_STATUS", "Error...")

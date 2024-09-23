@@ -12,4 +12,13 @@ sealed class AppScreens {
 
     @Serializable
     object MainMenu : AppScreens()
+
+    @Serializable
+    object Households : AppScreens()
+
+    @Serializable
+    object Tasks : AppScreens()
+
+    @Serializable
+    object Members : AppScreens()
 }

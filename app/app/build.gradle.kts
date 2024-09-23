@@ -97,6 +97,9 @@ dependencies {
     // Typesafe navigation
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+
+    // JWT
+    implementation("com.auth0.android:jwtdecode:2.0.2")
 }
 
 // Allow references to generated code

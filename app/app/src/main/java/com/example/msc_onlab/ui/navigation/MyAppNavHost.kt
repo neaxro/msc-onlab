@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.msc_onlab.ui.feature.mainMenu.MainMenu
 import com.example.msc_onlab.ui.feature.register.RegisterScreen
 import ui.screens.login.loginScreen.LoginScreen
 import kotlin.reflect.KClass
@@ -24,7 +25,11 @@ fun MyAppNavHost(
 
         composable<AppScreens.Login> {
             LoginScreen(
-                onSuccessLogin = { /*TODO*/ },
+                onSuccessLogin = {
+                    navController.navigate(AppScreens.MainMenu){
+                        popUpTo<AppScreens.Login> { inclusive = true }
+                    }
+                },
                 navigateToRegister = {
                     navController.navigate(AppScreens.Register)
                 }
@@ -37,6 +42,17 @@ fun MyAppNavHost(
                 navigateToLogin = {
                     navController.navigate(AppScreens.Login)
                 }
+            )
+        }
+
+        composable<AppScreens.MainMenu> {
+            MainMenu(
+                logout = {
+                    navController.navigate(AppScreens.Login){
+                        popUpTo<AppScreens.Login> { inclusive = true }
+                    }
+                },
+                navController = navController
             )
         }
     }
