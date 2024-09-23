@@ -1,0 +1,40 @@
+package com.example.msc_onlab.data.repository.household
+
+import android.app.Application
+import com.example.msc_onlab.data.model.household.HouseholdsBrief
+import com.example.msc_onlab.data.model.login.LoginData
+import com.example.msc_onlab.data.model.login.LoginResponse
+import com.example.msc_onlab.data.remote.HouseholdApi
+import com.example.msc_onlab.data.remote.LoginApi
+import com.example.msc_onlab.domain.wrappers.Resource
+import retrofit2.Response
+
+class HouseholdRepositoryImpl(
+    private val api: HouseholdApi,
+    private val app: Application
+) : HouseholdRepository {
+    private val context = app.applicationContext
+
+    override suspend fun getAllHouseholds(userId: String): Resource<HouseholdsBrief> {
+
+        val result = try{
+            val response = api.getAllHouseholdsBrief(userId = userId)
+
+            // Check server response
+            val res = if(response.code() == 200){
+                Resource.Success(message = "Successfully fetched all households!", data = response.body()!!)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result
+    }
+}

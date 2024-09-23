@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
     val screenState = _screenState.asStateFlow()
 
-    private val _loginData = MutableStateFlow<LoginData>(LoginData(username = "Axel", password = "Asdasd11"))
+    private val _loginData = MutableStateFlow<LoginData>(LoginData(username = "axel", password = "Asdasd11"))
     val loginData = _loginData.asStateFlow()
 
     private val _errors = MutableStateFlow<LoginFieldErrors>(LoginFieldErrors())

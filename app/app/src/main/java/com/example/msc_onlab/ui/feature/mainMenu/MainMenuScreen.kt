@@ -96,7 +96,6 @@ fun MainMenu(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.LightGray)
                 .padding(bottom = padding.calculateBottomPadding())
         ){
             MainMenuNavHost(

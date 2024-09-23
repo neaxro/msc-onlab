@@ -1,8 +1,11 @@
 package com.example.msc_onlab.data.di
 
 import android.app.Application
+import com.example.msc_onlab.data.remote.HouseholdApi
 import com.example.msc_onlab.data.remote.LoginApi
 import com.example.msc_onlab.data.remote.RegisterApi
+import com.example.msc_onlab.data.repository.household.HouseholdRepository
+import com.example.msc_onlab.data.repository.household.HouseholdRepositoryImpl
 import com.example.msc_onlab.data.repository.login.LoginRepository
 import com.example.msc_onlab.data.repository.login.LoginRepositoryImpl
 import com.example.msc_onlab.data.repository.register.RegisterRepository
@@ -37,6 +40,18 @@ object RepositoryModule {
     ): RegisterRepository {
         return RegisterRepositoryImpl(
             api = registerApi,
+            app = app
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideHouseholdRepository(
+        householdApi: HouseholdApi,
+        app: Application
+    ): HouseholdRepository {
+        return HouseholdRepositoryImpl(
+            api = householdApi,
             app = app
         )
     }
