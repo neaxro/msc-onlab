@@ -61,6 +61,16 @@ fun validateLastname(lastname: String, @ApplicationContext context: Context): Da
     return DataFieldErrors.NoError
 }
 
+fun validateHouseholdName(householdName: String, @ApplicationContext context: Context): DataFieldErrors {
+    if(householdName.isEmpty()) return DataFieldErrors.HouseholdError("Household name cannot be empty!")
+    if(householdName.length < Constants.MIN_HOUSEHOLD_NAME_LENGTH) return DataFieldErrors.HouseholdError("Household name is too short!")
+    if(householdName.length > Constants.MAX_HOUSEHOLD_NAME_LENGTH) return DataFieldErrors.HouseholdError("Household name is too long!")
+    if(containsNumbers(householdName)) return DataFieldErrors.HouseholdError("Household name cannot contain numbers!")
+    if(containsSpecialCharacters(householdName)) return DataFieldErrors.HouseholdError("Household name cannot contain special characters!")
+
+    return DataFieldErrors.NoError
+}
+
 private fun containsSpecialCharacters(text: String): Boolean {
     return text.matches(Regex("\\w*[^\\w\\s]+\\w*"))
 }
@@ -89,6 +99,7 @@ sealed class DataFieldErrors(val message: String){
     class EmailAddressError(msg: String): DataFieldErrors(message = msg)
     class FirstnameError(msg: String): DataFieldErrors(message = msg)
     class LastnameError(msg: String): DataFieldErrors(message = msg)
+    class HouseholdError(msg: String): DataFieldErrors(message = msg)
 
 }
 

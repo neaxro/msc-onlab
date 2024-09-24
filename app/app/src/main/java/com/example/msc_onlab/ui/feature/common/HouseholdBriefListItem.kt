@@ -33,7 +33,7 @@ fun HouseholdsBriefListItem(
     id: String,
     numberOfMembers: Int,
     numberOfTasks: Int,
-    onEdit: (String) -> Unit,
+    onEdit: (String, String) -> Unit,
     onClick: (String) -> Unit,
 ){
     Row(
@@ -63,7 +63,7 @@ fun HouseholdsBriefListItem(
             }
         }
 
-        IconButton(onClick = { onEdit(id) }) {
+        IconButton(onClick = { onEdit(id, title) }) {
             Icon(imageVector = Icons.Rounded.MoreVert, contentDescription = "Edit")
         }
     }

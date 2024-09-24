@@ -31,40 +31,6 @@ import com.example.msc_onlab.ui.feature.common.MyTopAppBar
 import com.example.msc_onlab.ui.feature.login.LoginState
 import com.example.msc_onlab.ui.navigation.AppScreens
 
-/*
-@Composable
-fun MainMenu(
-    logout: () -> Unit,
-    modifier: Modifier = Modifier
-){
-    Scaffold(
-        topBar = {
-            MyTopAppBar(
-                title = "Main Menu",
-                actions = {
-                    IconButton(onClick = { logout() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.Logout,
-                            contentDescription = "Log out"
-                        )
-                    }
-                }
-            )
-        },
-        modifier = modifier.fillMaxSize(),
-    ) { padding ->
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = padding.calculateTopPadding())
-        ) {
-            Text(text = "ID: ${LoggedPersonData.ID}")
-            Text(text = "USERNAME: ${LoggedPersonData.USERNAME}")
-        }
-    }
-}*/
-
 @Composable
 fun MainMenu(
     logout: () -> Unit,

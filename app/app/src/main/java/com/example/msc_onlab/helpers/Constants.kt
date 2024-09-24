@@ -15,4 +15,7 @@ object Constants {
 
     const val MIN_EMAIL_LENGTH = 6
     const val MAX_EMAIL_LENGTH = 40
+
+    const val MIN_HOUSEHOLD_NAME_LENGTH = 4
+    const val MAX_HOUSEHOLD_NAME_LENGTH = 30
 }

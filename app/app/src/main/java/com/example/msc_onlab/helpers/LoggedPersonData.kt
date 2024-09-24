@@ -15,4 +15,6 @@ object LoggedPersonData {
 
             field = value
         }
+
+    var SELECTED_HOUSEHOLD_ID: String? = null
 }
