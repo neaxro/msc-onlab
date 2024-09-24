@@ -80,7 +80,7 @@ class HouseholdResource(Resource):
             try:
                 self.household_service.validate_json_format_modify(body)
                 
-                result = self.household_service.replace_household(household_id, body)
+                result = self.household_service.update_household(household_id, body)
                 
                 if result.matched_count > 0:
                     return app.response_class(

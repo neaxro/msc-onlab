@@ -163,6 +163,23 @@ class HouseholdService:
         
         return result
     
+    def update_household(self, id: str, household_data: json):
+        household = self.get_by_id(id)
+
+        if not household:
+            raise Exception(f"Household not found with ID: {id}")
+        
+        update_fields = {
+            'title': household_data['title']  # Only update the title
+        }
+        
+        result = self.household_collection.update_one(
+            {"_id": ObjectId(id)},
+            {"$set": update_fields}
+        )
+
+        return result
+    
     def delete_household(self, id: str):
         household = self.get_by_id(id)
         
