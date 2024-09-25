@@ -1,0 +1,26 @@
+services:
+  mongodb:
+    image: mongodb/mongodb-community-server
+    container_name: msc_onlab_mongodb
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+      - MONGO_INITDB_DATABASE=msc-onlab
+    volumes:
+      - ./environment/test/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+
+  msc_onlab_api:
+    build:
+      dockerfile: Dockerfile
+    container_name: msc_onlab_api
+    ports:
+      - 5000:5000
+    environment:
+      - MONGODB_CONNECTION_URL=mongodb://root:pass@mongodb:27017
+      - MONGODB_DATABASE_NAME=msc_onlab
+      - MONGODB_COLLECTION_USERS=users
+      - MONGODB_COLLECTION_HOUSEHOLDS=households
+    depends_on:
+      - mongodb
