@@ -3,6 +3,7 @@ package com.example.msc_onlab.ui.feature.households
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.msc_onlab.data.model.household.HouseholdCreateData
 import com.example.msc_onlab.data.model.household.HouseholdUpdateData
 import com.example.msc_onlab.data.model.household.HouseholdsBrief
 import com.example.msc_onlab.data.repository.household.HouseholdRepository
@@ -78,6 +79,28 @@ class HouseholdsViewModel @Inject constructor(
         }
     }
 
+    private fun createHousehold(title: String){
+        val householdData = HouseholdCreateData(title = title)
+        _screenState.value = ScreenState.Loading()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            var result = householdRepository.createHousehold(newHouseholdData = householdData)
+
+            when(result){
+                is Resource.Success -> {
+                    _screenState.value = ScreenState.Success(message = "Household created!", show = true)
+                    val resultData = result.data!!
+
+                    // Refresh list
+                    loadHouseholds()
+                }
+                is Resource.Error -> {
+                    _screenState.value = ScreenState.Error(message = result.message!!)
+                }
+            }
+        }
+    }
+
     fun evoke(action: HouseholdAction){
         when(action){
             is HouseholdAction.SelectHousehold -> {
@@ -112,6 +135,10 @@ class HouseholdsViewModel @Inject constructor(
                     it.copy(id = action.id)
                 }
             }
+
+            is HouseholdAction.CreateHousehold -> {
+                createHousehold(title = action.title)
+            }
         }
     }
 
@@ -128,6 +155,7 @@ sealed class HouseholdAction{
     data class SelectHousehold(val id: String) : HouseholdAction()
     object ShowEditDialog : HouseholdAction()
     object HideEditDialog : HouseholdAction()
+    data class CreateHousehold(val title: String) : HouseholdAction()
     data class SetIdEditData(val id: String) : HouseholdAction()
     data class SetCurrentNameEditData(val currentName: String) : HouseholdAction()
     data class SetNewNameEditData(val newName: String) : HouseholdAction()

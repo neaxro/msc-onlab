@@ -39,12 +39,11 @@ import com.example.msc_onlab.helpers.validateHouseholdName
 import com.example.msc_onlab.ui.feature.common.SmartOutlinedTextField
 
 @Composable
-fun EditHouseholdDialog(
-    currentName: String,
+fun CreateHouseholdDialog(
     onDismissRequest: () -> Unit,
     onConfirmation: (String) -> Unit,
 ){
-    var newName by rememberSaveable { mutableStateOf(currentName) }
+    var title by rememberSaveable { mutableStateOf("") }
     var isError by rememberSaveable { mutableStateOf(false) }
     var errorMessage by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
@@ -72,7 +71,7 @@ fun EditHouseholdDialog(
                     verticalArrangement = Arrangement.Top
                 ) {
                     Text(
-                        text = "Edit household",
+                        text = "Create household",
                         fontWeight = FontWeight.Bold
                     )
                     HorizontalDivider(modifier = Modifier.scale(0.9f))
@@ -81,7 +80,7 @@ fun EditHouseholdDialog(
                 Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
                 SmartOutlinedTextField(
-                    value = newName,
+                    value = title,
                     label = {
                         Icon(
                             imageVector = Icons.Rounded.House,
@@ -94,7 +93,7 @@ fun EditHouseholdDialog(
                         errorMessage = error.message
 
                         if (it.length <= Constants.MAX_HOUSEHOLD_NAME_LENGTH) {
-                            newName = it
+                            title = it
                         }
                     },
                     isError = isError,
@@ -116,10 +115,12 @@ fun EditHouseholdDialog(
                     }
 
                     TextButton(
-                        onClick = {onConfirmation(newName) },
-                        enabled = !isError
+                        onClick = {
+                            onConfirmation(title)
+                        },
+                        enabled = !isError && title.isNotEmpty()
                     ) {
-                        Text(text = "Save")
+                        Text(text = "Create")
                     }
                 }
             }

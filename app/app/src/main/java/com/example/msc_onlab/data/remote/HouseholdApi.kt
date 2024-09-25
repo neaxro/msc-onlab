@@ -1,5 +1,7 @@
 package com.example.msc_onlab.data.remote
 
+import com.example.msc_onlab.data.model.household.HouseholdCreateData
+import com.example.msc_onlab.data.model.household.HouseholdCreateResponse
 import com.example.msc_onlab.data.model.household.HouseholdsBrief
 import com.example.msc_onlab.data.model.household.HouseholdUpdateData
 import com.example.msc_onlab.data.model.household.HouseholdUpdateResponse
@@ -10,6 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface HouseholdApi {
@@ -28,4 +31,11 @@ interface HouseholdApi {
         @Path("household_id") householdId: String,
         @Body newHouseholdData: HouseholdUpdateData
     ): Response<HouseholdUpdateResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("/household")
+    suspend fun createHousehold(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Body newHouseholdData: HouseholdCreateData
+    ): Response<HouseholdCreateResponse>
 }

@@ -58,6 +58,8 @@ fun Households(
     val households = viewModel.households.collectAsState().value
     val editHouseholdData = viewModel.editHouseholdData.collectAsState().value
 
+    var showCreateDialog by rememberSaveable { mutableStateOf(false) }
+
     val isFabVisible = rememberSaveable { mutableStateOf(true) }
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -95,7 +97,7 @@ fun Households(
                 exit = slideOutVertically(targetOffsetY = { it * 2 }),
             ) {
                 ExtendedFloatingActionButton(
-                    onClick = {},
+                    onClick = { showCreateDialog = true },
                     icon = { Icon(imageVector = Icons.Rounded.Add, contentDescription = "Create Household") },
                     text = { Text(text = "New household") },
                 )
@@ -152,6 +154,17 @@ fun Households(
                 onDismissRequest = { viewModel.evoke(HouseholdAction.HideEditDialog) },
                 onConfirmation = { newName ->
                     viewModel.evoke(HouseholdAction.SetNewNameEditData(newName))
+                }
+            )
+        }
+
+        if(showCreateDialog){
+            CreateHouseholdDialog(
+                onDismissRequest = { showCreateDialog = false },
+                onConfirmation = { title ->
+                    showCreateDialog = false
+
+                    viewModel.evoke(HouseholdAction.CreateHousehold(title))
                 }
             )
         }

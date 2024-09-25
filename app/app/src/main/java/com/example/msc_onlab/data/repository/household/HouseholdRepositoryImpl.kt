@@ -1,6 +1,8 @@
 package com.example.msc_onlab.data.repository.household
 
 import android.app.Application
+import com.example.msc_onlab.data.model.household.HouseholdCreateData
+import com.example.msc_onlab.data.model.household.HouseholdCreateResponse
 import com.example.msc_onlab.data.model.household.HouseholdUpdateData
 import com.example.msc_onlab.data.model.household.HouseholdUpdateResponse
 import com.example.msc_onlab.data.model.household.HouseholdsBrief
@@ -51,6 +53,31 @@ class HouseholdRepositoryImpl(
             // Check server response
             val res = if(response.code() == 200){
                 Resource.Success(message = "Successfully modified household!", data = response.body()!!)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result
+    }
+
+    override suspend fun createHousehold(
+        newHouseholdData: HouseholdCreateData
+    ): Resource<HouseholdCreateResponse> {
+
+        val result = try{
+            val response = api.createHousehold(newHouseholdData = newHouseholdData)
+
+            // Check server response
+            val res = if(response.code() == 200){
+                Resource.Success(message = "Successfully created household!", data = response.body()!!)
             }
             else{
                 // Server error
