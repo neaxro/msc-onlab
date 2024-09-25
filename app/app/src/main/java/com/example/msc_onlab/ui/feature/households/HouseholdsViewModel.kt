@@ -29,8 +29,8 @@ class HouseholdsViewModel @Inject constructor(
     private val _households = MutableStateFlow<HouseholdsBrief?>(null)
     val households = _households.asStateFlow()
 
-    private val _editHouseholdData = MutableStateFlow<EditHouseholdData>(EditHouseholdData())
-    val editHouseholdData = _editHouseholdData.asStateFlow()
+    private val _householdActionData = MutableStateFlow<HouseholdActionData>(HouseholdActionData())
+    val householdActionData = _householdActionData.asStateFlow()
 
     init {
         loadHouseholds()
@@ -55,9 +55,9 @@ class HouseholdsViewModel @Inject constructor(
         }
     }
 
-    private fun updateHousehold(){
-        val data = _editHouseholdData.value.toUpdateData()
-        val id = _editHouseholdData.value.id
+    private fun updateHousehold(newTitle: String){
+        val data = HouseholdUpdateData(title = newTitle)
+        val id = _householdActionData.value.id
 
         _screenState.value = ScreenState.Loading()
 
@@ -101,6 +101,27 @@ class HouseholdsViewModel @Inject constructor(
         }
     }
 
+    private fun deleteHousehold(){
+        _screenState.value = ScreenState.Loading()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            var result = householdRepository.deleteHousehold(householdId = _householdActionData.value.id)
+
+            when(result){
+                is Resource.Success -> {
+                    _screenState.value = ScreenState.Success(message = "Household deleted!", show = true)
+                    val resultData = result.data!!
+
+                    // Refresh list
+                    loadHouseholds()
+                }
+                is Resource.Error -> {
+                    _screenState.value = ScreenState.Error(message = result.message!!)
+                }
+            }
+        }
+    }
+
     fun evoke(action: HouseholdAction){
         when(action){
             is HouseholdAction.SelectHousehold -> {
@@ -108,36 +129,93 @@ class HouseholdsViewModel @Inject constructor(
             }
 
             HouseholdAction.HideEditDialog -> {
-                _editHouseholdData.update {
-                    it.copy(showDialog = false)
+                _householdActionData.update {
+                    it.copy(showEditDialog = false)
                 }
             }
             HouseholdAction.ShowEditDialog -> {
-                _editHouseholdData.update {
-                    it.copy(showDialog = true)
-                }
-            }
-            is HouseholdAction.SetCurrentNameEditData -> {
-                _editHouseholdData.update {
-                    it.copy(currentName = action.currentName)
-                }
-            }
-            is HouseholdAction.SetNewNameEditData -> {
-                _editHouseholdData.update {
-                    it.copy(newName = action.newName, showDialog = false)
-                }
-
-                updateHousehold()
-            }
-
-            is HouseholdAction.SetIdEditData -> {
-                _editHouseholdData.update {
-                    it.copy(id = action.id)
+                _householdActionData.update {
+                    it.copy(
+                        showEditDialog = true,
+                        showSheet = false
+                    )
                 }
             }
 
             is HouseholdAction.CreateHousehold -> {
+                _householdActionData.update {
+                    it.copy(
+                        showCreateDialog = false
+                    )
+                }
                 createHousehold(title = action.title)
+            }
+
+            is HouseholdAction.ShowSheet -> {
+                _householdActionData.update {
+                    it.copy(
+                        showSheet = true,
+                        title = action.title,
+                        id = action.id
+                    )
+                }
+            }
+            HouseholdAction.HideSheet -> {
+                _householdActionData.update {
+                    it.copy(
+                        showSheet = false
+                    )
+                }
+            }
+
+            is HouseholdAction.EditHousehold -> {
+                _householdActionData.update {
+                    it.copy(
+                        showEditDialog = false
+                    )
+                }
+                updateHousehold(newTitle = action.newTitle)
+            }
+
+            HouseholdAction.HideCreateDialog -> {
+                _householdActionData.update {
+                    it.copy(
+                        showCreateDialog = false
+                    )
+                }
+            }
+            HouseholdAction.ShowCreateDialog -> {
+                _householdActionData.update {
+                    it.copy(
+                        showCreateDialog = true
+                    )
+                }
+            }
+
+            HouseholdAction.ShowDeleteDialog -> {
+                _householdActionData.update {
+                    it.copy(
+                        showDeleteDialog = true,
+                        showSheet = false
+                    )
+                }
+            }
+
+            HouseholdAction.HideDeleteDialog -> {
+                _householdActionData.update {
+                    it.copy(
+                        showDeleteDialog = false
+                    )
+                }
+            }
+            HouseholdAction.DeleteHousehold -> {
+                _householdActionData.update {
+                    it.copy(
+                        showDeleteDialog = false
+                    )
+                }
+
+                deleteHousehold()
             }
         }
     }
@@ -147,29 +225,31 @@ class HouseholdsViewModel @Inject constructor(
 
         _screenState.value = ScreenState.Loading()
         LoggedPersonData.SELECTED_HOUSEHOLD_ID = householdID
-        _screenState.value = ScreenState.Success(message = "Household selected! ${LoggedPersonData.SELECTED_HOUSEHOLD_ID}", show = true)
+        _screenState.value = ScreenState.Success(message = "Household selected!", show = true)
     }
 }
 
 sealed class HouseholdAction{
     data class SelectHousehold(val id: String) : HouseholdAction()
+    data class ShowSheet(val id: String, val title: String) : HouseholdAction()
+    object HideSheet : HouseholdAction()
     object ShowEditDialog : HouseholdAction()
     object HideEditDialog : HouseholdAction()
+    data class EditHousehold(val newTitle: String) : HouseholdAction()
+    object ShowCreateDialog : HouseholdAction()
+    object HideCreateDialog : HouseholdAction()
     data class CreateHousehold(val title: String) : HouseholdAction()
-    data class SetIdEditData(val id: String) : HouseholdAction()
-    data class SetCurrentNameEditData(val currentName: String) : HouseholdAction()
-    data class SetNewNameEditData(val newName: String) : HouseholdAction()
+    object ShowDeleteDialog : HouseholdAction()
+    object HideDeleteDialog : HouseholdAction()
+    object DeleteHousehold : HouseholdAction()
 }
 
-data class EditHouseholdData(
-    val showDialog: Boolean = false,
+data class HouseholdActionData(
+    val showSheet: Boolean = false,
+    val showEditDialog: Boolean = false,
+    val showInviteDialog: Boolean = false,
+    val showDeleteDialog: Boolean = false,
+    val showCreateDialog: Boolean = false,
     val id: String = "",
-    val currentName: String = "",
-    val newName: String = "",
+    val title: String = "",
 )
-
-fun EditHouseholdData.toUpdateData(): HouseholdUpdateData {
-    return HouseholdUpdateData(
-        title = this.newName
-    )
-}

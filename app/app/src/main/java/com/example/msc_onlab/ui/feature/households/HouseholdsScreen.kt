@@ -1,34 +1,31 @@
 package com.example.msc_onlab.ui.feature.households
 
-import android.graphics.drawable.shapes.Shape
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,9 +41,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.msc_onlab.ui.feature.common.HouseholdsBriefListItem
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
-import com.example.msc_onlab.ui.theme.Shapes
-import com.example.msc_onlab.ui.theme.surfaceContainerHighestDark
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Households(
     viewModel: HouseholdsViewModel = hiltViewModel(),
@@ -56,9 +52,10 @@ fun Households(
     val lazyListState = rememberLazyListState()
 
     val households = viewModel.households.collectAsState().value
-    val editHouseholdData = viewModel.editHouseholdData.collectAsState().value
+    val householdActionData = viewModel.householdActionData.collectAsState().value
 
-    var showCreateDialog by rememberSaveable { mutableStateOf(false) }
+    // Bottom Sheet
+    val sheetState = rememberModalBottomSheetState()
 
     val isFabVisible = rememberSaveable { mutableStateOf(true) }
     val nestedScrollConnection = remember {
@@ -97,7 +94,7 @@ fun Households(
                 exit = slideOutVertically(targetOffsetY = { it * 2 }),
             ) {
                 ExtendedFloatingActionButton(
-                    onClick = { showCreateDialog = true },
+                    onClick = { viewModel.evoke(HouseholdAction.ShowCreateDialog) },
                     icon = { Icon(imageVector = Icons.Rounded.Add, contentDescription = "Create Household") },
                     text = { Text(text = "New household") },
                 )
@@ -121,9 +118,7 @@ fun Households(
                         numberOfMembers = household.no_people,
                         numberOfTasks = household.no_active_tasks,
                         onEdit = { id, title ->
-                            viewModel.evoke(HouseholdAction.SetIdEditData(id))
-                            viewModel.evoke(HouseholdAction.SetCurrentNameEditData(title))
-                            viewModel.evoke(HouseholdAction.ShowEditDialog)
+                            viewModel.evoke(HouseholdAction.ShowSheet(id = id, title = title))
                         },
                         onClick = { id ->
                             viewModel.evoke(HouseholdAction.SelectHousehold(id))
@@ -148,25 +143,47 @@ fun Households(
             }
         }
 
-        if(editHouseholdData.showDialog){
+
+        if(householdActionData.showEditDialog){
             EditHouseholdDialog(
-                currentName = editHouseholdData.currentName,
+                currentName = householdActionData.title,
                 onDismissRequest = { viewModel.evoke(HouseholdAction.HideEditDialog) },
                 onConfirmation = { newName ->
-                    viewModel.evoke(HouseholdAction.SetNewNameEditData(newName))
+                    viewModel.evoke(HouseholdAction.EditHousehold(newName))
                 }
             )
         }
 
-        if(showCreateDialog){
+        if(householdActionData.showCreateDialog){
             CreateHouseholdDialog(
-                onDismissRequest = { showCreateDialog = false },
+                onDismissRequest = {
+                    viewModel.evoke(HouseholdAction.HideCreateDialog)
+                },
                 onConfirmation = { title ->
-                    showCreateDialog = false
-
                     viewModel.evoke(HouseholdAction.CreateHousehold(title))
                 }
             )
         }
+
+        if(householdActionData.showDeleteDialog){
+            DeleteHouseholdDialog(
+                title = householdActionData.title,
+                onDismissRequest = { viewModel.evoke(HouseholdAction.HideDeleteDialog) },
+                onConfirmation = { viewModel.evoke(HouseholdAction.DeleteHousehold) }
+            )
+        }
+
+        if(householdActionData.showSheet){
+            HouseholdBottomSheet(
+                householdTitle = householdActionData.title,
+                onDismissRequest = { viewModel.evoke(HouseholdAction.HideSheet) },
+                sheetState = sheetState,
+                onEdit = { viewModel.evoke(HouseholdAction.ShowEditDialog) },
+                onInvite = { /* TODO */ },
+                onDelete = { viewModel.evoke(HouseholdAction.ShowDeleteDialog) },
+                onDetails = { /* TODO */ }
+            )
+        }
     }
 }
+

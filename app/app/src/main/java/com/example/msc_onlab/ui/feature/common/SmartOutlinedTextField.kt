@@ -1,5 +1,6 @@
 package com.example.msc_onlab.ui.feature.common
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 
@@ -67,13 +69,13 @@ fun SmartOutlinedTextField(
                 Icon(
                     imageVector = Icons.Rounded.Error,
                     contentDescription = "Invalid value",
-                    tint = Color.Red
+                    tint = MaterialTheme.colorScheme.error
                 )
             } else if (value.isNotEmpty()) {
                 Icon(
                     imageVector = Icons.Rounded.Check,
                     contentDescription = "Valid value",
-                    tint = Color.Green
+                    tint = Color(0xFF296A48)
                 )
             }
         },
@@ -83,4 +85,35 @@ fun SmartOutlinedTextField(
         modifier = modifier.width(250.dp),
         placeholder = placeholder,
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun asd() {
+    Column {
+
+        SmartOutlinedTextField(
+            value = "ASSD",
+            label = { /*TODO*/ },
+            onValueChange = {},
+            isError = true,
+            errorMessage = "Error message",
+            singleLine = true,
+            maxLength = 30,
+            readOnly = false,
+            enabled = true
+        )
+
+        SmartOutlinedTextField(
+            value = "ASSD",
+            label = { /*TODO*/ },
+            onValueChange = {},
+            isError = false,
+            errorMessage = "Error message",
+            singleLine = true,
+            maxLength = 30,
+            readOnly = false,
+            enabled = true
+        )
+    }
 }
