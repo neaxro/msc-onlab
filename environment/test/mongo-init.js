@@ -19,7 +19,7 @@ db.users.insertMany(
             "last_name": "Anderson",
             "username": "alice",
             "email": "alice.anderson@gmail.com",
-            "profile_picture": "default",
+            "profile_picture": "woman_1",
             "password": "9098c53fe0e338cf9ef819e1048b6cf42e9d840425a43f96c64c19843ed80b61"
         },
         {
@@ -28,7 +28,7 @@ db.users.insertMany(
             "last_name": "Brown",
             "username": "bob",
             "email": "bob.brown@gmail.com",
-            "profile_picture": "default",
+            "profile_picture": "man_2",
             "password": "9098c53fe0e338cf9ef819e1048b6cf42e9d840425a43f96c64c19843ed80b61"
         }
     ]
