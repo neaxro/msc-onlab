@@ -1,6 +1,7 @@
 package com.example.msc_onlab.helpers
 
 import com.auth0.android.jwt.JWT
+import com.example.msc_onlab.R
 
 object LoggedPersonData {
     private lateinit var jwt: JWT
@@ -12,9 +13,11 @@ object LoggedPersonData {
             jwt = JWT(value)
             this.ID = jwt.getClaim("id").asString()
             this.USERNAME = jwt.getClaim("username").asString()
+            this.PROFILE_PICTURE = jwt.getClaim("profile_picture").asString()
 
             field = value
         }
 
     var SELECTED_HOUSEHOLD_ID: String? = null
+    var PROFILE_PICTURE: String? = null
 }

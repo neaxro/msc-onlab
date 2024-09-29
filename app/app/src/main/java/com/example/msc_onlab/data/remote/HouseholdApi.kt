@@ -3,9 +3,14 @@ package com.example.msc_onlab.data.remote
 import com.example.msc_onlab.data.model.household.HouseholdCreateData
 import com.example.msc_onlab.data.model.household.HouseholdCreateResponse
 import com.example.msc_onlab.data.model.household.HouseholdDeleteResponse
+import com.example.msc_onlab.data.model.household.HouseholdDetailedResponse
+import com.example.msc_onlab.data.model.household.HouseholdMembersResponse
+import com.example.msc_onlab.data.model.household.HouseholdTasksResponse
 import com.example.msc_onlab.data.model.household.HouseholdsBrief
 import com.example.msc_onlab.data.model.household.HouseholdUpdateData
 import com.example.msc_onlab.data.model.household.HouseholdUpdateResponse
+import com.example.msc_onlab.data.model.members.MembersResponse
+import com.example.msc_onlab.data.model.task.TaskDeleteResponse
 import com.example.msc_onlab.helpers.LoggedPersonData
 import retrofit2.Response
 import retrofit2.http.Body
@@ -47,4 +52,40 @@ interface HouseholdApi {
         @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
         @Path("household_id") householdId: String
     ): Response<HouseholdDeleteResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("/household/id/{household_id}/detailed")
+    suspend fun getHouseholdById(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("household_id") householdId: String
+    ): Response<HouseholdDetailedResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("/household/id/{household_id}/users")
+    suspend fun getUsersInHousehold(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("household_id") householdId: String
+    ): Response<HouseholdMembersResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("/household/id/{household_id}/tasks/all/detailed")
+    suspend fun getTasksInHousehold(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("household_id") householdId: String
+    ): Response<HouseholdTasksResponse>
+
+    @Headers("Content-Type: application/json")
+    @DELETE("/household/id/{household_id}/tasks/id/{task_id}")
+    suspend fun deleteTask(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("household_id") householdId: String,
+        @Path("task_id") taskId: String,
+    ): Response<TaskDeleteResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("/household/id/{household_id}/users")
+    suspend fun getMembers(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("household_id") householdId: String,
+    ): Response<MembersResponse>
 }

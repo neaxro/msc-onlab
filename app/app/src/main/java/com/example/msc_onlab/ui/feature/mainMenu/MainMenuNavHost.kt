@@ -12,6 +12,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.msc_onlab.ui.feature.households.Households
+import com.example.msc_onlab.ui.feature.members.MembersScreen
+import com.example.msc_onlab.ui.feature.tasks.TasksScreen
 import com.example.msc_onlab.ui.navigation.AppScreens
 
 @Composable
@@ -32,15 +34,11 @@ fun MainMenuNavHost(
         }
 
         composable<AppScreens.Members> {
-            Box(Modifier.fillMaxSize()) {
-                Text(text = "Members", modifier.align(Alignment.Center))
-            }
+            MembersScreen()
         }
 
         composable<AppScreens.Tasks> {
-            Box(Modifier.fillMaxSize()) {
-                Text(text = "Tasks", modifier.align(Alignment.Center))
-            }
+            TasksScreen()
         }
     }
 }
