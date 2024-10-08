@@ -71,6 +71,21 @@ fun validateHouseholdName(householdName: String, @ApplicationContext context: Co
     return DataFieldErrors.NoError
 }
 
+fun validateTaskName(taskName: String, @ApplicationContext context: Context): DataFieldErrors {
+    if(taskName.isEmpty()) return DataFieldErrors.TaskError("Task name cannot be empty!")
+    if(taskName.length < Constants.MIN_TASK_TITLE_LENGTH) return DataFieldErrors.TaskError("Task name is too short!")
+    if(taskName.length > Constants.MAX_TASK_TITLE_LENGTH) return DataFieldErrors.TaskError("Task name is too long!")
+    if(containsSpecialCharacters(taskName)) return DataFieldErrors.TaskError("Task name cannot contain special characters!")
+
+    return DataFieldErrors.NoError
+}
+
+fun validateTaskDescription(taskDescription: String, @ApplicationContext context: Context): DataFieldErrors {
+    if(taskDescription.length > Constants.MAX_TASK_DESCRIPTION_LENGTH) return DataFieldErrors.TaskError("Task description is too long!")
+
+    return DataFieldErrors.NoError
+}
+
 private fun containsSpecialCharacters(text: String): Boolean {
     return text.matches(Regex("\\w*[^\\w\\s]+\\w*"))
 }
@@ -100,6 +115,7 @@ sealed class DataFieldErrors(val message: String){
     class FirstnameError(msg: String): DataFieldErrors(message = msg)
     class LastnameError(msg: String): DataFieldErrors(message = msg)
     class HouseholdError(msg: String): DataFieldErrors(message = msg)
+    class TaskError(msg: String): DataFieldErrors(message = msg)
 
 }
 

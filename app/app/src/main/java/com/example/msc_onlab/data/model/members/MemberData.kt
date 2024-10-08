@@ -1,6 +1,6 @@
 package com.example.msc_onlab.data.model.members
 
-data class Data(
+data class MemberData(
     val _id: Id,
     val email: String,
     val first_name: String,

@@ -1,8 +1,10 @@
 package com.example.msc_onlab.ui.feature.common
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
@@ -79,10 +81,16 @@ fun MyTopAppBar(
                 modifier = modifier
             )
 
-            if(showLoadingBar) {
-                LinearProgressIndicator(
-                    modifier = Modifier.fillMaxWidth()
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(3.dp) // Set the height for the container
+            ) {
+                if (showLoadingBar) {
+                    LinearProgressIndicator(
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }

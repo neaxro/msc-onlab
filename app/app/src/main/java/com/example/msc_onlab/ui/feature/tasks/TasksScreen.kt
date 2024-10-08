@@ -53,6 +53,7 @@ import com.example.msc_onlab.ui.feature.households.HouseholdBottomSheet
 @Composable
 fun TasksScreen(
     viewModel: TasksViewModel = hiltViewModel(),
+    onEdit: (String) -> Unit,
     modifier: Modifier = Modifier
 ){
     val context = LocalContext.current
@@ -130,7 +131,12 @@ fun TasksScreen(
                             onEdit = { id, title ->
                                 viewModel.evoke(TasksAction.ShowSheet(id = id, title = title))
                             },
-                            onClick = { id, newState -> }
+                            onClick = { id, newState ->
+                                viewModel.evoke(TasksAction.UpdateTask(
+                                    taskId = id,
+                                    state = newState
+                                ))
+                            }
                         )
                         if(tasks.data.last() != task){
                             HorizontalDivider(modifier = Modifier.scale(0.9f))
@@ -165,7 +171,10 @@ fun TasksScreen(
                     taskTitle = tasksActionData.title,
                     onDismissRequest = { viewModel.evoke(TasksAction.HideSheet) },
                     sheetState = sheetState,
-                    onEdit = {  },
+                    onEdit = {
+                        viewModel.evoke(TasksAction.HideSheet)
+                        onEdit(tasksActionData.id)
+                    },
                     onDelete = { viewModel.evoke(TasksAction.ShowDeleteDialog) },
                     onDetails = {  }
                 )

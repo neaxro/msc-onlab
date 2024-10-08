@@ -225,7 +225,7 @@ class HouseholdsViewModel @Inject constructor(
 
         _screenState.value = ScreenState.Loading()
         LoggedPersonData.SELECTED_HOUSEHOLD_ID = householdID
-        _screenState.value = ScreenState.Success(message = "Household selected!", show = true)
+        _screenState.value = ScreenState.Success(message = "Household selected!", show = false)
     }
 }
 

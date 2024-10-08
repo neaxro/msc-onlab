@@ -3,13 +3,12 @@ package com.example.msc_onlab.ui.feature.tasks
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.msc_onlab.data.model.household.HouseholdDetailedResponse
 import com.example.msc_onlab.data.model.household.HouseholdTasksResponse
+import com.example.msc_onlab.data.model.household.getPathData
 import com.example.msc_onlab.data.repository.household.HouseholdRepository
 import com.example.msc_onlab.domain.wrappers.Resource
 import com.example.msc_onlab.domain.wrappers.ScreenState
 import com.example.msc_onlab.helpers.LoggedPersonData
-import com.example.msc_onlab.ui.feature.households.HouseholdActionData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,11 +33,11 @@ class TasksViewModel @Inject constructor(
 
     init {
         if(LoggedPersonData.SELECTED_HOUSEHOLD_ID != null) {
-            getTasks()
+            loadTasks()
         }
     }
 
-    private fun getTasks(){
+    private fun loadTasks(){
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -73,7 +72,37 @@ class TasksViewModel @Inject constructor(
                     val deleteData = result.data!!
 
                     // Refresh list
-                    getTasks()
+                    loadTasks()
+                }
+                is Resource.Error -> {
+                    _screenState.value = ScreenState.Error(message = result.message!!)
+                }
+            }
+        }
+    }
+
+    private fun updateTask(taskId: String, state: Boolean){
+        _screenState.value = ScreenState.Loading()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            var result = householdRepository.patchTask(
+                householdId = LoggedPersonData.SELECTED_HOUSEHOLD_ID!!,
+                taskId = taskId,
+                newTaskData = _tasks.value!!.data
+                    .first {
+                        it._id.`$oid` == taskId
+                    }.copy(
+                        done = state
+                    ).getPathData()
+            )
+
+            when(result){
+                is Resource.Success -> {
+                    _screenState.value = ScreenState.Success()
+                    val result = result.data!!
+
+                    // Refresh list
+                    loadTasks()
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
@@ -127,6 +156,13 @@ class TasksViewModel @Inject constructor(
                     )
                 }
             }
+
+            is TasksAction.UpdateTask -> {
+                updateTask(
+                    taskId = action.taskId,
+                    state = action.state
+                )
+            }
         }
     }
 }
@@ -137,6 +173,7 @@ sealed class TasksAction{
     object DeleteTask: TasksAction()
     object ShowDeleteDialog: TasksAction()
     object HideDeleteDialog: TasksAction()
+    data class UpdateTask(val taskId: String, val state: Boolean): TasksAction()
 }
 
 data class TaskActionData(

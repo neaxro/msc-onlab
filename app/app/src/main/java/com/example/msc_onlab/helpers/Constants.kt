@@ -18,4 +18,10 @@ object Constants {
 
     const val MIN_HOUSEHOLD_NAME_LENGTH = 4
     const val MAX_HOUSEHOLD_NAME_LENGTH = 30
+
+    const val MIN_TASK_TITLE_LENGTH = 4
+    const val MAX_TASK_TITLE_LENGTH = 30
+
+    const val MIN_TASK_DESCRIPTION_LENGTH = 0
+    const val MAX_TASK_DESCRIPTION_LENGTH = 300
 }

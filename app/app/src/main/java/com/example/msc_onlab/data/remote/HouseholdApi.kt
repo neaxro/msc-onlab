@@ -11,6 +11,9 @@ import com.example.msc_onlab.data.model.household.HouseholdUpdateData
 import com.example.msc_onlab.data.model.household.HouseholdUpdateResponse
 import com.example.msc_onlab.data.model.members.MembersResponse
 import com.example.msc_onlab.data.model.task.TaskDeleteResponse
+import com.example.msc_onlab.data.model.task.TaskResponse
+import com.example.msc_onlab.data.model.task.patch.TaskPatchData
+import com.example.msc_onlab.data.model.task.patch.TaskPatchResponse
 import com.example.msc_onlab.helpers.LoggedPersonData
 import retrofit2.Response
 import retrofit2.http.Body
@@ -88,4 +91,20 @@ interface HouseholdApi {
         @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
         @Path("household_id") householdId: String,
     ): Response<MembersResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("/household/tasks/id/{task_id}/detailed")
+    suspend fun getTaskById(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("task_id") taskId: String,
+    ): Response<TaskResponse>
+
+    @Headers("Content-Type: application/json")
+    @PATCH("/household/id/{household_id}/tasks/id/{task_id}")
+    suspend fun patchTask(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("household_id") householdId: String,
+        @Path("task_id") taskId: String,
+        @Body newTaskData: TaskPatchData
+    ): Response<TaskPatchResponse>
 }

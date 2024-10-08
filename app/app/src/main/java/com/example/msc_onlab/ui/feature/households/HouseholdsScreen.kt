@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,11 +42,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.msc_onlab.ui.feature.common.HouseholdsBriefListItem
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Households(
     viewModel: HouseholdsViewModel = hiltViewModel(),
+    onNavigateToTasks: () -> Unit,
     modifier: Modifier = Modifier
 ){
     val context = LocalContext.current
@@ -122,6 +125,7 @@ fun Households(
                         },
                         onClick = { id ->
                             viewModel.evoke(HouseholdAction.SelectHousehold(id))
+                            onNavigateToTasks()
                         },
                     )
                     if(households.data.last() != household){

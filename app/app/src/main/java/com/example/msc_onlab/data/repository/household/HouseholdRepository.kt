@@ -13,6 +13,9 @@ import com.example.msc_onlab.data.model.login.LoginData
 import com.example.msc_onlab.data.model.login.LoginResponse
 import com.example.msc_onlab.data.model.members.MembersResponse
 import com.example.msc_onlab.data.model.task.TaskDeleteResponse
+import com.example.msc_onlab.data.model.task.TaskResponse
+import com.example.msc_onlab.data.model.task.patch.TaskPatchData
+import com.example.msc_onlab.data.model.task.patch.TaskPatchResponse
 import com.example.msc_onlab.domain.wrappers.Resource
 import com.example.msc_onlab.helpers.LoggedPersonData
 import retrofit2.Response
@@ -40,4 +43,8 @@ interface HouseholdRepository {
     suspend fun deleteTask(householdId: String, taskId: String): Resource<TaskDeleteResponse>
 
     suspend fun getMembers(householdId: String): Resource<MembersResponse>
+
+    suspend fun getTaskById(taskId: String): Resource<TaskResponse>
+
+    suspend fun patchTask(householdId: String, taskId: String, newTaskData: TaskPatchData): Resource<TaskPatchResponse>
 }

@@ -11,8 +11,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.example.msc_onlab.ui.feature.households.Households
 import com.example.msc_onlab.ui.feature.members.MembersScreen
+import com.example.msc_onlab.ui.feature.tasks.EditTaskScreen
 import com.example.msc_onlab.ui.feature.tasks.TasksScreen
 import com.example.msc_onlab.ui.navigation.AppScreens
 
@@ -30,7 +32,11 @@ fun MainMenuNavHost(
             .fillMaxSize()
     ){
         composable<AppScreens.Households> {
-            Households()
+            Households(
+                onNavigateToTasks = {
+                    mainMenuNavController.navigate(AppScreens.Tasks)
+                }
+            )
         }
 
         composable<AppScreens.Members> {
@@ -38,7 +44,21 @@ fun MainMenuNavHost(
         }
 
         composable<AppScreens.Tasks> {
-            TasksScreen()
+            TasksScreen(
+                onEdit = { taskId ->
+                    mainMenuNavController.navigate(AppScreens.EditTask(taskId = taskId))
+                }
+            )
+        }
+
+        composable<AppScreens.EditTask> {
+            EditTaskScreen(
+                onNavigateBack = {
+                    mainMenuNavController.navigate(AppScreens.Tasks){
+                        popUpTo<AppScreens.Tasks> { inclusive = true }
+                    }
+                }
+            )
         }
     }
 }
