@@ -17,7 +17,6 @@ import com.example.msc_onlab.helpers.LoggedPersonData
 import com.example.msc_onlab.helpers.or
 import com.example.msc_onlab.helpers.validateTaskDescription
 import com.example.msc_onlab.helpers.validateTaskName
-import com.example.msc_onlab.ui.feature.register.RegisterFieldErrors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -91,7 +90,7 @@ class EditTaskViewModel @Inject constructor(
         }
     }
 
-    private fun updateTask(){
+    private fun updateTask(showStatus: Boolean = false){
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -103,7 +102,7 @@ class EditTaskViewModel @Inject constructor(
 
             when(result){
                 is Resource.Success -> {
-                    _screenState.value = ScreenState.Success(message = "Task updated!", show = true)
+                    _screenState.value = ScreenState.Success(message = "Task updated!", show = showStatus)
                     val result = result.data!!
                 }
                 is Resource.Error -> {
@@ -173,6 +172,8 @@ class EditTaskViewModel @Inject constructor(
                         subtasks = updatedSubtasks
                     )
                 }
+
+                updateTask()
             }
 
             is EditTasksAction.DeleteSubtask -> {
@@ -190,7 +191,7 @@ class EditTaskViewModel @Inject constructor(
             }
 
             EditTasksAction.SaveTask -> {
-                updateTask()
+                updateTask(showStatus = true)
             }
         }
     }
