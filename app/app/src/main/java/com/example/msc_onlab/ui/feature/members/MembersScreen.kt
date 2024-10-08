@@ -41,6 +41,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.msc_onlab.ui.feature.common.DeleteDialog
@@ -105,7 +106,8 @@ fun MembersScreen(
             ) {
                 Text(
                     text = "Select a household first!",
-                    modifier = Modifier.align(Alignment.Center)
+                    fontWeight = FontWeight.Light,
+                    modifier = Modifier.align(Alignment.Center),
                 )
             }
         }

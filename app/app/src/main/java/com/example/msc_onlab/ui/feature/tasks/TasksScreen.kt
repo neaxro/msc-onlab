@@ -1,25 +1,19 @@
 package com.example.msc_onlab.ui.feature.tasks
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
@@ -40,14 +34,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.msc_onlab.ui.feature.common.DeleteDialog
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
 import com.example.msc_onlab.ui.feature.common.TaskBriefListItem
-import com.example.msc_onlab.ui.feature.households.HouseholdAction
-import com.example.msc_onlab.ui.feature.households.HouseholdBottomSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -129,7 +122,7 @@ fun TasksScreen(
                             dueDate = task.due_date,
                             isDone = task.done,
                             onEdit = { id, title ->
-                                viewModel.evoke(TasksAction.ShowSheet(id = id, title = title))
+                                onEdit(id)
                             },
                             onClick = { id, newState ->
                                 viewModel.evoke(TasksAction.UpdateTask(
@@ -152,32 +145,10 @@ fun TasksScreen(
                 ) {
                     Text(
                         text = "There is no task in household.",
-                        modifier = Modifier.align(Alignment.Center)
+                        fontWeight = FontWeight.Light,
+                        modifier = Modifier.align(Alignment.Center),
                     )
                 }
-            }
-
-            if(tasksActionData.showDeleteDialog){
-                DeleteDialog(
-                    title = tasksActionData.title,
-                    description = "Are you sure to delete task?",
-                    onDismissRequest = { viewModel.evoke(TasksAction.HideDeleteDialog) },
-                    onConfirmation = { viewModel.evoke(TasksAction.DeleteTask) }
-                )
-            }
-
-            if(tasksActionData.showSheet){
-                TasksBottomSheet(
-                    taskTitle = tasksActionData.title,
-                    onDismissRequest = { viewModel.evoke(TasksAction.HideSheet) },
-                    sheetState = sheetState,
-                    onEdit = {
-                        viewModel.evoke(TasksAction.HideSheet)
-                        onEdit(tasksActionData.id)
-                    },
-                    onDelete = { viewModel.evoke(TasksAction.ShowDeleteDialog) },
-                    onDetails = {  }
-                )
             }
         }
     }

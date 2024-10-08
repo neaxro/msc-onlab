@@ -15,6 +15,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Done
+import androidx.compose.material.icons.rounded.RemoveCircle
+import androidx.compose.material.icons.rounded.RemoveCircleOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -92,7 +94,11 @@ fun SubtaskBriefListItem(
         }
 
         IconButton(onClick = { onDelete(id) }) {
-            Icon(imageVector = Icons.Rounded.Delete, contentDescription = "Delete")
+            Icon(
+                imageVector = Icons.Rounded.RemoveCircleOutline,
+                contentDescription = "Remove",
+                tint = MaterialTheme.colorScheme.primary
+            )
         }
     }
 }

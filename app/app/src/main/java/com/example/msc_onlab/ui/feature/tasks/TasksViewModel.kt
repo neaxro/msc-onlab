@@ -56,30 +56,7 @@ class TasksViewModel @Inject constructor(
         }
     }
 
-    private fun deleteTask(){
-        _screenState.value = ScreenState.Loading()
 
-        viewModelScope.launch(Dispatchers.IO) {
-            var result = householdRepository.deleteTask(
-                householdId = LoggedPersonData.SELECTED_HOUSEHOLD_ID!!,
-                taskId = _taskActionData.value.id
-            )
-
-            when(result){
-                is Resource.Success -> {
-                    _screenState.value = ScreenState.Success()
-
-                    val deleteData = result.data!!
-
-                    // Refresh list
-                    loadTasks()
-                }
-                is Resource.Error -> {
-                    _screenState.value = ScreenState.Error(message = result.message!!)
-                }
-            }
-        }
-    }
 
     private fun updateTask(taskId: String, state: Boolean){
         _screenState.value = ScreenState.Loading()
@@ -113,50 +90,6 @@ class TasksViewModel @Inject constructor(
 
     fun evoke(action: TasksAction){
         when(action){
-            is TasksAction.ShowSheet -> {
-                _taskActionData.update {
-                    it.copy(
-                        showSheet = true,
-                        id = action.id,
-                        title = action.title
-                    )
-                }
-            }
-
-            TasksAction.HideSheet -> {
-                _taskActionData.update {
-                    it.copy(
-                        showSheet = false
-                    )
-                }
-            }
-
-            TasksAction.DeleteTask -> {
-                _taskActionData.update {
-                    it.copy(
-                        showDeleteDialog = false
-                    )
-                }
-
-                deleteTask()
-            }
-
-            TasksAction.HideDeleteDialog -> {
-                _taskActionData.update {
-                    it.copy(
-                        showDeleteDialog = false
-                    )
-                }
-            }
-            TasksAction.ShowDeleteDialog -> {
-                _taskActionData.update {
-                    it.copy(
-                        showDeleteDialog = true,
-                        showSheet = false
-                    )
-                }
-            }
-
             is TasksAction.UpdateTask -> {
                 updateTask(
                     taskId = action.taskId,
@@ -168,17 +101,10 @@ class TasksViewModel @Inject constructor(
 }
 
 sealed class TasksAction{
-    data class ShowSheet(val id: String, val title: String): TasksAction()
-    object HideSheet: TasksAction()
-    object DeleteTask: TasksAction()
-    object ShowDeleteDialog: TasksAction()
-    object HideDeleteDialog: TasksAction()
     data class UpdateTask(val taskId: String, val state: Boolean): TasksAction()
 }
 
 data class TaskActionData(
-    val showSheet: Boolean = false,
-    val showDeleteDialog: Boolean = false,
     val id: String = "",
     val title: String = "",
 )

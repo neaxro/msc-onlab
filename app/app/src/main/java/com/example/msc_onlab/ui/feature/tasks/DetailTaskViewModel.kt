@@ -112,6 +112,28 @@ class EditTaskViewModel @Inject constructor(
         }
     }
 
+    private fun deleteTask(){
+        _screenState.value = ScreenState.Loading()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            var result = householdRepository.deleteTask(
+                householdId = LoggedPersonData.SELECTED_HOUSEHOLD_ID!!,
+                taskId = taskId
+            )
+
+            when(result){
+                is Resource.Success -> {
+                    _screenState.value = ScreenState.Success()
+
+                    val deleteData = result.data!!
+                }
+                is Resource.Error -> {
+                    _screenState.value = ScreenState.Error(message = result.message!!)
+                }
+            }
+        }
+    }
+
     fun evoke(action: EditTasksAction){
         when(action){
             is EditTasksAction.UpdateDescription -> {
@@ -188,10 +210,16 @@ class EditTaskViewModel @Inject constructor(
                         subtasks = updatedSubtasks
                     )
                 }
+
+                updateTask()
             }
 
             EditTasksAction.SaveTask -> {
-                updateTask(showStatus = true)
+                updateTask()
+            }
+
+            EditTasksAction.DeleteTask -> {
+                deleteTask()
             }
         }
     }
@@ -205,6 +233,7 @@ sealed class EditTasksAction{
     data class ChangeSubtaskStatus(val subtaskId: String, val status: Boolean) : EditTasksAction()
     data class DeleteSubtask(val subtaskId: String) : EditTasksAction()
     object SaveTask : EditTasksAction()
+    object DeleteTask : EditTasksAction()
 }
 
 data class EditTaskFieldErrors(

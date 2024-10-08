@@ -15,7 +15,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.RemoveCircleOutline
 import androidx.compose.material.icons.rounded.TaskAlt
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -47,6 +49,7 @@ import com.example.msc_onlab.domain.wrappers.ScreenState
 import com.example.msc_onlab.helpers.Constants
 import com.example.msc_onlab.helpers.isError
 import com.example.msc_onlab.ui.feature.common.DatePickerDocked
+import com.example.msc_onlab.ui.feature.common.DeleteDialog
 import com.example.msc_onlab.ui.feature.common.MemberDropDownMenu
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
@@ -69,6 +72,7 @@ fun EditTaskScreen(
     val errors = viewModel.errors.collectAsState().value
 
     var selectedTabIndex by rememberSaveable { mutableStateOf<TaskEditPage>(TaskEditPage.SubtasksPage) }
+    var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -76,10 +80,10 @@ fun EditTaskScreen(
                 title = task?.title ?: "Not found",
                 screenState = viewModel.screenState.collectAsState(),
                 actions = {
-                    IconButton(onClick = { onNavigateBack() }) {
+                    IconButton(onClick = { showDeleteDialog = true }) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = "Go back"
+                            imageVector = Icons.Rounded.Delete,
+                            contentDescription = "Remove"
                         )
                     }
                 },
@@ -179,6 +183,7 @@ fun EditTaskScreen(
                                 onClick = {
                                     controller?.hide()
                                     viewModel.evoke(EditTasksAction.SaveTask)
+                                    onNavigateBack()
                                 },
                                 modifier = Modifier.width(250.dp),
                                 shape = Shapes.small,
@@ -245,6 +250,19 @@ fun EditTaskScreen(
             ){
                 Text(text = "Task not found...", modifier = Modifier.align(Alignment.Center))
             }
+        }
+
+        if(showDeleteDialog){
+            DeleteDialog(
+                title = task?.title ?: "Delete task",
+                description = "Are you sure to delete task?",
+                onDismissRequest = { showDeleteDialog = false },
+                onConfirmation = {
+                    viewModel.evoke(EditTasksAction.DeleteTask)
+                    showDeleteDialog = false
+                    onNavigateBack()
+                }
+            )
         }
     }
 }
