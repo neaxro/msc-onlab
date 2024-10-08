@@ -103,7 +103,8 @@ db.households.insertMany([
         "creation_date": "2024.09.25. 13:27:12",
         "people": [
             ObjectId("66f40d24c53e1eb2d8bbcd0d"),
-            ObjectId("66f40ebdc53e1eb2d8bbcd1e")
+            ObjectId("66f40ebdc53e1eb2d8bbcd1e"),
+            ObjectId("66f40ea5c53e1eb2d8bbcd1b")
         ],
         "tasks": [
             {
