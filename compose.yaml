@@ -12,8 +12,7 @@ services:
       - ./environment/test/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
 
   msc_onlab_api:
-    build:
-      dockerfile: Dockerfile
+    image: msc-onlab-backend:latest
     container_name: msc_onlab_api
     ports:
       - 5000:5000

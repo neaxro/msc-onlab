@@ -24,11 +24,16 @@ class TaskService:
         self.user_service = UserService()
     
     def validate_json_format_insert(self, json_data):
-        required_fields = ["title", "description", "due_date"]
+        required_fields = ["title", "due_date"]  # Only 'title' and 'due_date' are required
 
         for field in required_fields:
             if field not in json_data or not json_data[field]:
                 raise Exception(f"Field '{field}' is missing or empty in the JSON data.")
+        
+        # 'description' can be present but allowed to be empty
+        if "description" not in json_data:
+            json_data["description"] = ""  # If not present, set it to an empty string
+
     
     def validate_json_format_update(self, json_data):
         required_fields = ["creation_date", "description", "done", "due_date", "responsible_id", "subtasks", "title"]
