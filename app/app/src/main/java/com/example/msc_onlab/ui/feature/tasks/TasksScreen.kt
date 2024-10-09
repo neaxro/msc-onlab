@@ -45,6 +45,7 @@ import com.example.msc_onlab.ui.feature.common.TaskBriefListItem
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TasksScreen(
+    onCreateTask: () -> Unit,
     viewModel: TasksViewModel = hiltViewModel(),
     onEdit: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -94,7 +95,7 @@ fun TasksScreen(
                 exit = slideOutVertically(targetOffsetY = { it * 2 }),
             ) {
                 ExtendedFloatingActionButton(
-                    onClick = { /* TODO */ },
+                    onClick = { onCreateTask() },
                     icon = { Icon(imageVector = Icons.Rounded.Add, contentDescription = "Create Household") },
                     text = { Text(text = "New task") },
                 )

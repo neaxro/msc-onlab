@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.msc_onlab.ui.feature.households.Households
 import com.example.msc_onlab.ui.feature.members.MembersScreen
+import com.example.msc_onlab.ui.feature.tasks.CreateTaskScreen
 import com.example.msc_onlab.ui.feature.tasks.EditTaskScreen
 import com.example.msc_onlab.ui.feature.tasks.TasksScreen
 import com.example.msc_onlab.ui.navigation.AppScreens
@@ -47,12 +48,25 @@ fun MainMenuNavHost(
             TasksScreen(
                 onEdit = { taskId ->
                     mainMenuNavController.navigate(AppScreens.EditTask(taskId = taskId))
+                },
+                onCreateTask = {
+                    mainMenuNavController.navigate(AppScreens.CreateTask)
                 }
             )
         }
 
         composable<AppScreens.EditTask> {
             EditTaskScreen(
+                onNavigateBack = {
+                    mainMenuNavController.navigate(AppScreens.Tasks){
+                        popUpTo<AppScreens.Tasks> { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        composable<AppScreens.CreateTask> {
+            CreateTaskScreen(
                 onNavigateBack = {
                     mainMenuNavController.navigate(AppScreens.Tasks){
                         popUpTo<AppScreens.Tasks> { inclusive = true }

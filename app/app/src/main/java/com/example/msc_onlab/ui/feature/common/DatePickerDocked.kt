@@ -47,6 +47,7 @@ fun DatePickerDocked(
     label: @Composable() (() -> Unit)? = null,
     onValueChange: (String) -> Unit,
     readOnly: Boolean,
+    isError: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
@@ -79,7 +80,8 @@ fun DatePickerDocked(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(64.dp)
+                .height(64.dp),
+            isError = isError
         )
 
         if (showDatePicker) {

@@ -12,6 +12,8 @@ import com.example.msc_onlab.data.model.household.HouseholdUpdateResponse
 import com.example.msc_onlab.data.model.members.MembersResponse
 import com.example.msc_onlab.data.model.task.TaskDeleteResponse
 import com.example.msc_onlab.data.model.task.TaskResponse
+import com.example.msc_onlab.data.model.task.create.CreateTaskData
+import com.example.msc_onlab.data.model.task.create.CreateTaskResponse
 import com.example.msc_onlab.data.model.task.patch.TaskPatchData
 import com.example.msc_onlab.data.model.task.patch.TaskPatchResponse
 import com.example.msc_onlab.helpers.LoggedPersonData
@@ -107,4 +109,12 @@ interface HouseholdApi {
         @Path("task_id") taskId: String,
         @Body newTaskData: TaskPatchData
     ): Response<TaskPatchResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("/household/id/{household_id}/tasks")
+    suspend fun createTask(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("household_id") householdId: String,
+        @Body taskData: CreateTaskData
+    ): Response<CreateTaskResponse>
 }

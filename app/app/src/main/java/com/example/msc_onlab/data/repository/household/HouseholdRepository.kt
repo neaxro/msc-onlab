@@ -14,6 +14,8 @@ import com.example.msc_onlab.data.model.login.LoginResponse
 import com.example.msc_onlab.data.model.members.MembersResponse
 import com.example.msc_onlab.data.model.task.TaskDeleteResponse
 import com.example.msc_onlab.data.model.task.TaskResponse
+import com.example.msc_onlab.data.model.task.create.CreateTaskData
+import com.example.msc_onlab.data.model.task.create.CreateTaskResponse
 import com.example.msc_onlab.data.model.task.patch.TaskPatchData
 import com.example.msc_onlab.data.model.task.patch.TaskPatchResponse
 import com.example.msc_onlab.domain.wrappers.Resource
@@ -47,4 +49,6 @@ interface HouseholdRepository {
     suspend fun getTaskById(taskId: String): Resource<TaskResponse>
 
     suspend fun patchTask(householdId: String, taskId: String, newTaskData: TaskPatchData): Resource<TaskPatchResponse>
+
+    suspend fun createTask(householdId: String, taskData: CreateTaskData): Resource<CreateTaskResponse>
 }

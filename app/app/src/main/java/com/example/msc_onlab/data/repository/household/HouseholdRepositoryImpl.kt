@@ -15,6 +15,8 @@ import com.example.msc_onlab.data.model.login.LoginResponse
 import com.example.msc_onlab.data.model.members.MembersResponse
 import com.example.msc_onlab.data.model.task.TaskDeleteResponse
 import com.example.msc_onlab.data.model.task.TaskResponse
+import com.example.msc_onlab.data.model.task.create.CreateTaskData
+import com.example.msc_onlab.data.model.task.create.CreateTaskResponse
 import com.example.msc_onlab.data.model.task.patch.TaskPatchData
 import com.example.msc_onlab.data.model.task.patch.TaskPatchResponse
 import com.example.msc_onlab.data.remote.HouseholdApi
@@ -290,4 +292,31 @@ class HouseholdRepositoryImpl(
 
         return result
     }
+
+    override suspend fun createTask(
+        householdId: String,
+        taskData: CreateTaskData
+    ): Resource<CreateTaskResponse> {
+        val result = try{
+            val response = api.createTask(
+                householdId = householdId,
+                taskData = taskData
+            )
+
+            // Check server response
+            val res = if(response.code() == 200){
+                Resource.Success(message = "Successfully created task!", data = response.body()!!)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result    }
 }
