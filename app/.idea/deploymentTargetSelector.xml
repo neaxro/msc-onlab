@@ -14,9 +14,6 @@
       <SelectionState runConfigName="MemberDropDownMenuPreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="TEHP">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="ANSI">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>

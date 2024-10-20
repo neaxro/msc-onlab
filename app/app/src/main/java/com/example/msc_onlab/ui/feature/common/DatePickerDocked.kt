@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
@@ -37,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import com.example.msc_onlab.ui.theme.MsconlabTheme
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneOffset
 import java.util.Date
 import java.util.Locale
 
@@ -51,7 +54,9 @@ fun DatePickerDocked(
     modifier: Modifier = Modifier,
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(
+        selectableDates = FutureOrPresentSelectableDates
+    )
     val selectedDate: String = datePickerState.selectedDateMillis?.let {
         convertMillisToDate(it)
     } ?: value
@@ -144,5 +149,19 @@ fun DatePickerDockedPreview() {
                 readOnly = false
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+object FutureOrPresentSelectableDates: SelectableDates {
+    private val now = LocalDate.now()
+    private val dayStart = now.atTime(0, 0, 0, 0).toEpochSecond(ZoneOffset.UTC) * 1000
+
+    override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+        return utcTimeMillis >= dayStart
+    }
+
+    override fun isSelectableYear(year: Int): Boolean {
+        return year >= now.year
     }
 }
