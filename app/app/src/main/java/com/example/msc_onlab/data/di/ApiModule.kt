@@ -3,6 +3,7 @@ package com.example.msc_onlab.data.di
 import com.example.msc_onlab.data.model.household.HouseholdsBrief
 import com.example.msc_onlab.data.remote.HouseholdApi
 import com.example.msc_onlab.data.remote.LoginApi
+import com.example.msc_onlab.data.remote.ProfileApi
 import com.example.msc_onlab.data.remote.RegisterApi
 import dagger.Module
 import dagger.Provides
@@ -46,5 +47,15 @@ object ApiModule {
             .baseUrl(BASE_URL)
             .build()
             .create(HouseholdApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileApi(): ProfileApi{
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(BASE_URL)
+            .build()
+            .create(ProfileApi::class.java)
     }
 }

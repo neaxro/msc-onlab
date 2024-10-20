@@ -23,6 +23,9 @@ sealed class AppScreens {
     object Members : AppScreens()
 
     @Serializable
+    object Profile : AppScreens()
+
+    @Serializable
     data class EditTask(val taskId: String) : AppScreens()
 
     @Serializable

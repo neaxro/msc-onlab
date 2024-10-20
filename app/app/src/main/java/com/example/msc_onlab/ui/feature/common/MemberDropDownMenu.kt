@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.example.msc_onlab.data.model.members.Id
 import com.example.msc_onlab.data.model.members.MemberData
-import com.example.msc_onlab.helpers.getProfilePicture
+import com.example.msc_onlab.helpers.ResourceLocator
 import com.example.msc_onlab.ui.theme.MsconlabTheme
 import java.lang.reflect.Member
 
@@ -104,7 +104,7 @@ fun MemberDropDownMenu(
                                 modifier = Modifier.size(30.dp),
                             ) {
                                 Image(
-                                    painter = painterResource(id = getProfilePicture(member.profile_picture)),
+                                    painter = painterResource(id = ResourceLocator.getProfilePicture(member.profile_picture)),
                                     contentDescription = "Profile picture",
                                     contentScale = ContentScale.Crop,
                                 )

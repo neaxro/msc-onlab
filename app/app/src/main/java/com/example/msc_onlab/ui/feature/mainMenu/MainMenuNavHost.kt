@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.msc_onlab.ui.feature.households.Households
 import com.example.msc_onlab.ui.feature.members.MembersScreen
+import com.example.msc_onlab.ui.feature.profile.ProfileScreen
 import com.example.msc_onlab.ui.feature.tasks.CreateTaskScreen
 import com.example.msc_onlab.ui.feature.tasks.EditTaskScreen
 import com.example.msc_onlab.ui.feature.tasks.TasksScreen
@@ -73,6 +74,10 @@ fun MainMenuNavHost(
                     }
                 }
             )
+        }
+
+        composable<AppScreens.Profile> {
+            ProfileScreen()
         }
     }
 }

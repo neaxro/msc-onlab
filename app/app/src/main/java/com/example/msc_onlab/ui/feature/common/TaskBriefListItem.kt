@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.msc_onlab.R
 import com.example.msc_onlab.data.model.household.HouseholdsBrief
-import com.example.msc_onlab.helpers.getProfilePicture
+import com.example.msc_onlab.helpers.ResourceLocator
 import com.example.msc_onlab.ui.theme.MsconlabTheme
 
 @Composable
@@ -73,9 +73,10 @@ fun TaskBriefListItem(
                 elevation = CardDefaults.elevatedCardElevation(2.dp)
             ) {
                 Image(
-                    painter = painterResource(id = getProfilePicture(responsibleProfilePictureName)),
+                    painter = painterResource(id = ResourceLocator.getProfilePicture(responsibleProfilePictureName)),
                     contentDescription = "Profile picture",
                     contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
                 )
             }
 

@@ -10,6 +10,7 @@ import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.rounded.House
 import androidx.compose.material.icons.rounded.Logout
 import androidx.compose.material.icons.rounded.PeopleAlt
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.TaskAlt
 import androidx.compose.material3.Icon
@@ -43,6 +44,7 @@ fun MainMenu(
         NavigationItem(0, "Households", AppScreens.Households, Icons.Rounded.House, 0),
         NavigationItem(0, "Tasks", AppScreens.Tasks, Icons.Rounded.TaskAlt, 0),
         NavigationItem(0, "Members", AppScreens.Members, Icons.Rounded.PeopleAlt, 0),
+        NavigationItem(0, "Profile", AppScreens.Profile, Icons.Rounded.Person, 0),
     )
 
     Scaffold(
