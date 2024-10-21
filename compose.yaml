@@ -21,5 +21,6 @@ services:
       - MONGODB_DATABASE_NAME=msc_onlab
       - MONGODB_COLLECTION_USERS=users
       - MONGODB_COLLECTION_HOUSEHOLDS=households
+      - MONGODB_COLLECTION_INVITATIONS=invitations
     depends_on:
       - mongodb

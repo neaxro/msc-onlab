@@ -10,6 +10,7 @@ from app.household.household_routes import HouseholdResource
 from app.household.household_detailed_routes import HouseholdDetailedResource
 from app.household.invitation.invitation_create_routes import InvitationCreateResource
 from app.household.invitation.invitation_accept_routes import InvitationAcceptResource
+from app.household.invitation.invitation_decline_routes import InvitationDeclineResource
 from app.household.household_user_routes import HouseholdUserResource
 
 from app.household.tasks.task_assign_routes import AssignResource
@@ -30,8 +31,9 @@ api.add_resource(UserResource, '/user', '/user/<id>')
 # Household resources
 api.add_resource(HouseholdResource, '/household', '/household/all/<user_id>', '/household/id/<household_id>')
 api.add_resource(HouseholdDetailedResource, '/household', '/household/all/detailed', '/household/id/<household_id>/detailed')
-api.add_resource(InvitationCreateResource, '/household/invite/')
-api.add_resource(InvitationAcceptResource, '/household/accept-invite/<invitation_token>')
+api.add_resource(InvitationCreateResource, '/household/invite', '/household/invite/<user_id>')
+api.add_resource(InvitationAcceptResource, '/household/accept-invite/<invitation_id>')
+api.add_resource(InvitationDeclineResource, '/household/decline-invite/<invitation_id>')
 api.add_resource(HouseholdUserResource, '/household', '/household/id/<household_id>/users')
 
 # Task resources

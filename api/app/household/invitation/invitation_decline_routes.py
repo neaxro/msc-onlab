@@ -6,7 +6,7 @@ from app.household.invitation.invitation_service import InvitationService
 from app.utils.templater import Templater
 from app.decorators.token_requires import token_required
 
-class InvitationAcceptResource(Resource):
+class InvitationDeclineResource(Resource):
     def __init__(self):
         self.invitation_service = InvitationService()
         self.templater = Templater()
@@ -14,7 +14,7 @@ class InvitationAcceptResource(Resource):
     @token_required
     def post(self, token_data, invitation_id=None):
         try:
-            result = self.invitation_service.accept_invitation(
+            result = self.invitation_service.decline_invitation(
                 token_data,
                 invitation_id
             )
