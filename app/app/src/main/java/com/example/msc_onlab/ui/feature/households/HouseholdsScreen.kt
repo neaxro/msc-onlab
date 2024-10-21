@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -12,12 +13,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.TaskAlt
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -33,10 +38,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.msc_onlab.ui.feature.common.HouseholdsBriefListItem
@@ -56,6 +63,8 @@ fun Households(
 
     val households = viewModel.households.collectAsState().value
     val householdActionData = viewModel.householdActionData.collectAsState().value
+
+    var selectedTabIndex by rememberSaveable { mutableStateOf<HouseholdPage>(HouseholdPage.Households) }
 
     // Bottom Sheet
     val sheetState = rememberModalBottomSheetState()
@@ -106,34 +115,64 @@ fun Households(
         floatingActionButtonPosition = FabPosition.Center
     ) { padding ->
         if (households != null && households.data.isNotEmpty()) {
-            LazyColumn(
-                modifier = modifier
+            Column(
+                modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = padding.calculateTopPadding())
-                    .nestedScroll(nestedScrollConnection),
-                state = lazyListState,
-                contentPadding = PaddingValues(all = 10.dp),
+                    .padding(top = padding.calculateTopPadding()),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                items(households.data) { household ->
-                    HouseholdsBriefListItem(
-                        title = household.title,
-                        id = household._id.`$oid`,
-                        numberOfMembers = household.no_people,
-                        numberOfTasks = household.no_active_tasks,
-                        onEdit = { id, title ->
-                            viewModel.evoke(HouseholdAction.ShowSheet(id = id, title = title))
-                        },
-                        onClick = { id ->
-                            viewModel.evoke(HouseholdAction.SelectHousehold(id))
-                            onNavigateToTasks()
-                        },
-                    )
-                    if(households.data.last() != household){
-                        HorizontalDivider(modifier = Modifier.scale(0.9f))
+                TabRow(selectedTabIndex = selectedTabIndex.ordinal) {
+                    HouseholdPage.entries.forEachIndexed() { index, tabPage ->
+                        Tab(
+                            selected = index == selectedTabIndex.ordinal,
+                            onClick = { selectedTabIndex = tabPage },
+                            text = { Text(text = tabPage.title) },
+                        )
+                    }
+                }
+
+                when(selectedTabIndex){
+                    HouseholdPage.Households -> {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .nestedScroll(nestedScrollConnection),
+                            state = lazyListState,
+                            contentPadding = PaddingValues(all = 10.dp),
+                        ) {
+                            items(households.data) { household ->
+                                HouseholdsBriefListItem(
+                                    title = household.title,
+                                    id = household._id.`$oid`,
+                                    numberOfMembers = household.no_people,
+                                    numberOfTasks = household.no_active_tasks,
+                                    onEdit = { id, title ->
+                                        viewModel.evoke(HouseholdAction.ShowSheet(id = id, title = title))
+                                    },
+                                    onClick = { id ->
+                                        viewModel.evoke(HouseholdAction.SelectHousehold(id))
+                                        onNavigateToTasks()
+                                    },
+                                )
+                                if(households.data.last() != household){
+                                    HorizontalDivider(modifier = Modifier.scale(0.9f))
+                                }
+                            }
+                        }
+                    }
+                    HouseholdPage.Invitations -> {
+                        isFabVisible.value = false
+
+                        Box(modifier = Modifier.fillMaxSize()){
+                            Text(
+                                text = "Invitations...",
+                                fontWeight = FontWeight.Light,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
                     }
                 }
             }
-
         } else if (households != null) {
             Box(
                 modifier = Modifier
@@ -191,3 +230,7 @@ fun Households(
     }
 }
 
+private enum class HouseholdPage(val title: String, val icon: ImageVector){
+    Households("Households", Icons.Rounded.TaskAlt),
+    Invitations("Invitations", Icons.Rounded.Edit),
+}
