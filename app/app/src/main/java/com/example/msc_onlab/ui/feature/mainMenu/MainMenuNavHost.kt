@@ -77,7 +77,13 @@ fun MainMenuNavHost(
         }
 
         composable<AppScreens.Profile> {
-            ProfileScreen()
+            ProfileScreen(
+                onLogout = {
+                    navController.navigate(AppScreens.Login){
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
+            )
         }
     }
 }
