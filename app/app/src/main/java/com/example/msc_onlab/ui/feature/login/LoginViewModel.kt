@@ -13,9 +13,13 @@ import com.example.msc_onlab.domain.wrappers.ScreenState
 import com.example.msc_onlab.helpers.AppDataRememberer
 import com.example.msc_onlab.helpers.DataFieldErrors
 import com.example.msc_onlab.helpers.LoggedPersonData
+import com.example.msc_onlab.helpers.or
 import com.example.msc_onlab.helpers.sha256
+import com.example.msc_onlab.helpers.validateFirstname
+import com.example.msc_onlab.helpers.validateLastname
 import com.example.msc_onlab.helpers.validateUserPassword
 import com.example.msc_onlab.helpers.validateUsername
+import com.example.msc_onlab.ui.feature.profile.ProfileFieldErrors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -91,6 +95,9 @@ class LoginViewModel @Inject constructor(
     fun evoke(action: LoginAction){
         when(action){
             LoginAction.Login -> {
+                checkAllValues()
+                if (_errors.value.anyErrors()) return
+
                 login()
             }
             is LoginAction.UpdatePassword -> {
@@ -121,6 +128,18 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    private fun checkAllValues(){
+        val username = validateUsername(_loginData.value.username, applicationContext)
+        val password = validateUserPassword(_loginData.value.password, applicationContext)
+
+        _errors.update {
+            it.copy(
+                userName = username,
+                password = password
+            )
+        }
+    }
 }
 
 sealed class LoginAction{
@@ -138,3 +157,10 @@ data class LoginFieldErrors(
     val userName: DataFieldErrors = DataFieldErrors.NoError,
     val password: DataFieldErrors = DataFieldErrors.NoError,
 )
+
+fun LoginFieldErrors.anyErrors(): Boolean {
+    val error = this.userName
+        .or(this.password)
+
+    return error !is DataFieldErrors.NoError
+}

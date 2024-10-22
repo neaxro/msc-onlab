@@ -45,7 +45,6 @@ fun validateFirstname(firstname: String, @ApplicationContext context: Context): 
     if(firstname.length > Constants.MAX_FIRSTNAME_LENGTH) return DataFieldErrors.FirstnameError("Firstname is too long!")
     if(containsNumbers(firstname)) return DataFieldErrors.FirstnameError("Firstname cannot contain numbers!")
     if(containsSpecialCharacters(firstname)) return DataFieldErrors.FirstnameError("Firstname cannot contain special characters!")
-    if(containsWhitespaces(firstname)) return DataFieldErrors.FirstnameError("Firstname cannot contain whitespace(s)!")
 
     return DataFieldErrors.NoError
 }
