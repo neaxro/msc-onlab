@@ -21,3 +21,11 @@ object LoggedPersonData {
     var SELECTED_HOUSEHOLD_ID: String? = null
     var PROFILE_PICTURE: String? = null
 }
+
+fun LoggedPersonData.clear(){
+    this.ID = null
+    this.USERNAME = null
+    this.TOKEN = ""
+    this.SELECTED_HOUSEHOLD_ID = null
+    this.PROFILE_PICTURE = null
+}

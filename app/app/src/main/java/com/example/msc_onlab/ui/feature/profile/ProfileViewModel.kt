@@ -14,6 +14,7 @@ import com.example.msc_onlab.domain.wrappers.Resource
 import com.example.msc_onlab.domain.wrappers.ScreenState
 import com.example.msc_onlab.helpers.DataFieldErrors
 import com.example.msc_onlab.helpers.LoggedPersonData
+import com.example.msc_onlab.helpers.clear
 import com.example.msc_onlab.helpers.or
 import com.example.msc_onlab.helpers.sha256
 import com.example.msc_onlab.helpers.validateFirstname
@@ -88,6 +89,12 @@ class ProfileViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun logout(){
+        LoggedPersonData.clear()
+
+        // TODO: Forget remembered Auth data (username, password)
     }
 
     fun evoke(action: ProfileAction){
@@ -219,6 +226,10 @@ class ProfileViewModel @Inject constructor(
                     }
                 }
             }
+
+            ProfileAction.Logout -> {
+                logout()
+            }
         }
     }
 
@@ -291,6 +302,7 @@ class ProfileViewModel @Inject constructor(
 
 sealed class ProfileAction{
     object Update : ProfileAction()
+    object Logout : ProfileAction()
     class UpdateFirstname(val firstname: String) : ProfileAction()
     class UpdateLastname(val lastname: String) : ProfileAction()
     class UpdateUsername(val username: String) : ProfileAction()

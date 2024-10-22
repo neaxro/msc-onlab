@@ -83,6 +83,7 @@ import com.example.msc_onlab.ui.theme.Shapes
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
+    onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ){
     val context = LocalContext.current
@@ -96,7 +97,7 @@ fun ProfileScreen(
             MyTopAppBar(
                 title = "Profile",
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { viewModel.evoke(ProfileAction.Logout) }) {
                         Icon(imageVector = Icons.AutoMirrored.Rounded.Logout, contentDescription = "Log out")
                     }
                 }
