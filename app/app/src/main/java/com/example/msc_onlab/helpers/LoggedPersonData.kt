@@ -10,6 +10,8 @@ object LoggedPersonData {
     var USERNAME: String? = null
     var TOKEN: String = ""
         set(value) {
+            if (value.isEmpty()) return
+
             jwt = JWT(value)
             this.ID = jwt.getClaim("id").asString()
             this.USERNAME = jwt.getClaim("username").asString()

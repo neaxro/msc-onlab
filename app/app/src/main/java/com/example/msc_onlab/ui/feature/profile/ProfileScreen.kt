@@ -97,7 +97,14 @@ fun ProfileScreen(
             MyTopAppBar(
                 title = "Profile",
                 actions = {
+<<<<<<< HEAD
                     IconButton(onClick = { viewModel.evoke(ProfileAction.Logout) }) {
+=======
+                    IconButton(onClick = {
+                        viewModel.evoke(ProfileAction.Logout)
+                        onLogout()
+                    }) {
+>>>>>>> ca5c836a75e10f0a4a5dde8480deeb8f30da2935
                         Icon(imageVector = Icons.AutoMirrored.Rounded.Logout, contentDescription = "Log out")
                     }
                 }
