@@ -1,6 +1,7 @@
 package com.example.msc_onlab.ui.feature.login
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +10,7 @@ import com.example.msc_onlab.data.model.login.LoginResponse
 import com.example.msc_onlab.data.repository.login.LoginRepository
 import com.example.msc_onlab.domain.wrappers.Resource
 import com.example.msc_onlab.domain.wrappers.ScreenState
+import com.example.msc_onlab.helpers.AppDataRememberer
 import com.example.msc_onlab.helpers.DataFieldErrors
 import com.example.msc_onlab.helpers.LoggedPersonData
 import com.example.msc_onlab.helpers.sha256
@@ -25,12 +27,13 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
+    private val sharedPreferences: SharedPreferences,
     private val applicationContext: Context
 ) : ViewModel() {
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
     val screenState = _screenState.asStateFlow()
 
-    private val _loginData = MutableStateFlow<LoginData>(LoginData(username = "axel", password = "Asdasd11"))
+    private val _loginData = MutableStateFlow<LoginData>(LoginData(username = "", password = ""))
     val loginData = _loginData.asStateFlow()
 
     private val _errors = MutableStateFlow<LoginFieldErrors>(LoginFieldErrors())
@@ -38,6 +41,14 @@ class LoginViewModel @Inject constructor(
 
     private val _loginState = MutableStateFlow<LoginState>(LoginState.NotLoggedIn)
     val loginState = _loginState.asStateFlow()
+
+    init {
+        val rememberedLoginData = AppDataRememberer.getLoginData(sharedPreferences)
+        if(rememberedLoginData != null){
+            _loginData.value = rememberedLoginData
+            login()
+        }
+    }
 
     private fun login(){
         _screenState.value = ScreenState.Loading()
@@ -55,6 +66,12 @@ class LoginViewModel @Inject constructor(
 
                     Log.i("LOGIN_STATUS", "Logged!")
                     Log.i("LOGIN_STATUS", result.data!!.toString())
+
+                    AppDataRememberer.rememberLoginData(
+                        sharedPreferences = sharedPreferences,
+                        username = _loginData.value.username,
+                        password = _loginData.value.password,
+                    )
 
                     val loginResponse: LoginResponse = result.data!!
                     LoggedPersonData.TOKEN = loginResponse.data.token

@@ -1,6 +1,7 @@
 package com.example.msc_onlab.ui.feature.profile
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.provider.ContactsContract.Data
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,6 +13,7 @@ import com.example.msc_onlab.data.repository.login.LoginRepository
 import com.example.msc_onlab.data.repository.profile.ProfileRepository
 import com.example.msc_onlab.domain.wrappers.Resource
 import com.example.msc_onlab.domain.wrappers.ScreenState
+import com.example.msc_onlab.helpers.AppDataRememberer
 import com.example.msc_onlab.helpers.DataFieldErrors
 import com.example.msc_onlab.helpers.LoggedPersonData
 import com.example.msc_onlab.helpers.clear
@@ -37,6 +39,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val loginRepository: LoginRepository,
+    private val sharedPreferences: SharedPreferences,
     private val applicationContext: Context
 ) : ViewModel() {
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
@@ -81,6 +84,12 @@ class ProfileViewModel @Inject constructor(
                 is Resource.Success -> {
                     _screenState.value = ScreenState.Success(show = true)
 
+                    AppDataRememberer.rememberLoginData(
+                        sharedPreferences = sharedPreferences,
+                        username = _user.value!!.username,
+                        password = _user.value!!.newPassword,
+                    )
+
                     // Update the current token
                     LoggedPersonData.TOKEN = result.data!!.data
                 }
@@ -93,8 +102,7 @@ class ProfileViewModel @Inject constructor(
 
     private fun logout(){
         LoggedPersonData.clear()
-
-        // TODO: Forget remembered Auth data (username, password)
+        AppDataRememberer.forgetLoginData(sharedPreferences)
     }
 
     fun evoke(action: ProfileAction){
