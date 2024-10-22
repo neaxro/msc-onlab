@@ -32,10 +32,6 @@ class HouseholdsViewModel @Inject constructor(
     private val _householdActionData = MutableStateFlow<HouseholdActionData>(HouseholdActionData())
     val householdActionData = _householdActionData.asStateFlow()
 
-    init {
-        loadHouseholds()
-    }
-
     private fun loadHouseholds(){
         _screenState.value = ScreenState.Loading()
 
@@ -217,6 +213,10 @@ class HouseholdsViewModel @Inject constructor(
 
                 deleteHousehold()
             }
+
+            HouseholdAction.LoadHouseholds -> {
+                loadHouseholds()
+            }
         }
     }
 
@@ -230,6 +230,7 @@ class HouseholdsViewModel @Inject constructor(
 }
 
 sealed class HouseholdAction{
+    object LoadHouseholds : HouseholdAction()
     data class SelectHousehold(val id: String) : HouseholdAction()
     data class ShowSheet(val id: String, val title: String) : HouseholdAction()
     object HideSheet : HouseholdAction()

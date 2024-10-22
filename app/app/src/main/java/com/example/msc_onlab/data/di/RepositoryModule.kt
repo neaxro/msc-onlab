@@ -2,11 +2,14 @@ package com.example.msc_onlab.data.di
 
 import android.app.Application
 import com.example.msc_onlab.data.remote.HouseholdApi
+import com.example.msc_onlab.data.remote.InvitationApi
 import com.example.msc_onlab.data.remote.LoginApi
 import com.example.msc_onlab.data.remote.ProfileApi
 import com.example.msc_onlab.data.remote.RegisterApi
 import com.example.msc_onlab.data.repository.household.HouseholdRepository
 import com.example.msc_onlab.data.repository.household.HouseholdRepositoryImpl
+import com.example.msc_onlab.data.repository.invitation.InvitationRepository
+import com.example.msc_onlab.data.repository.invitation.InvitationRepositoryImpl
 import com.example.msc_onlab.data.repository.login.LoginRepository
 import com.example.msc_onlab.data.repository.login.LoginRepositoryImpl
 import com.example.msc_onlab.data.repository.profile.ProfileRepository
@@ -67,6 +70,18 @@ object RepositoryModule {
     ): ProfileRepository {
         return ProfileRepositoryImpl(
             api = profileApi,
+            app = app
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideInvitationRepository(
+        invitationApi: InvitationApi,
+        app: Application
+    ): InvitationRepository {
+        return InvitationRepositoryImpl(
+            api = invitationApi,
             app = app
         )
     }

@@ -49,6 +49,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.msc_onlab.ui.feature.common.HouseholdsBriefListItem
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
+import com.example.msc_onlab.ui.feature.invitation.InvitationsScreen
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,6 +87,10 @@ fun Households(
                 return Offset.Zero
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.evoke(HouseholdAction.LoadHouseholds)
     }
 
     Scaffold(
@@ -163,13 +168,15 @@ fun Households(
                     HouseholdPage.Invitations -> {
                         isFabVisible.value = false
 
-                        Box(modifier = Modifier.fillMaxSize()){
+                        InvitationsScreen()
+
+                        /*Box(modifier = Modifier.fillMaxSize()){
                             Text(
                                 text = "Invitations...",
                                 fontWeight = FontWeight.Light,
                                 modifier = Modifier.align(Alignment.Center)
                             )
-                        }
+                        }*/
                     }
                 }
             }

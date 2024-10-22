@@ -2,6 +2,7 @@ package com.example.msc_onlab.data.di
 
 import com.example.msc_onlab.data.model.household.HouseholdsBrief
 import com.example.msc_onlab.data.remote.HouseholdApi
+import com.example.msc_onlab.data.remote.InvitationApi
 import com.example.msc_onlab.data.remote.LoginApi
 import com.example.msc_onlab.data.remote.ProfileApi
 import com.example.msc_onlab.data.remote.RegisterApi
@@ -57,5 +58,15 @@ object ApiModule {
             .baseUrl(BASE_URL)
             .build()
             .create(ProfileApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideInvitationApi(): InvitationApi{
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(BASE_URL)
+            .build()
+            .create(InvitationApi::class.java)
     }
 }
