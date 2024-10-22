@@ -6,9 +6,15 @@ import uuid
 import jwt  # Import the JWT library
 import random  # Import random for generating random subtask counts
 import getpass  # Import getpass for password input
+from faker import Faker  # Import Faker for generating random names
+
+fake = Faker()  # Initialize the Faker instance
 
 def get_uuid():
     return uuid.uuid4().hex[:4]
+
+# Generate random profile pictures
+PROFILE_PICTURES = ['man_1', 'man_2', 'man_3', 'man_4', 'woman_1', 'woman_2', 'woman_3']
 
 def login(base_url, username, password) -> str:
     headers = {
@@ -44,63 +50,37 @@ def decode_jwt(token):
         print(f"Failed to decode token: {e}")
         return None
 
-def create_households(base_url, count, token):
+def create_users(base_url, count):
     headers = {
-        "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
     }
-
-    for i in range(1, count + 1):
-        title = f"{get_uuid()} - Household"
+    
+    for i in range(count):
+        # Generate random first name, last name, and email
+        first_name = fake.first_name()
+        last_name = fake.last_name()
+        username = f"{first_name.lower()}{last_name.lower()}"
+        email = f"{first_name}.{last_name}@gmail.com"
+        profile_picture = random.choice(PROFILE_PICTURES)
+        password = "Asdasd11"  # Hardcoded password
         
+        # Create user registration data
         data = {
-            "title": title
+            "first_name": first_name,
+            "last_name": last_name,
+            "username": username,
+            "email": email,
+            "profile_picture": profile_picture,
+            "password": hashlib.sha256(password.encode('utf-8')).hexdigest()
         }
-        
-        response = requests.post(f"{base_url}/household", json=data, headers=headers)
+
+        # Make the POST request to register the user
+        response = requests.post(f"{base_url}/auth/register", json=data, headers=headers)
         
         if response.status_code == 200:
-            print(f"[{i}/{count}]  Household '{title}' created successfully.")
+            print(f"[{i+1}/{count}] User '{username}' created successfully.")
         else:
-            print(f"Failed to create household '{title}'. Status code: {response.status_code}, Error: {response.text}")
-
-def create_tasks(base_url, household_id, count, subtask_range, subtask_range_min, token):
-    
-    user_data = decode_jwt(token)
-    
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json"
-    }
-
-    for i in range(1, count + 1):
-        # Generate random number of subtasks between subtask_range_min and subtask_range
-        num_subtasks = random.randint(subtask_range_min, int(subtask_range))
-        
-        # Create a list of subtasks
-        subtasks = [
-            {
-                "title": f"{get_uuid()} - Subtask",
-                "type": "checkbox",
-                "done": False  # Defaulting to False as it's a new task
-            }
-            for _ in range(num_subtasks)
-        ]
-
-        data = {
-            "title": f"{get_uuid()} - Task",
-            "description": "Task description",
-            "due_date": "2024-10-16",  # Set a sample due date, you can parameterize it if needed
-            "responsible_id": user_data['id'],
-            "subtasks": subtasks
-        }
-        
-        response = requests.post(f"{base_url}/household/id/{household_id}/tasks", json=data, headers=headers)
-        
-        if response.status_code == 200:
-            print(f"[{i}/{count}]  Task '{data['title']}' created successfully in household '{household_id}' with {num_subtasks} subtasks.")
-        else:
-            print(f"Failed to create task '{data['title']}'. Status code: {response.status_code}, Error: {response.text}")
+            print(f"Failed to create user '{username}'. Status code: {response.status_code}, Error: {response.text}")
 
 def init_parser():
     parser = argparse.ArgumentParser(
@@ -113,7 +93,7 @@ def init_parser():
     parser.add_argument("-p", "--password", help="API password (optional, will be prompted if missing)")
     
     # Add the type argument with choices
-    parser.add_argument("-t", "--type", choices=['household', 'task'], required=True, help="Type of data to create (e.g., household, task)")
+    parser.add_argument("-t", "--type", choices=['household', 'task', 'users'], required=True, help="Type of data to create (e.g., household, task, users)")
     
     parser.add_argument("-c", "--count", type=int, required=True, help="Number of items to create")
 
@@ -148,7 +128,7 @@ def main():
         print(f"Error during login: {e}")
         exit(1)
 
-    # Call create_households or create_tasks based on the type
+    # Call create_households, create_tasks, or create_users based on the type
     if args.type == 'household':
         create_households(args.baseurl, args.count, token)
     elif args.type == 'task':
@@ -160,6 +140,8 @@ def main():
             exit(1)
         
         create_tasks(args.baseurl, args.household_id, args.count, args.subtask_range, args.subtask_range_min, token)
+    elif args.type == 'users':
+        create_users(args.baseurl, args.count)
 
 if __name__ == "__main__":
     main()
