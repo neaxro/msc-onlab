@@ -36,9 +36,7 @@ fun HouseholdBottomSheet(
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
     onEdit: () -> Unit,
-    onInvite: () -> Unit,
     onDelete: () -> Unit,
-    onDetails: () -> Unit,
 ){
     ModalBottomSheet(
         onDismissRequest = { onDismissRequest() },
@@ -77,38 +75,6 @@ fun HouseholdBottomSheet(
                 Spacer(modifier = Modifier.padding(horizontal = 10.dp))
                 Text(
                     text = "Edit household",
-                    fontSize = 18.sp
-                )
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .clickable { onInvite() },
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Icon(imageVector = Icons.Rounded.Share, contentDescription = "Invite")
-                Spacer(modifier = Modifier.padding(horizontal = 10.dp))
-                Text(
-                    text = "Invite someone to household",
-                    fontSize = 18.sp
-                )
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .clickable { onDetails() },
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Icon(imageVector = Icons.Rounded.FileOpen, contentDescription = "Details")
-                Spacer(modifier = Modifier.padding(horizontal = 10.dp))
-                Text(
-                    text = "Show details",
                     fontSize = 18.sp
                 )
             }

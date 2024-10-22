@@ -119,77 +119,68 @@ fun Households(
         },
         floatingActionButtonPosition = FabPosition.Center
     ) { padding ->
-        if (households != null && households.data.isNotEmpty()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = padding.calculateTopPadding()),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                TabRow(selectedTabIndex = selectedTabIndex.ordinal) {
-                    HouseholdPage.entries.forEachIndexed() { index, tabPage ->
-                        Tab(
-                            selected = index == selectedTabIndex.ordinal,
-                            onClick = { selectedTabIndex = tabPage },
-                            text = { Text(text = tabPage.title) },
-                        )
-                    }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = padding.calculateTopPadding()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            TabRow(selectedTabIndex = selectedTabIndex.ordinal) {
+                HouseholdPage.entries.forEachIndexed() { index, tabPage ->
+                    Tab(
+                        selected = index == selectedTabIndex.ordinal,
+                        onClick = { selectedTabIndex = tabPage },
+                        text = { Text(text = tabPage.title) },
+                    )
                 }
+            }
 
-                when(selectedTabIndex){
-                    HouseholdPage.Households -> {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .nestedScroll(nestedScrollConnection),
-                            state = lazyListState,
-                            contentPadding = PaddingValues(all = 10.dp),
-                        ) {
-                            items(households.data) { household ->
-                                HouseholdsBriefListItem(
-                                    title = household.title,
-                                    id = household._id.`$oid`,
-                                    numberOfMembers = household.no_people,
-                                    numberOfTasks = household.no_active_tasks,
-                                    onEdit = { id, title ->
-                                        viewModel.evoke(HouseholdAction.ShowSheet(id = id, title = title))
-                                    },
-                                    onClick = { id ->
-                                        viewModel.evoke(HouseholdAction.SelectHousehold(id))
-                                        onNavigateToTasks()
-                                    },
-                                )
-                                if(households.data.last() != household){
-                                    HorizontalDivider(modifier = Modifier.scale(0.9f))
-                                }
+            when(selectedTabIndex){
+                HouseholdPage.Households -> {
+                    if (households != null && households.data.isNotEmpty()) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .nestedScroll(nestedScrollConnection),
+                        state = lazyListState,
+                        contentPadding = PaddingValues(all = 10.dp),
+                    ) {
+                        items(households.data) { household ->
+                            HouseholdsBriefListItem(
+                                title = household.title,
+                                id = household._id.`$oid`,
+                                numberOfMembers = household.no_people,
+                                numberOfTasks = household.no_active_tasks,
+                                onEdit = { id, title ->
+                                    viewModel.evoke(HouseholdAction.ShowSheet(id = id, title = title))
+                                },
+                                onClick = { id ->
+                                    viewModel.evoke(HouseholdAction.SelectHousehold(id))
+                                    onNavigateToTasks()
+                                },
+                            )
+                            if(households.data.last() != household){
+                                HorizontalDivider(modifier = Modifier.scale(0.9f))
                             }
                         }
                     }
-                    HouseholdPage.Invitations -> {
-                        isFabVisible.value = false
-
-                        InvitationsScreen()
-
-                        /*Box(modifier = Modifier.fillMaxSize()){
+                    } else if (households != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(top = padding.calculateTopPadding())
+                        ) {
                             Text(
-                                text = "Invitations...",
-                                fontWeight = FontWeight.Light,
+                                text = "You do not belong to any households yet.",
                                 modifier = Modifier.align(Alignment.Center)
                             )
-                        }*/
+                        }
                     }
                 }
-            }
-        } else if (households != null) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = padding.calculateTopPadding())
-            ) {
-                Text(
-                    text = "You do not belong to any households yet.",
-                    modifier = Modifier.align(Alignment.Center)
-                )
+                HouseholdPage.Invitations -> {
+                    isFabVisible.value = false
+                    InvitationsScreen()
+                }
             }
         }
 
@@ -229,9 +220,7 @@ fun Households(
                 onDismissRequest = { viewModel.evoke(HouseholdAction.HideSheet) },
                 sheetState = sheetState,
                 onEdit = { viewModel.evoke(HouseholdAction.ShowEditDialog) },
-                onInvite = { /* TODO */ },
                 onDelete = { viewModel.evoke(HouseholdAction.ShowDeleteDialog) },
-                onDetails = { /* TODO */ }
             )
         }
     }

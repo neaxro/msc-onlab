@@ -104,8 +104,6 @@ class InvitationsViewModel @Inject constructor(
                 declineInvitation(action.invitationId)
                 loadInvitations()
             }
-
-            is InvitationAction.CreateInvitation -> TODO()
         }
     }
 }
@@ -114,5 +112,4 @@ sealed class InvitationAction{
     object LoadInvitations : InvitationAction()
     data class AcceptInvite(val invitationId: String) : InvitationAction()
     data class DeclineInvite(val invitationId: String) : InvitationAction()
-    data class CreateInvitation(val invitationData: CreateInvitationData) : InvitationAction()
 }

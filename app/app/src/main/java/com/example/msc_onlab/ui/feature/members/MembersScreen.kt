@@ -30,9 +30,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -46,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.msc_onlab.ui.feature.common.DeleteDialog
 import com.example.msc_onlab.ui.feature.common.HouseholdsBriefListItem
+import com.example.msc_onlab.ui.feature.common.InvitationDialog
 import com.example.msc_onlab.ui.feature.common.MemberBriefListItem
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
@@ -64,6 +67,27 @@ fun MembersScreen(
 
     val members = viewModel.members.collectAsState().value
 
+    var showInvitationDialog by rememberSaveable { mutableStateOf(false) }
+
+    val isFabVisible = rememberSaveable { mutableStateOf(true) }
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                // Hide FAB
+                if (available.y < -1) {
+                    isFabVisible.value = false
+                }
+
+                // Show FAB
+                if (available.y > 1) {
+                    isFabVisible.value = true
+                }
+
+                return Offset.Zero
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             MyTopAppBar(
@@ -75,6 +99,20 @@ fun MembersScreen(
             MySnackBarHost(screenState = viewModel.screenState)
         },
         modifier = modifier.fillMaxSize(),
+        floatingActionButton = {
+            AnimatedVisibility(
+                visible = isFabVisible.value,
+                enter = slideInVertically(initialOffsetY = { it * 2 }),
+                exit = slideOutVertically(targetOffsetY = { it * 2 }),
+            ) {
+                ExtendedFloatingActionButton(
+                    onClick = { showInvitationDialog = true },
+                    icon = { Icon(imageVector = Icons.Rounded.Add, contentDescription = "Invite") },
+                    text = { Text(text = "Invite") },
+                )
+            }
+        },
+        floatingActionButtonPosition = FabPosition.Center
     ) { padding ->
         if (members != null && members.data.isNotEmpty()) {
             LazyColumn(
@@ -110,6 +148,16 @@ fun MembersScreen(
                     modifier = Modifier.align(Alignment.Center),
                 )
             }
+        }
+
+        if(showInvitationDialog){
+            InvitationDialog(
+                onDismissRequest = { showInvitationDialog = false },
+                onConfirmation = { invitedUsername ->
+                    viewModel.evoke(MembersAction.CreateInvitation(invitedUsername))
+                    showInvitationDialog = false
+                }
+            )
         }
     }
 }

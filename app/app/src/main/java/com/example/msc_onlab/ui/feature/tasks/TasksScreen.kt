@@ -142,7 +142,6 @@ fun TasksScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = padding.calculateTopPadding())
                 ) {
                     Text(
                         text = "There is no task in household.",
