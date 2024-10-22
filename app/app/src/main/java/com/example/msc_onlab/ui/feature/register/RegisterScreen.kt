@@ -2,11 +2,14 @@ package com.example.msc_onlab.ui.feature.register
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Login
 import androidx.compose.material.icons.rounded.AccountCircle
@@ -20,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -29,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.msc_onlab.helpers.Constants
 import com.example.msc_onlab.helpers.isError
@@ -56,11 +61,6 @@ fun RegisterScreen(
             MyTopAppBar(
                 title = "Register",
                 screenState = viewModel.screenState.collectAsState(),
-                actions = {
-                    IconButton(onClick = { navigateToLogin() }) {
-                        Icon(imageVector = Icons.AutoMirrored.Rounded.Login, contentDescription = "Back to Login")
-                    }
-                }
             )
         },
         snackbarHost = {
@@ -72,13 +72,14 @@ fun RegisterScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = padding.calculateTopPadding()),
+                .padding(top = padding.calculateTopPadding())
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
 
             Spacer(
-                modifier = Modifier.padding(vertical = 20.dp)
+                modifier = Modifier.padding(vertical = 5.dp)
             )
 
             // Firstname
@@ -274,6 +275,32 @@ fun RegisterScreen(
                     fontWeight = FontWeight.Bold
                 )
             }
+
+            Spacer(modifier = Modifier.padding(vertical = 5.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.width(250.dp)
+            ) {
+                Text(
+                    text = "Already have an account?",
+                    fontSize = 12.sp
+                )
+                TextButton(
+                    onClick = {
+                        navigateToLogin()
+                    },
+
+                    ){
+                    Text(
+                        text = "SIGN IN",
+                        fontSize = 12.sp
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.padding(vertical = 80.dp))
         }
     }
 }
