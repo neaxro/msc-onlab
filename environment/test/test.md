@@ -26,3 +26,13 @@ python3 more_data.py  --username axel --password Asdasd11 --type task --count 20
 ```console
 python3 more_data.py  --username axel --password Asdasd11 --type task --count 1 --household_id 66f40fb450421e8ecd6ccdd5 --subtask_range_min 10 --subtask_range 10
 ```
+
+### Creates 10 users
+```console
+python3 more_data.py --username axel --password Asdasd11 --type users --count 10
+```
+
+### Creates 10 users and they invites the user to the household
+```console
+python3 more_data.py --username axel --password Asdasd11 --type users --count 10 --target_username axel --household_id 671813c214da09e2e657ef4f
+```
