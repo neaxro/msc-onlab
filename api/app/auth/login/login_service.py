@@ -23,7 +23,7 @@ class LoginService:
             if not json_data.get(field):
                 raise Exception(f"Field '{field}' is required and cannot be empty.")
     
-    def _generate_token(self, username, id):
+    def _generate_token(self, username, id, profile_picture):
         expiration_time_hours = 2
         secret_key = os.environ['TOKEN_SECRET_KEY']
             
@@ -32,6 +32,7 @@ class LoginService:
             {
                 'id': id,
                 'username': username,
+                'profile_picture': profile_picture,
                 'exp': expiration_time
             },
             secret_key,
@@ -51,7 +52,8 @@ class LoginService:
             raise Exception("User does not exist!")
 
         if user['password'] == password:
-            token = self._generate_token(username, id)
+            profile_picture = user['profile_picture']
+            token = self._generate_token(username, id, profile_picture)
             return token
         
         else:
