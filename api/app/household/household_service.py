@@ -4,6 +4,7 @@ from bson import ObjectId
 from app.utils.parsers import *
 from app.utils.time_management import *
 from app.utils.validators import validate_non_empty_array
+from app.user.user_service import UserService
 
 class HouseholdService:
     def __init__(self):
@@ -14,6 +15,7 @@ class HouseholdService:
         self.client = MongoClient(mongodb_url)
         self.db = self.client[db_name]
         self.household_collection = self.db[household_collection_name]
+        self.user_service = UserService()
     
     def validate_json_format(self, json_data):
         required_fields = ["_id", "title", "creation_date", "people", "tasks"]
@@ -57,6 +59,33 @@ class HouseholdService:
                 }
             }
         ])
+        
+        return parse_json(households)
+    
+    def get_all_brief_for_user(self, user_id):
+        user = self.user_service.get_user_by_id(user_id)
+        
+        if user is None:
+            raise Exception(f"User does not exist with ID: {user_id}")
+        
+        pipeline = [
+            {
+                # Match households where the user_id is in the "people" array
+                "$match": {
+                    "people": { "$in": [ObjectId(user_id)] }
+                }
+            },
+            {
+                "$project": {
+                    "_id": 1,
+                    "title": 1,
+                    "no_people": { "$size": "$people" },
+                    "no_active_tasks": { "$size": { "$filter": { "input": "$tasks", "as": "task", "cond": { "$eq": ["$$task.done", False] } } } }
+                }
+            }
+        ]
+        
+        households = self.household_collection.aggregate(pipeline)
         
         return parse_json(households)
     
@@ -132,6 +161,23 @@ class HouseholdService:
             replacement=dict(household)
         )
         
+        return result
+    
+    def update_household(self, id: str, household_data: json):
+        household = self.get_by_id(id)
+
+        if not household:
+            raise Exception(f"Household not found with ID: {id}")
+        
+        update_fields = {
+            'title': household_data['title']  # Only update the title
+        }
+        
+        result = self.household_collection.update_one(
+            {"_id": ObjectId(id)},
+            {"$set": update_fields}
+        )
+
         return result
     
     def delete_household(self, id: str):

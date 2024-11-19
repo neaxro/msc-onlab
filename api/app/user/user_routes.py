@@ -55,24 +55,14 @@ class UserResource(Resource):
                 
                 result = self.user_service.replace_user(body)
                 
-                if result.matched_count > 0:
-                    return app.response_class(
-                        response=self.templater.get_basic_succes_template(
-                            status="Updated",
-                            data=f"{result.modified_count} modified"
-                        ),
-                        status=200,
-                        mimetype='application/json'
-                    )
-                
-                else:
-                    return app.response_class(
-                        response=self.templater.get_basic_error_template(
-                            error_message="No mach."
-                        ),
-                        status=404,
-                        mimetype='application/json'
-                    )
+                return app.response_class(
+                    response=self.templater.get_basic_succes_template(
+                        status="Updated",
+                        data=result
+                    ),
+                    status=200,
+                    mimetype='application/json'
+                )
             
             except Exception as e:
                 return app.response_class(

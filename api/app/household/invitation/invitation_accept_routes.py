@@ -12,11 +12,11 @@ class InvitationAcceptResource(Resource):
         self.templater = Templater()
     
     @token_required
-    def post(self, token_data, invitation_token=None):
+    def post(self, token_data, invitation_id=None):
         try:
-            result = self.invitation_service.process_invitation(
+            result = self.invitation_service.accept_invitation(
                 token_data,
-                invitation_token
+                invitation_id
             )
             return app.response_class(
                 response=self.templater.get_basic_succes_template(

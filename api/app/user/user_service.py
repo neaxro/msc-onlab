@@ -56,4 +56,25 @@ class UserService:
             replacement=data
         )
         
-        return result
+        # Check if the update operation was successful
+        if result.matched_count == 0:
+            raise Exception("User update failed. No matching user found.")
+        
+        if result.modified_count == 0:
+            raise Exception("User update failed. No changes were made.")
+
+        # Lazy import of LoginService to avoid circular import
+        from app.auth.login.login_service import LoginService
+        login_service = LoginService()
+
+        # After successfully updating the user data, log them in with their updated credentials
+        try:
+            new_token = login_service.login_user({
+                'username': data['username'],
+                'password': data['password']  # Updated password
+            })
+        except Exception as e:
+            raise Exception(f"Login failed after updating user: {str(e)}")
+        
+        # Return the result of the update operation and the new token
+        return new_token

@@ -14,9 +14,15 @@ jobs:
   test:
     uses: ./.github/workflows/test-backend.yml
 
+  coverage:
+    uses: ./.github/workflows/coverage-backend.yml
+    secrets:
+      COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+
   build_image:
     needs:
       - test
+      - coverage
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
