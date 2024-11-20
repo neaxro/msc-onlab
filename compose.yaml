@@ -36,10 +36,20 @@ services:
       context: ./api_v2/auth
       dockerfile: Dockerfile
     restart: always
+    environment:
+      APP_HOST: "0.0.0.0"
+      APP_PORT: 5000
+      APP_DEBUG: True
+      KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
+      KEYCLOAK_REALM_NAME: msc-onlab-test
+      KEYCLOAK_CLIENT_ID: msc-onlab-auth-microservice-client-test
+      KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
+      METRICS_PREFIX: msc_onlab
+      METRICS_APP_NAME: auth
     ports:
       - 5000:5000
     healthcheck:
-      test: ["CMD", "curl", "http://localhost/health"]
+      test: ["CMD", "curl", "http://kong:8000/auth/health"]
       interval: 5s
       timeout: 60s
       retries: 5
