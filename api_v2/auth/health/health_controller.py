@@ -2,7 +2,7 @@ from flask_restful import Resource
 
 class Health(Resource):
     def __init__(self):
-        self.asd = "asd"
+        pass
 
     def get(self):
         return "Healthy", 200

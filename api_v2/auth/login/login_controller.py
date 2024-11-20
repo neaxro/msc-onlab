@@ -1,24 +1,19 @@
 from flask import request, jsonify
 from flask_restful import Resource
 from keycloak import KeycloakOpenID
+from config import Config
 
 
 class Login(Resource):
     def __init__(self):
-        self.keycloak_server_url = "http://localhost:8080"
-        self.realm_name = "msc-onlab-test"
-        self.client_id = "msc-onlab-auth-microservice-client-test"
-        self.client_secret = "moo8oexa0Aitoon8chohCaeh8eith5ei"
+        config = Config()
         
         self.keycloak_openid = KeycloakOpenID(
-            server_url=self.keycloak_server_url,
-            realm_name=self.realm_name,
-            client_id=self.client_id,
-            client_secret_key=self.client_secret
+            server_url=config.KEYCLOAK_SERVER_URL,
+            realm_name=config.KEYCLOAK_REALM_NAME,
+            client_id=config.KEYCLOAK_CLIENT_ID,
+            client_secret_key=config.KEYCLOAK_CLIENT_SECRET
         )
-
-    def get(self):
-        return "Login"
     
     def post(self):
         try:
