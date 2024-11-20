@@ -12,3 +12,7 @@ class Config:
         self.KEYCLOAK_REALM_NAME = os.getenv("KEYCLOAK_REALM_NAME", "msc-onlab-test")
         self.KEYCLOAK_CLIENT_ID = os.getenv("KEYCLOAK_CLIENT_ID", "msc-onlab-auth-microservice-client-test")
         self.KEYCLOAK_CLIENT_SECRET = os.getenv("KEYCLOAK_CLIENT_SECRET", "moo8oexa0Aitoon8chohCaeh8eith5ei")
+        
+        # Metrics related config
+        self.METRICS_PREFIX = os.getenv("METRICS_PREFIX", "msc_onlab")
+        self.METRICS_APP_NAME = os.getenv("METRICS_APP_NAME", "auth")

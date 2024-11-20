@@ -2,6 +2,7 @@ from flask import request, jsonify
 from flask_restful import Resource
 from keycloak import KeycloakOpenID
 from config import Config
+from metrics import Metrics, count_requests, time_request, latency_request
 
 
 class Login(Resource):
@@ -15,6 +16,9 @@ class Login(Resource):
             client_secret_key=config.KEYCLOAK_CLIENT_SECRET
         )
     
+    @count_requests
+    @time_request
+    @latency_request
     def post(self):
         try:
             data = request.get_json()
