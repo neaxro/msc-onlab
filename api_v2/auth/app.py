@@ -5,6 +5,7 @@ from prometheus_client import make_wsgi_app
 from config import Config
 from health.health_controller import Health
 from login.login_controller import Login
+from register.register_controller import Register
 
 def build_app():
     app = Flask(__name__)
@@ -15,6 +16,7 @@ def build_app():
     api = Api(app)
     api.add_resource(Health, '/health', endpoint='health')
     api.add_resource(Login, '/login', endpoint='login')
+    api.add_resource(Register, '/register', endpoint='register')
     
     return app
 

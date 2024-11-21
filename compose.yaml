@@ -44,6 +44,8 @@ services:
       KEYCLOAK_REALM_NAME: msc-onlab-test
       KEYCLOAK_CLIENT_ID: msc-onlab-auth-microservice-client-test
       KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
+      KEYCLOAK_ADMIN_USERNAME: realmadmin
+      KEYCLOAK_ADMIN_PASSWORD: Asdasd11
       METRICS_PREFIX: msc_onlab
       METRICS_APP_NAME: auth
     ports:
