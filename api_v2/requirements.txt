@@ -3,3 +3,4 @@ Flask-RESTful
 pytest
 pytest-cov
 coveralls
+pre-commit

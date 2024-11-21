@@ -1,14 +1,15 @@
-from flask import request, jsonify
-from flask_restful import Resource
-from keycloak import KeycloakAdmin
 from config import Config
-from metrics import Metrics, count_requests, time_request, latency_request
+from flask import request
+from flask_restful import Resource
+from metrics import count_requests, latency_request, time_request
+
+from keycloak import KeycloakAdmin
 
 
 class Register(Resource):
     def __init__(self):
         config = Config()
-        
+
         self.keycloak_admin = KeycloakAdmin(
             server_url=config.KEYCLOAK_SERVER_URL,
             username=config.KEYCLOAK_ADMIN_USERNAME,
@@ -16,16 +17,16 @@ class Register(Resource):
             realm_name=config.KEYCLOAK_REALM_NAME,
             client_id=config.KEYCLOAK_CLIENT_ID,
             client_secret_key=config.KEYCLOAK_CLIENT_SECRET,
-            verify=True
+            verify=True,
         )
-    
+
     @count_requests
     @time_request
     @latency_request
     def post(self):
         try:
             data = request.get_json()
-            
+
             first_name = data.get("first_name")
             last_name = data.get("last_name")
             email = data.get("email")
@@ -36,17 +37,19 @@ class Register(Resource):
                 return {"error": "Missing field(s)"}, 400
 
             try:
-                user_id = self.keycloak_admin.create_user({
-                    "username": username,
-                    "email": email,
-                    "firstName": first_name,
-                    "lastName": last_name,
-                    "enabled": True,
-                    "emailVerified": True,
-                    "credentials": [
-                        {"type": "password", "value": password, "temporary": False}
-                    ]
-                })
+                user_id = self.keycloak_admin.create_user(
+                    {
+                        "username": username,
+                        "email": email,
+                        "firstName": first_name,
+                        "lastName": last_name,
+                        "enabled": True,
+                        "emailVerified": True,
+                        "credentials": [
+                            {"type": "password", "value": password, "temporary": False}
+                        ],
+                    }
+                )
 
                 return {"message": "User created successfully", "user_id": user_id}, 201
             except Exception as e:
