@@ -16,6 +16,11 @@ services:
     ports:
       - 8000:8000
       - 8443:8443
+    healthcheck:
+      test: ["CMD", "curl", "http://kong:8000"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   # Databases
   mysql:
@@ -94,7 +99,7 @@ services:
     healthcheck:
       test: ["CMD", "curl", "http://kong:8000/auth/health"]
       interval: 5s
-      timeout: 60s
+      timeout: 5s
       retries: 5
 
   # Monitoring

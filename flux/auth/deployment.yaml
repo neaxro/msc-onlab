@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  namespace: app-msc-dipterv-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-msc-dipterv-dev-auth
+  template:
+    metadata:
+      labels:
+        app: app-msc-dipterv-dev-auth
+    spec:
+      containers:
+        - name: app-msc-dipterv-dev-auth
+          image: axelnemes/app-msc-dipterv-dev # {"$imagepolicy": "flux-system:msc-dipterv-dev-auth"}
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          ports:
+            - name: http
+              containerPort: 5000
+              protocol: TCP
+
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/worker
+                operator: In
+                values:
+                - worker
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 50
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - rpw01
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - rpw02

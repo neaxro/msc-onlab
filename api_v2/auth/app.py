@@ -7,9 +7,10 @@ from prometheus_client import make_wsgi_app
 from register.register_controller import Register
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
+app = Flask(__name__)
+
 
 def build_app():
-    app = Flask(__name__)
     app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {"/metrics": make_wsgi_app()})
 
     api = Api(app)
@@ -20,8 +21,9 @@ def build_app():
     return app
 
 
+application = build_app()
+
 if __name__ == "__main__":
     config = Config()
 
-    app = build_app()
     app.run(host=config.APP_HOST, port=config.APP_PORT, debug=config.APP_DEBUG)

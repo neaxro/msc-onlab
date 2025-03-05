@@ -5,3 +5,4 @@ pytest-cov
 coveralls
 python-keycloak
 prometheus-client
+gunicorn
