@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: auth
-  namespace: app-msc-dipterv-dev
 spec:
   replicas: 1
   selector:
@@ -17,6 +16,7 @@ spec:
         - name: app-msc-dipterv-dev-auth
           image: axelnemes/app-msc-dipterv-dev # {"$imagepolicy": "flux-system:msc-dipterv-dev-auth"}
           imagePullPolicy: IfNotPresent
+
           resources:
             requests:
               cpu: "100m"
@@ -24,10 +24,24 @@ spec:
             limits:
               cpu: "200m"
               memory: "256Mi"
+
           ports:
             - name: http
               containerPort: 5000
               protocol: TCP
+
+          envFrom:
+            - configMapRef:
+                name: keycloak-config
+            - secretRef:
+                name: keycloak-config
+
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        capabilities:
+          drop:
+            - all
 
       affinity:
         nodeAffinity:
