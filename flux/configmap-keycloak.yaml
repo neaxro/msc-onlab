@@ -3,11 +3,9 @@ kind: ConfigMap
 metadata:
   name: keycloak-config
 data:
-  configmap: |
-    KEYCLOAK_SERVER_URL: http://keycloak.nemes.live
-    KEYCLOAK_REALM_NAME: msc-onlab-test
-    KEYCLOAK_CLIENT_ID: msc-onlab-auth-microservice-client-test
-    KEYCLOAK_ADMIN_USERNAME: realmadmin
-    METRICS_PREFIX: msc_onlab
-    METRICS_APP_NAME: auth
-    CONFIGMAP_TEST: hello_world
+  KEYCLOAK_SERVER_URL: http://keycloak.keycloak.svc.cluster.local:80
+  KEYCLOAK_REALM_NAME: msc-onlab-test
+  KEYCLOAK_CLIENT_ID: msc-onlab-auth-microservice-client-test
+  KEYCLOAK_ADMIN_USERNAME: realmadmin
+  METRICS_PREFIX: msc_onlab
+  METRICS_APP_NAME: auth
