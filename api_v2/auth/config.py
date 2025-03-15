@@ -27,3 +27,6 @@ class Config:
         # Metrics related config
         self.METRICS_PREFIX = os.getenv("METRICS_PREFIX", "msc_onlab")
         self.METRICS_APP_NAME = os.getenv("METRICS_APP_NAME", "auth")
+
+        # Logging related
+        self.TIMEZONE = os.getenv("TIMEZONE", "Europe/Budapest")

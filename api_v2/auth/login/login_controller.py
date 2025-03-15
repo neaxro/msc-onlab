@@ -1,5 +1,5 @@
 from config import Config
-from flask import jsonify, request
+from flask import current_app, jsonify, request
 from flask_restful import Resource
 from metrics import count_requests, latency_request, time_request
 
@@ -26,18 +26,25 @@ class Login(Resource):
             username = data.get("username")
             password = data.get("password")
 
+            current_app.logger.info(f'Login attempt for "{username}" user.')
+
             if not username or not password:
                 return {"error": "Username and password are required"}, 400
 
             # Authenticate user with Keycloak
             try:
                 token = self.keycloak_openid.token(username, password)
+                current_app.logger.info(f'Successful login for "{username}" user.')
                 return jsonify(token)
             except Exception as e:
+                current_app.logger.info(
+                    f'Invalid credentials or other error for "{username}" user.'
+                )
                 return {
                     "error": "Invalid credentials or other error",
                     "details": str(e),
                 }, 401
 
         except Exception as e:
+            current_app.logger.info(f"Something went wrong. Error: {str(e)}")
             return {"error": "Something went wrong", "details": str(e)}, 500
