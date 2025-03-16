@@ -1,4 +1,14 @@
 services:
+  # Info page
+  nginx:
+    image: nginx:1.27.4-perl
+    environment:
+      NGINX_PORT: 80
+    volumes:
+      - ./info_page:/usr/share/nginx/html:ro
+    ports:
+      - 80:80
+
   # Gateway
   kong:
     image: kong:2.8.5
