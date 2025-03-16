@@ -112,9 +112,9 @@ services:
       timeout: 5s
       retries: 5
 
-  household:
+  team:
     build:
-      context: ./api_v2/household
+      context: ./api_v2/team
       dockerfile: Dockerfile
     restart: always
     environment:
@@ -123,16 +123,16 @@ services:
       APP_DEBUG: True
       KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
       KEYCLOAK_REALM_NAME: msc-onlab-test
-      KEYCLOAK_CLIENT_ID: msc-onlab-household-microservice-client-test
+      KEYCLOAK_CLIENT_ID: msc-onlab-team-microservice-client-test
       KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
       KEYCLOAK_ADMIN_USERNAME: realmadmin
       KEYCLOAK_ADMIN_PASSWORD: Asdasd11
       METRICS_PREFIX: msc_onlab
-      METRICS_APP_NAME: household
+      METRICS_APP_NAME: team
     ports:
       - 5001:5001
     healthcheck:
-      test: ["CMD", "curl", "http://kong:8000/household/health"]
+      test: ["CMD", "curl", "http://kong:8000/team/health"]
       interval: 5s
       timeout: 5s
       retries: 5

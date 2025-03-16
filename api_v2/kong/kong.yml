@@ -8,12 +8,12 @@ services:
         paths:
           - /auth
 
-  - name: household_service
-    url: http://household:5001/
+  - name: team_service
+    url: http://team:5001/
     routes:
-      - name: household_route
+      - name: team_route
         paths:
-          - /household
+          - /team
 
   - name: keycloak_service
     url: http://keycloak:8080

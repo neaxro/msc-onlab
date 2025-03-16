@@ -1,6 +1,6 @@
 FROM python:bullseye
 
-WORKDIR /household
+WORKDIR /team
 
 COPY . .
 
