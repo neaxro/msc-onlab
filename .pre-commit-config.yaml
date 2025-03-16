@@ -4,9 +4,9 @@ repos:
     hooks:
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
-        files: ^(api_v2|keycloak|monitoring)/  # Only check files in the api_v2 folder
+        files: ^(api|keycloak|monitoring)/
       - id: end-of-file-fixer
-        files: ^(api_v2|keycloak|monitoring)/
+        files: ^(api|keycloak|monitoring)/
       - id: check-yaml
       - id: check-added-large-files
       - id: check-merge-conflict
@@ -16,7 +16,7 @@ repos:
     hooks:
       - id: black
         language_version: python3
-        files: ^api_v2/
+        files: ^api/
 
   - repo: https://github.com/PyCQA/flake8
     rev: 6.1.0
@@ -26,17 +26,17 @@ repos:
         additional_dependencies:
           - flake8-bugbear
           - flake8-comprehensions
-        files: ^api_v2/
+        files: ^api/
 
   - repo: https://github.com/pre-commit/mirrors-isort
     rev: v5.10.0
     hooks:
       - id: isort
         args: ["--profile", "black"]
-        files: ^api_v2/
+        files: ^api/
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
       - id: debug-statements
-        files: ^api_v2/
+        files: ^api/

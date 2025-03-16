@@ -33,4 +33,4 @@ class Config:
         self.MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "msc_onlab")
         self.MYSQL_TEAM_TABLE = os.getenv("MYSQL_TEAM_TABLE", "teams")
         self.MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
-        self.MYSQL_PORT = os.getenv("MYSQL_PORT", 3306)
+        self.MYSQL_PORT = int(os.getenv("MYSQL_PORT", 3306))

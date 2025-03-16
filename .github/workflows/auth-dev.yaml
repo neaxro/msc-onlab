@@ -5,7 +5,7 @@ on:
     branches:
       - dev
     paths:
-      - 'api_v2/auth/**'
+      - 'api/auth/**'
 
 jobs:
   build_and_push:
@@ -32,7 +32,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./api_v2/auth
+          context: ./api/auth
           push: true
           tags: axelnemes/msc-dipterv-dev:auth-${{ steps.date.outputs.date }}-${{ github.sha }}
           platforms: linux/arm64, linux/amd64

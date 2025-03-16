@@ -89,7 +89,7 @@ services:
   # Backend
   auth:
     build:
-      context: ./api_v2/auth
+      context: ./api/auth
       dockerfile: Dockerfile
     restart: always
     environment:
@@ -114,7 +114,7 @@ services:
 
   team:
     build:
-      context: ./api_v2/team
+      context: ./api/team
       dockerfile: Dockerfile
     restart: always
     environment:
@@ -123,8 +123,8 @@ services:
       APP_DEBUG: True
       KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
       KEYCLOAK_REALM_NAME: msc-onlab-test
-      KEYCLOAK_CLIENT_ID: msc-onlab-team-microservice-client-test
-      KEYCLOAK_CLIENT_SECRET: 7DfBVXNAS4VBPGd9CzeDGYqJWNDWt1xC
+      KEYCLOAK_CLIENT_ID: msc-onlab-microservice-client-test
+      KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
       METRICS_PREFIX: msc_onlab
       METRICS_APP_NAME: team
       MYSQL_TEAM_USER: team_service_user
@@ -190,7 +190,7 @@ services:
 
 configs:
   kong_config:
-    file: ./api_v2/kong/kong.yml
+    file: ./api/kong/kong.yml
   keycloak_test_realm:
     file: ./keycloak/realm.json
   prometheus_config:
