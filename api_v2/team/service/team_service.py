@@ -13,6 +13,10 @@ class TeamService:
         user_id = user_data["sub"]
         return self.team_repository.get_all(user_id)
 
+    def get_by_id(self, team_id, user_data):
+        user_id = user_data["sub"]
+        return self.team_repository.get_by_id(team_id, user_id)
+
     def get_by_name(self, team_name):
         return self.team_repository.get_by_name(team_name)
 

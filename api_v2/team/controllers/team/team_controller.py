@@ -17,7 +17,7 @@ class Team(Resource):
     @count_requests
     @time_request
     @latency_request
-    def get(self):
+    def get(self, team_id=None):
         try:
             user_data = get_decoded_token_from_request()
             current_app.logger.info(
@@ -25,9 +25,17 @@ class Team(Resource):
             )
 
             try:
-                response = self.team_service.get_all(user_data)
-                current_app.logger.info("Successfuly fetched all team!")
-                return jsonify(response)
+                if team_id:
+                    response = self.team_service.get_by_id(team_id, user_data)
+                    current_app.logger.info(
+                        f"Successfuly fetched team with {team_id} id for {user_data['preferred_username']}!"  # noqa: E501
+                    )
+                    return jsonify(response)
+
+                else:
+                    response = self.team_service.get_all(user_data)
+                    current_app.logger.info("Successfuly fetched all team!")
+                    return jsonify(response)
 
             except Exception as e:
                 current_app.logger.info("Error occured during fetching all team.")

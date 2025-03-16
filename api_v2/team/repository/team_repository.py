@@ -65,22 +65,34 @@ class TeamRepository:
         finally:
             cur.close()
 
-    def get_by_id(self, team_id):
+    def get_by_id(self, team_id, user_id):
         """
         Finds the team by id.
 
         :param int team_id: Id of the team
         :return: Team's data or None if not found
-        :type priority: object or None
+        :type priority: object or []
         :rtype: dict
         """
         try:
             cur = self.connection.cursor(pymysql.cursors.DictCursor)
-            cur.execute("SELECT * FROM teams WHERE id = %s", (team_id,))
+            cur.execute(
+                """
+                SELECT t.id , t.name ,t.description  from teams t
+                INNER JOIN team_user tu on tu.team_id =t.id
+                WHERE
+                    t.id = %s AND
+                    tu.user_id = %s
+                """,
+                (
+                    team_id,
+                    user_id,
+                ),
+            )
             result = cur.fetchall()
 
             if not result:
-                return None  # No team found with the given name
+                return []  # No team found with the given name
             return result
         except Exception as e:
             self.connection.rollback()

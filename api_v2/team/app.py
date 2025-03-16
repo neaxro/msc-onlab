@@ -24,7 +24,7 @@ def build_app():
 
     api = Api(app)
     api.add_resource(Health, "/health", endpoint="health")
-    api.add_resource(Team, "/team", endpoint="team")
+    api.add_resource(Team, "/teams", "/teams/<team_id>", endpoint="team")
 
     return app
 
