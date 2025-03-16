@@ -82,3 +82,73 @@ class Team(Resource):
         except Exception as e:
             current_app.logger.info(f"Something went wrong. Error: {str(e)}")
             return {"error": "Something went wrong", "details": str(e)}, 500
+
+    @requires_auth
+    @count_requests
+    @time_request
+    @latency_request
+    def patch(self, team_id):
+        try:
+            body = request.get_json()
+            data = {
+                "id": team_id,
+                "name": body.get("name"),
+                "description": body.get("description"),
+            }
+            user_data = get_decoded_token_from_request()
+
+            current_app.logger.info(
+                f"Updating team with name \"{data['name']}\" initiated by {user_data['preferred_username']}"  # noqa: E501
+            )
+
+            try:
+                self.team_service.update(data, user_data)
+                current_app.logger.info(
+                    f"New team called \"{data['name']}\" successfuly updated!"
+                )
+                return jsonify(
+                    {"message": "Team successfuly updated!", "team_id": team_id}
+                )
+            except Exception as e:
+                current_app.logger.info(
+                    f"Error occured during \"{data['name']}\" team updating..."
+                )
+                return {
+                    "error": "Error occured during team updating...",
+                    "details": str(e),
+                }, 401
+
+        except Exception as e:
+            current_app.logger.info(f"Something went wrong. Error: {str(e)}")
+            return {"error": "Something went wrong", "details": str(e)}, 500
+
+    @requires_auth
+    @count_requests
+    @time_request
+    @latency_request
+    def delete(self, team_id):
+        try:
+            user_data = get_decoded_token_from_request()
+
+            current_app.logger.info(
+                f"Delete team with id \"{team_id}\" initiated by {user_data['preferred_username']}"  # noqa: E501
+            )
+
+            try:
+                self.team_service.delete(team_id, user_data)
+                current_app.logger.info(f"Team with id {team_id} successfuly deleted!")
+                return jsonify(
+                    {"message": "Team successfuly deleted!", "team_id": team_id}
+                )
+            except Exception as e:
+                current_app.logger.info(
+                    f"Error occured during team with id {team_id} deletion..."
+                )
+                return {
+                    "error": "Error occured during team deletion...",
+                    "details": str(e),
+                }, 401
+
+        except Exception as e:
+            current_app.logger.info(f"Something went wrong. Error: {str(e)}")
+            return {"error": "Something went wrong", "details": str(e)}, 500

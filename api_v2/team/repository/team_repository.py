@@ -127,15 +127,57 @@ class TeamRepository:
         finally:
             cur.close()
 
+    def update(self, data, user_id):
+        """
+        Updates team based on new team data.
+
+        :param dict data: The new data which overwrites the existing team.
+        :return: The affected row count
+        :rtype: int
+        """
+
+        try:
+            cur = self.connection.cursor(pymysql.cursors.DictCursor)
+            cur.execute(
+                """
+                UPDATE teams t
+                SET name = %(name)s, description = %(description)s
+                WHERE t.id = %(id)s
+                AND EXISTS (
+                    SELECT 1
+                    FROM team_user tu
+                    WHERE tu.team_id = t.id
+                    AND tu.user_id = %(user_id)s
+                );
+                """,
+                {
+                    "name": data["name"],
+                    "description": data["description"],
+                    "id": data["id"],
+                    "user_id": user_id,
+                },
+            )
+
+            self.connection.commit()
+
+            return cur.rowcount
+        except Exception as e:
+            self.connection.rollback()
+            raise e
+        finally:
+            cur.close()
+
     def delete(self, team_id):
         """
-        Deletes team with team_id
+        Deletes team with team_id.
+        It also deletes any related records in team_user table!
 
         :param int team_id: The Id of the team that need to be deleted
         :return: The affected row count
         :rtype: int
         """
         try:
+            # Cascade deletion on team_user table!
             cur = self.connection.cursor(pymysql.cursors.DictCursor)
             cur.execute(
                 """

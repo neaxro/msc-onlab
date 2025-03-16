@@ -17,7 +17,7 @@ class TeamService:
         user_id = user_data["sub"]
         return self.team_repository.get_by_id(team_id, user_id)
 
-    def get_by_name(self, team_name):
+    def __get_by_name(self, team_name):
         return self.team_repository.get_by_name(team_name)
 
     def insert(self, data, user_data):
@@ -26,7 +26,7 @@ class TeamService:
             raise Exception("Name and description are required")
 
         # Check for existing team
-        existing_team = self.get_by_name(data["name"])
+        existing_team = self.__get_by_name(data["name"])
         if existing_team is not None:
             raise Exception(f"Team with \"{data['name']}\" name already exists!")
 
@@ -60,3 +60,31 @@ class TeamService:
                 raise Exception(
                     f"An error occurred while processing the team creation: {str(e)}"
                 )
+
+    def update(self, data, user_data):
+        user_id = user_data["sub"]
+        team_membership = self.team_user_repository.is_user_part_of_team(
+            data["id"], user_id
+        )
+
+        # User does not belongs to team
+        if team_membership is None:
+            raise Exception(
+                f"User {user_data['preferred_username']} is not part of team with id {data['id']}!"  # noqa: E501
+            )
+
+        return self.team_repository.update(data, user_id)
+
+    def delete(self, team_id, user_data):
+        user_id = user_data["sub"]
+        team_membership = self.team_user_repository.is_user_part_of_team(
+            team_id, user_id
+        )
+
+        # User does not belongs to team
+        if team_membership is None:
+            raise Exception(
+                f"User {user_data['preferred_username']} is not part of team with id {team_id}!"  # noqa: E501
+            )
+
+        return self.team_repository.delete(team_id)
