@@ -14,15 +14,11 @@ class Config:
         )
         self.KEYCLOAK_REALM_NAME = os.getenv("KEYCLOAK_REALM_NAME", "msc-onlab-test")
         self.KEYCLOAK_CLIENT_ID = os.getenv(
-            "KEYCLOAK_CLIENT_ID", "msc-onlab-team-microservice-client-test"
+            "KEYCLOAK_CLIENT_ID", "msc-onlab-microservice-client-test"
         )
         self.KEYCLOAK_CLIENT_SECRET = os.getenv(
             "KEYCLOAK_CLIENT_SECRET", "moo8oexa0Aitoon8chohCaeh8eith5ei"
         )
-        self.KEYCLOAK_ADMIN_USERNAME = os.getenv(
-            "KEYCLOAK_ADMIN_USERNAME", "realmadmin"
-        )
-        self.KEYCLOAK_ADMIN_PASSWORD = os.getenv("KEYCLOAK_ADMIN_PASSWORD", "Asdasd11")
 
         # Metrics related config
         self.METRICS_PREFIX = os.getenv("METRICS_PREFIX", "msc_onlab")
@@ -30,3 +26,11 @@ class Config:
 
         # Logging related
         self.TIMEZONE = os.getenv("TIMEZONE", "Europe/Budapest")
+
+        # MySQL database related config
+        self.MYSQL_TEAM_USER = os.getenv("MYSQL_USER", "team_service_user")
+        self.MYSQL_TEAM_PASSWORD = os.getenv("MYSQL_PASSWORD", "pass")
+        self.MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "msc_onlab")
+        self.MYSQL_TEAM_TABLE = os.getenv("MYSQL_TEAM_TABLE", "teams")
+        self.MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
+        self.MYSQL_PORT = os.getenv("MYSQL_PORT", 3306)

@@ -12,7 +12,7 @@
     "accessTokenLifespan": 300,
     "clients": [
         {
-            "clientId": "msc-onlab-auth-microservice-client-test",
+            "clientId": "msc-onlab-microservice-client-test",
             "enabled": true,
             "protocol": "openid-connect",
             "publicClient": false,

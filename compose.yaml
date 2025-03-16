@@ -98,7 +98,7 @@ services:
       APP_DEBUG: True
       KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
       KEYCLOAK_REALM_NAME: msc-onlab-test
-      KEYCLOAK_CLIENT_ID: msc-onlab-auth-microservice-client-test
+      KEYCLOAK_CLIENT_ID: msc-onlab-microservice-client-test
       KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
       KEYCLOAK_ADMIN_USERNAME: realmadmin
       KEYCLOAK_ADMIN_PASSWORD: Asdasd11
@@ -124,11 +124,15 @@ services:
       KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
       KEYCLOAK_REALM_NAME: msc-onlab-test
       KEYCLOAK_CLIENT_ID: msc-onlab-team-microservice-client-test
-      KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
-      KEYCLOAK_ADMIN_USERNAME: realmadmin
-      KEYCLOAK_ADMIN_PASSWORD: Asdasd11
+      KEYCLOAK_CLIENT_SECRET: 7DfBVXNAS4VBPGd9CzeDGYqJWNDWt1xC
       METRICS_PREFIX: msc_onlab
       METRICS_APP_NAME: team
+      MYSQL_TEAM_USER: team_service_user
+      MYSQL_TEAM_PASSWORD: pass
+      MYSQL_DATABASE: msc_onlab
+      MYSQL_TEAM_TABLE: teams
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
     ports:
       - 5001:5001
     healthcheck:
@@ -136,6 +140,9 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    depends_on:
+      mysql:
+        condition: service_healthy
 
   # Monitoring
   prometheus:

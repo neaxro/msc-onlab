@@ -5,7 +5,7 @@ metadata:
 data:
   KEYCLOAK_SERVER_URL: http://keycloak.keycloak.svc.cluster.local:80
   KEYCLOAK_REALM_NAME: msc-onlab-test
-  KEYCLOAK_CLIENT_ID: msc-onlab-auth-microservice-client-test
+  KEYCLOAK_CLIENT_ID: msc-onlab-microservice-client-test
   KEYCLOAK_ADMIN_USERNAME: realmadmin
   METRICS_PREFIX: msc_onlab
   METRICS_APP_NAME: auth

@@ -6,3 +6,5 @@ coveralls
 python-keycloak
 prometheus-client
 gunicorn
+yoyo-migrations
+pymysql

@@ -14,7 +14,7 @@ class Config:
         )
         self.KEYCLOAK_REALM_NAME = os.getenv("KEYCLOAK_REALM_NAME", "msc-onlab-test")
         self.KEYCLOAK_CLIENT_ID = os.getenv(
-            "KEYCLOAK_CLIENT_ID", "msc-onlab-auth-microservice-client-test"
+            "KEYCLOAK_CLIENT_ID", "msc-onlab-microservice-client-test"
         )
         self.KEYCLOAK_CLIENT_SECRET = os.getenv(
             "KEYCLOAK_CLIENT_SECRET", "moo8oexa0Aitoon8chohCaeh8eith5ei"
