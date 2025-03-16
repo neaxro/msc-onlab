@@ -67,3 +67,12 @@ def requires_auth(f):
         return f(*args, **kwargs)
 
     return decorated
+
+
+def get_decoded_token_from_request():
+    auth_header = request.headers.get("Authorization", None)
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return None
+
+    token = auth_header.split(" ")[1]
+    return keycloakClient.keycloak_openid.decode_token(token)

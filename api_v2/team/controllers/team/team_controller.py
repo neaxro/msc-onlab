@@ -1,14 +1,17 @@
 from flask import current_app, jsonify, request
 from flask_restful import Resource
 from repository.team_repository import TeamRepository
+from repository.team_user_repository import TeamUserRepository
 from service.team_service import TeamService
 from utils.metrics import count_requests, latency_request, time_request
-from utils.token_check import requires_auth
+from utils.token_check import get_decoded_token_from_request, requires_auth
 
 
 class Team(Resource):
     def __init__(self):
-        self.team_service = TeamService(TeamRepository())
+        self.team_service = TeamService(
+            team_repositry=TeamRepository(), team_user_repository=TeamUserRepository()
+        )
 
     @requires_auth
     @count_requests
@@ -16,10 +19,13 @@ class Team(Resource):
     @latency_request
     def get(self):
         try:
-            current_app.logger.info("Getting all teams...")
+            user_data = get_decoded_token_from_request()
+            current_app.logger.info(
+                f"Getting all teams for user {user_data['preferred_username']}."
+            )
 
             try:
-                response = self.team_service.get_all()
+                response = self.team_service.get_all(user_data)
                 current_app.logger.info("Successfuly fetched all team!")
                 return jsonify(response)
 
@@ -42,11 +48,14 @@ class Team(Resource):
         try:
             body = request.get_json()
             data = {"name": body.get("name"), "description": body.get("description")}
+            user_data = get_decoded_token_from_request()
 
-            current_app.logger.info(f"Creating new team with name \"{data['name']}\"")
+            current_app.logger.info(
+                f"Creating new team with name \"{data['name']}\" initiated by {user_data['preferred_username']}"  # noqa: E501
+            )
 
             try:
-                response = self.team_service.insert(data)
+                response = self.team_service.insert(data, user_data)
                 current_app.logger.info(
                     f"New team called \"{data['name']}\" successfuly created!"
                 )
