@@ -126,11 +126,11 @@ Android application for creating and assigning teams tasks. After logging in, yo
 
 | Detail          | Mode | URI        | HTTP Codes  | Description  | State |
 |-----------------|:----:|------------|-------------|-------------|:-----:|
-| Get all teams| GET| /teams | 200, 500| List all teams a user belongs to. Get username from token. | :construction: |
-| Get team by ID| GET| /teams/{team_id} | 200, 500| Get team details by ID. Get username from token. | :construction: |
-| Create team| POST| /teams | 201, 400, 500| Create a new team (requires name and description). | :construction: |
-| Modify team| PATCH| /teams/{team_id} | 200, 500| Modify a team's name or description. | :construction: |
-| Modify team| DELETE| /teams/{team_id} | 200, 500| Delete a team. | :construction: |
+| Get all teams| GET| /teams | 200, 500| List all teams a user belongs to. Get username from token. | :white_check_mark: |
+| Get team by ID| GET| /teams/{team_id} | 200, 500| Get team details by ID. Get username from token. | :white_check_mark: |
+| Create team| POST| /teams | 201, 400, 500| Create a new team (requires name and description). | :white_check_mark: |
+| Modify team| PATCH| /teams/{team_id} | 200, 500| Modify a team's name or description. | :white_check_mark: |
+| Delete team| DELETE| /teams/{team_id} | 200, 500| Delete a team. | :white_check_mark: |
 
 ## :date: Task service
 
