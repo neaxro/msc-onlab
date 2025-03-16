@@ -1,0 +1,8 @@
+Flask
+Flask-RESTful
+pytest
+pytest-cov
+coveralls
+python-keycloak
+prometheus-client
+gunicorn
