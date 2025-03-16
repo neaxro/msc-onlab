@@ -1,9 +1,9 @@
 import time
 from functools import wraps
 
-from config import Config
 from flask import request
 from prometheus_client import Counter, Summary
+from utils.config import Config
 
 
 class Metrics:

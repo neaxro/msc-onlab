@@ -1,13 +1,13 @@
 import logging
 
-from config import Config
 from flask import Flask
 from flask_restful import Api
 from health.health_controller import Health
-from logging_config import setup_logger
 from login.login_controller import Login
 from prometheus_client import make_wsgi_app
 from register.register_controller import Register
+from utils.config import Config
+from utils.logging_config import setup_logger
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 app = Flask(__name__)

@@ -2,8 +2,8 @@ import logging
 from datetime import datetime
 
 import pytz
-from config import Config
 from flask import has_request_context, request
+from utils.config import Config
 
 
 class RequestFormatter(logging.Formatter):
