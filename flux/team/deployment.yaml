@@ -35,6 +35,10 @@ spec:
                 name: keycloak-config
             - secretRef:
                 name: keycloak-config
+            - configMapRef:
+                name: mysql-config
+            - secretRef:
+                name: mysql-config
 
           livenessProbe:
             httpGet:
