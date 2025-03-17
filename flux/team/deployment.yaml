@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app-msc-dipterv-dev-team
-          image: axelnemes/msc-dipterv-dev:team-2025-03-17-157d407c5e8b228bd587df0d068c7abe88e58fa0 # {"$imagepolicy": "flux-system:msc-dipterv-dev-team"}
+          image: axelnemes/msc-dipterv-dev:team-2025-03-17-89cd3b03429390d061798ceaf505cb425d26e62a # {"$imagepolicy": "flux-system:msc-dipterv-dev-team"}
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -36,7 +36,6 @@ spec:
                 name: mysql-config
             - secretRef:
                 name: mysql-config
-
           livenessProbe:
             httpGet:
               path: /health

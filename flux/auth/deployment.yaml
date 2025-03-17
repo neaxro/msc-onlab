@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app-msc-dipterv-dev-auth
-          image: axelnemes/msc-dipterv-dev:auth-2025-03-17-157d407c5e8b228bd587df0d068c7abe88e58fa0 # {"$imagepolicy": "flux-system:msc-dipterv-dev-auth"}
+          image: axelnemes/msc-dipterv-dev:auth-2025-03-17-89cd3b03429390d061798ceaf505cb425d26e62a # {"$imagepolicy": "flux-system:msc-dipterv-dev-auth"}
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -32,7 +32,6 @@ spec:
                 name: keycloak-config
             - secretRef:
                 name: keycloak-config
-
           livenessProbe:
             httpGet:
               path: /health
@@ -41,7 +40,6 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
-
           readinessProbe:
             httpGet:
               path: /health
@@ -50,14 +48,12 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 2
             failureThreshold: 3
-
           startupProbe:
             httpGet:
               path: /health
               port: 5000
             failureThreshold: 30
             periodSeconds: 10
-
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
