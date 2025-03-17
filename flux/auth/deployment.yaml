@@ -14,9 +14,8 @@ spec:
     spec:
       containers:
         - name: app-msc-dipterv-dev-auth
-          image: axelnemes/msc-dipterv-dev:auth-2025-03-05-e5632707cc26fe6a38652b4a8c65ca6979b21b08 # {"$imagepolicy": "flux-system:msc-dipterv-dev-auth"}
+          image: axelnemes/msc-dipterv-dev:auth-2025-03-17-157d407c5e8b228bd587df0d068c7abe88e58fa0 # {"$imagepolicy": "flux-system:msc-dipterv-dev-auth"}
           imagePullPolicy: IfNotPresent
-
           resources:
             requests:
               cpu: "100m"
@@ -24,25 +23,21 @@ spec:
             limits:
               cpu: "200m"
               memory: "256Mi"
-
           ports:
             - name: http
               containerPort: 5000
               protocol: TCP
-
           envFrom:
             - configMapRef:
                 name: keycloak-config
             - secretRef:
                 name: keycloak-config
-
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
         capabilities:
           drop:
             - all
-
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
