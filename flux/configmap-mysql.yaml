@@ -7,4 +7,4 @@ data:
   MYSQL_DATABASE: msc_onlab
   MYSQL_TEAM_TABLE: teams
   MYSQL_HOST: mysql
-  MYSQL_PORT: 3306
+  MYSQL_PORT: "3306"
