@@ -10,14 +10,7 @@ spec:
     - host: dipterv.msc.nemes.live
       http:
         paths:
-          - path: /auth
-            pathType: Prefix
-            backend:
-              service:
-                name: kong
-                port:
-                  number: 80
-          - path: /team
+          - path: /
             pathType: Prefix
             backend:
               service:
