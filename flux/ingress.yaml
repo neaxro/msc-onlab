@@ -2,16 +2,23 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: auth
+  name: dipterv
 spec:
   rules:
-  - host: auth.dipterv.msc.nemes.live
+  - host: dipterv.msc.nemes.live
     http:
       paths:
-      - path: /
+      - path: /auth
         pathType: Prefix
         backend:
           service:
             name: auth
             port:
               number: 5000
+      - path: /team
+        pathType: Prefix
+        backend:
+          service:
+            name: team
+            port:
+              number: 5001
