@@ -1,11 +1,11 @@
-run-name: "[DEV/AUTH] Build and Push"
+run-name: "[DEV/TEAM] Build and Push"
 
 on:
   push:
     branches:
       - dev
     paths:
-      - 'api/auth/**'
+      - 'api/team/**'
 
 jobs:
   build_and_push:
@@ -32,7 +32,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./api/auth
+          context: ./api/team
           push: true
-          tags: axelnemes/msc-dipterv-dev:auth-${{ steps.date.outputs.date }}-${{ github.sha }}
+          tags: axelnemes/msc-dipterv-dev:team-${{ steps.date.outputs.date }}-${{ github.sha }}
           platforms: linux/arm64, linux/amd64

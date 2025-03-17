@@ -12,3 +12,9 @@ scrape_configs:
       - targets:
         - kong:8000
     metrics_path: /auth/metrics
+
+  - job_name: backend-team
+    static_configs:
+      - targets:
+        - kong:8000
+    metrics_path: /team/metrics

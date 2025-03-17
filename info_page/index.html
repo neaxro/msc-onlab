@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Info Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .db {
+            background-color: #becaff;
+        }
+
+        .backend {
+            background-color: #d7ffd7;
+        }
+
+        .monitoring {
+            background-color: #ffd2d2;
+        }
+
+        .gateway {
+            background-color: #ffffc7;
+        }
+
+        .open-link {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Service Overview</h2>
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Service Name</th>
+            <th>Native URL</th>
+            <th>Kong URL (if applicable)</th>
+            <th>Compose URL</th>
+            <th>Username</th>
+            <th>Password</th>
+        </tr>
+
+        <tr class="db">
+            <td rowspan="2">Database</td>
+            <td>MySQL</td>
+            <td>localhost:3306</td>
+            <td>-</td>
+            <td>http://mysql:3306</td>
+            <td>dev</td>
+            <td>pass</td>
+        </tr>
+        <tr class="db">
+            <td>PostgreSQL</td>
+            <td>localhost:5432</td>
+            <td>-</td>
+            <td>http://postgresql:5432</td>
+            <td>admin</td>
+            <td>pass</td>
+        </tr>
+
+        <tr class="backend">
+            <td rowspan="2">Backend</td>
+            <td>Auth Service</td>
+            <td>http://localhost:5000 <a class="open-link" href="http://localhost:5000" target="_blank">Open</a></td>
+            <td>http://kong:8000/auth <a class="open-link" href="http://kong:8000/auth" target="_blank">Open</a></td>
+            <td>http://auth:5000</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr class="backend">
+            <td>Team Service</td>
+            <td>http://localhost:5001 <a class="open-link" href="http://localhost:5001" target="_blank">Open</a></td>
+            <td>http://kong:8000/team <a class="open-link" href="http://kong:8000/team"
+                    target="_blank">Open</a></td>
+            <td>http://team:5001</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+
+        <tr class="monitoring">
+            <td rowspan="2">Monitoring</td>
+            <td>Prometheus</td>
+            <td>http://localhost:9090 <a class="open-link" href="http://localhost:9090" target="_blank">Open</a></td>
+            <td>-</td>
+            <td>http://prometheus:9090</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr class="monitoring">
+            <td>Grafana</td>
+            <td>http://localhost:3000 <a class="open-link" href="http://localhost:3000" target="_blank">Open</a></td>
+            <td>-</td>
+            <td>http://grafana:3000</td>
+            <td>admin</td>
+            <td>pass</td>
+        </tr>
+
+        <tr class="gateway">
+            <td rowspan="2">Gateway / Identity</td>
+            <td>Kong API Gateway</td>
+            <td>http://localhost:8000 <a class="open-link" href="http://localhost:8000" target="_blank">Open</a></td>
+            <td>-</td>
+            <td>http://kong:8000</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr class="gateway">
+            <td>Keycloak</td>
+            <td>http://localhost:8080 <a class="open-link" href="http://localhost:8080" target="_blank">Open</a></td>
+            <td>http://kong:8000/keycloak <a class="open-link" href="http://kong:8000/keycloak" target="_blank">Open</a>
+            </td>
+            <td>http://keycloak:8080</td>
+            <td>admin</td>
+            <td>pass</td>
+        </tr>
+    </table>
+</body>
+
+</html>

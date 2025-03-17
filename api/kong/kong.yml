@@ -1,0 +1,23 @@
+_format_version: '2.1'
+
+services:
+  - name: auth_service
+    url: http://auth:5000/
+    routes:
+      - name: auth_route
+        paths:
+          - /auth
+
+  - name: team_service
+    url: http://team:5001/
+    routes:
+      - name: team_route
+        paths:
+          - /team
+
+  - name: keycloak_service
+    url: http://keycloak:8080
+    routes:
+      - name: keycloak_route
+        paths:
+          - /keycloak

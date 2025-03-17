@@ -1,4 +1,14 @@
 services:
+  # Info page
+  nginx:
+    image: nginx:1.27.4-perl
+    environment:
+      NGINX_PORT: 80
+    volumes:
+      - ./info_page:/usr/share/nginx/html:ro
+    ports:
+      - 80:80
+
   # Gateway
   kong:
     image: kong:2.8.5
@@ -79,7 +89,7 @@ services:
   # Backend
   auth:
     build:
-      context: ./api_v2/auth
+      context: ./api/auth
       dockerfile: Dockerfile
     restart: always
     environment:
@@ -88,7 +98,7 @@ services:
       APP_DEBUG: True
       KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
       KEYCLOAK_REALM_NAME: msc-onlab-test
-      KEYCLOAK_CLIENT_ID: msc-onlab-auth-microservice-client-test
+      KEYCLOAK_CLIENT_ID: msc-onlab-microservice-client-test
       KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
       KEYCLOAK_ADMIN_USERNAME: realmadmin
       KEYCLOAK_ADMIN_PASSWORD: Asdasd11
@@ -101,6 +111,38 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  team:
+    build:
+      context: ./api/team
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      APP_HOST: "0.0.0.0"
+      APP_PORT: 5001
+      APP_DEBUG: True
+      KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
+      KEYCLOAK_REALM_NAME: msc-onlab-test
+      KEYCLOAK_CLIENT_ID: msc-onlab-microservice-client-test
+      KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
+      METRICS_PREFIX: msc_onlab
+      METRICS_APP_NAME: team
+      MYSQL_TEAM_USER: team_service_user
+      MYSQL_TEAM_PASSWORD: pass
+      MYSQL_DATABASE: msc_onlab
+      MYSQL_TEAM_TABLE: teams
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+    ports:
+      - 5001:5001
+    healthcheck:
+      test: ["CMD", "curl", "http://kong:8000/team/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      mysql:
+        condition: service_healthy
 
   # Monitoring
   prometheus:
@@ -148,7 +190,7 @@ services:
 
 configs:
   kong_config:
-    file: ./api_v2/kong/kong.yml
+    file: ./api/kong/kong.yml
   keycloak_test_realm:
     file: ./keycloak/realm.json
   prometheus_config:
