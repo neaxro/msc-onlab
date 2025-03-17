@@ -1,21 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth
+  name: team
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-msc-dipterv-dev-auth
+      app: app-msc-dipterv-dev-team
   template:
     metadata:
       labels:
-        app: app-msc-dipterv-dev-auth
+        app: app-msc-dipterv-dev-team
     spec:
       containers:
-        - name: app-msc-dipterv-dev-auth
-          image: axelnemes/msc-dipterv-dev:auth-2025-03-17-157d407c5e8b228bd587df0d068c7abe88e58fa0 # {"$imagepolicy": "flux-system:msc-dipterv-dev-auth"}
+        - name: app-msc-dipterv-dev-team
+          image: axelnemes/app-msc-dipterv-dev # {"$imagepolicy": "flux-system:msc-dipterv-dev-team"}
           imagePullPolicy: IfNotPresent
+
           resources:
             requests:
               cpu: "100m"
@@ -23,10 +24,12 @@ spec:
             limits:
               cpu: "200m"
               memory: "256Mi"
+
           ports:
             - name: http
               containerPort: 5000
               protocol: TCP
+
           envFrom:
             - configMapRef:
                 name: keycloak-config
@@ -36,7 +39,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: 5000
+              port: 5001
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -45,7 +48,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health
-              port: 5000
+              port: 5001
             initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 2
@@ -54,7 +57,7 @@ spec:
           startupProbe:
             httpGet:
               path: /health
-              port: 5000
+              port: 5001
             failureThreshold: 30
             periodSeconds: 10
 
@@ -64,27 +67,28 @@ spec:
         capabilities:
           drop:
             - all
+
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node-role.kubernetes.io/worker
-                    operator: In
-                    values:
-                      - worker
+            - matchExpressions:
+              - key: node-role.kubernetes.io/worker
+                operator: In
+                values:
+                - worker
           preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 50
-              preference:
-                matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                      - rpw01
-            - weight: 1
-              preference:
-                matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                      - rpw02
+          - weight: 50
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - rpw01
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - rpw02
