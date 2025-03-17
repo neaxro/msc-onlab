@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+data:
+  MYSQL_TEAM_USER: team_service_user
+  MYSQL_DATABASE: msc_onlab
+  MYSQL_TEAM_TABLE: teams
+  MYSQL_HOST: mysql-primary.db-mysql.svc.cluster.local
+  MYSQL_PORT: "3306"

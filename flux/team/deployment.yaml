@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth
+  name: team
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-msc-dipterv-dev-auth
+      app: app-msc-dipterv-dev-team
   template:
     metadata:
       labels:
-        app: app-msc-dipterv-dev-auth
+        app: app-msc-dipterv-dev-team
     spec:
       containers:
-        - name: app-msc-dipterv-dev-auth
-          image: axelnemes/app-msc-dipterv-dev # {"$imagepolicy": "flux-system:msc-dipterv-dev-auth"}
+        - name: app-msc-dipterv-dev-team
+          image: axelnemes/app-msc-dipterv-dev # {"$imagepolicy": "flux-system:msc-dipterv-dev-team"}
           imagePullPolicy: IfNotPresent
 
           resources:
@@ -27,7 +27,7 @@ spec:
 
           ports:
             - name: http
-              containerPort: 5000
+              containerPort: 5001
               protocol: TCP
 
           envFrom:
@@ -35,11 +35,15 @@ spec:
                 name: keycloak-config
             - secretRef:
                 name: keycloak-config
+            - configMapRef:
+                name: mysql-config
+            - secretRef:
+                name: mysql-config
 
           livenessProbe:
             httpGet:
               path: /health
-              port: 5000
+              port: 5001
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -48,7 +52,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health
-              port: 5000
+              port: 5001
             initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 2
@@ -57,7 +61,7 @@ spec:
           startupProbe:
             httpGet:
               path: /health
-              port: 5000
+              port: 5001
             failureThreshold: 30
             periodSeconds: 10
 

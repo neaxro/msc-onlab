@@ -1,0 +1,24 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kong-config
+  namespace: app-msc-dipterv-dev
+data:
+  kong.yml: |
+    _format_version: "2.1"
+
+    services:
+      - name: auth_service
+        url: http://auth.app-msc-dipterv-dev.svc.cluster.local:5000
+        routes:
+          - name: auth_route
+            paths:
+              - /auth
+
+      - name: team_service
+        url: http://team.app-msc-dipterv-dev.svc.cluster.local:5001
+        routes:
+          - name: team_route
+            paths:
+              - /team
