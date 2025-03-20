@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: app-msc-dipterv-dev
+  labels:
+    application: app-msc-dipterv-dev
+spec:
+  endpoints:
+    - interval: 1m
+      path: auth/metrics
+      port: 80
+    - interval: 1m
+      path: team/metrics
+      port: 80
+  namespaceSelector:
+    matchNames:
+    - app-msc-dipterv-dev
+  selector:
+    matchLabels:
+      name: kong
