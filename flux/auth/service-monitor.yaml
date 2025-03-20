@@ -1,20 +1,17 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: app-msc-dipterv-dev
+  name: app-msc-dipterv-dev-auth
   labels:
-    application: app-msc-dipterv-dev
+    application: app-msc-dipterv-dev-auth
 spec:
   endpoints:
     - interval: 1m
-      path: auth/metrics
-      port: proxy
-    - interval: 1m
-      path: team/metrics
-      port: proxy
+      path: metrics
+      port: http
   namespaceSelector:
     matchNames:
     - app-msc-dipterv-dev
   selector:
     matchLabels:
-      name: kong
+      application: auth
