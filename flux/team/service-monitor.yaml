@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: app-msc-dipterv-dev-team
+  labels:
+    application: app-msc-dipterv-dev-team
+spec:
+  endpoints:
+    - interval: 1m
+      path: metrics
+      port: http
+  namespaceSelector:
+    matchNames:
+    - app-msc-dipterv-dev
+  selector:
+    matchLabels:
+      application: team
