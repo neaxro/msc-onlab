@@ -8,10 +8,10 @@ spec:
   endpoints:
     - interval: 1m
       path: auth/metrics
-      port: 80
+      port: proxy
     - interval: 1m
       path: team/metrics
-      port: 80
+      port: proxy
   namespaceSelector:
     matchNames:
     - app-msc-dipterv-dev
