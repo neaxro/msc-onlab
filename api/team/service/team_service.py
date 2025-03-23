@@ -88,3 +88,39 @@ class TeamService:
             )
 
         return self.team_repository.delete(team_id)
+
+    def add_user(self, team_id, invited_user_id, user_data):
+        user_id = user_data["sub"]
+        team_data = self.team_repository.get_by_id(team_id, user_id)
+        user_membership = self.team_user_repository.is_user_part_of_team(
+            team_id, invited_user_id
+        )
+
+        if not team_data:
+            raise Exception(f"Team with id {team_id} does not exist!")
+
+        if user_membership is not None:
+            raise Exception(
+                f"User ({invited_user_id}) already member of team {team_data['name']}!"
+            )
+
+        # Assign user to team
+        return self.team_user_repository.insert(team_id, invited_user_id)
+
+    def remove_user(self, team_id, invited_user_id, user_data):
+        user_id = user_data["sub"]
+        team_data = self.team_repository.get_by_id(team_id, user_id)
+        user_membership = self.team_user_repository.is_user_part_of_team(
+            team_id, invited_user_id
+        )
+
+        if not team_data:
+            raise Exception(f"Team with id {team_id} does not exist!")
+
+        if user_membership is None:
+            raise Exception(
+                f"User ({invited_user_id}) is not member of team {team_data['name']}!"
+            )
+
+        # Remove user from team
+        return self.team_user_repository.delete(team_id, invited_user_id)

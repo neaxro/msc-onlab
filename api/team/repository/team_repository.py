@@ -89,7 +89,7 @@ class TeamRepository:
                     user_id,
                 ),
             )
-            result = cur.fetchall()
+            result = cur.fetchone()
 
             if not result:
                 return []  # No team found with the given name

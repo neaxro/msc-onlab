@@ -1,7 +1,8 @@
 import logging
 
-from controllers.health.health_controller import Health
-from controllers.team.team_controller import Team
+from controllers.health.health_controller import HealthController
+from controllers.team.membership_controller import MembershipController
+from controllers.team.team_controller import TeamController
 from flask import Flask
 from flask_restful import Api
 from prometheus_client import make_wsgi_app
@@ -23,8 +24,13 @@ def build_app():
     app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {"/metrics": make_wsgi_app()})
 
     api = Api(app)
-    api.add_resource(Health, "/health", endpoint="health")
-    api.add_resource(Team, "/teams", "/teams/<team_id>", endpoint="team")
+    api.add_resource(HealthController, "/health", endpoint="health")
+    api.add_resource(TeamController, "/teams", "/teams/<team_id>", endpoint="team")
+    api.add_resource(
+        MembershipController,
+        "/membership/<team_id>/invited/<invited_user_id>",
+        endpoint="membership",
+    )
 
     return app
 

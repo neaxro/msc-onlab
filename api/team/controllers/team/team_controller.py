@@ -7,7 +7,7 @@ from utils.metrics import count_requests, latency_request, time_request
 from utils.token_check import get_decoded_token_from_request, requires_auth
 
 
-class Team(Resource):
+class TeamController(Resource):
     def __init__(self):
         self.team_service = TeamService(
             team_repositry=TeamRepository(), team_user_repository=TeamUserRepository()

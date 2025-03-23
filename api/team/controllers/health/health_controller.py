@@ -3,7 +3,7 @@ from flask_restful import Resource
 from utils.metrics import count_requests, latency_request, time_request
 
 
-class Health(Resource):
+class HealthController(Resource):
     def __init__(self):
         pass
 

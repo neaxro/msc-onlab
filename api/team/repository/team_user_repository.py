@@ -48,6 +48,26 @@ class TeamUserRepository:
         finally:
             cur.close()
 
+    def delete(self, team_id, user_id):
+        try:
+            cur = self.connection.cursor(pymysql.cursors.DictCursor)
+            cur.execute(
+                """
+                DELETE FROM team_user
+                WHERE team_id=%s and user_id=%s
+                """,
+                (team_id, user_id),
+            )
+
+            self.connection.commit()
+
+            return cur.rowcount
+        except Exception as e:
+            self.connection.rollback()
+            raise e
+        finally:
+            cur.close()
+
     def is_user_part_of_team(self, team_id, user_id):
         try:
             cur = self.connection.cursor(pymysql.cursors.DictCursor)
