@@ -134,6 +134,7 @@ Android application for creating and assigning teams tasks. After logging in, yo
 | Add user to team| POST| /membership/{team_id}/invited/{invited_user_id} | 200, 500| Adds user to team. | :white_check_mark: |
 | Removes user from team| DELETE| /membership/{team_id}/invited/{invited_user_id} | 200, 500| Removes user from team. | :white_check_mark: |
 | Get users of team| GET | /membership/{team_id} | 200, 500| Get all user's data from team | :construction: |
+| Get teams for user | GET | /membership/{user_id} | 200, 500| Get all user's data from team | :construction: |
 
 ## :date: Task service
 
