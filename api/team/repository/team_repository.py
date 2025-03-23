@@ -15,24 +15,31 @@ class TeamRepository:
             port=config.MYSQL_PORT,
         )
 
-    def get_all(self, user_id):
+    def get_all(self, user_id=None):
         """
         Finds all team where user is member.
 
-        :param str user_id: Id of the user
+        :param str user_id: Id of the user, or none for all team search
         :return: Teams' data
         :rtype: list
         """
         try:
             cur = self.connection.cursor(pymysql.cursors.DictCursor)
-            cur.execute(
-                """
-                SELECT t.id , t.name ,t.description  from teams t
-                inner join team_user tu on tu.team_id =t.id
-                WHERE tu.user_id = %s
-                """,
-                (user_id,),
-            )
+            if user_id:
+                cur.execute(
+                    """
+                    SELECT t.id , t.name ,t.description  from teams t
+                    inner join team_user tu on tu.team_id =t.id
+                    WHERE tu.user_id = %s
+                    """,
+                    (user_id,),
+                )
+            else:
+                cur.execute(
+                    """
+                    SELECT t.id , t.name ,t.description  from teams t
+                    """,
+                )
             result = cur.fetchall()
 
             return result
@@ -65,30 +72,41 @@ class TeamRepository:
         finally:
             cur.close()
 
-    def get_by_id(self, team_id, user_id):
+    def get_by_id(self, team_id, user_id=None):
         """
         Finds the team by id.
 
         :param int team_id: Id of the team
+        :param str user_id: Id of the user or None if whole db search is needed.
         :return: Team's data or None if not found
         :type priority: object or []
         :rtype: dict
         """
         try:
             cur = self.connection.cursor(pymysql.cursors.DictCursor)
-            cur.execute(
-                """
-                SELECT t.id , t.name ,t.description  from teams t
-                INNER JOIN team_user tu on tu.team_id =t.id
-                WHERE
-                    t.id = %s AND
-                    tu.user_id = %s
-                """,
-                (
-                    team_id,
-                    user_id,
-                ),
-            )
+            if user_id:
+                cur.execute(
+                    """
+                    SELECT t.id , t.name ,t.description  from teams t
+                    INNER JOIN team_user tu on tu.team_id =t.id
+                    WHERE
+                        t.id = %s AND
+                        tu.user_id = %s
+                    """,
+                    (
+                        team_id,
+                        user_id,
+                    ),
+                )
+            else:
+                cur.execute(
+                    """
+                    SELECT t.id , t.name ,t.description  from teams t
+                    WHERE
+                        t.id = %s
+                    """,
+                    (team_id,),
+                )
             result = cur.fetchone()
 
             if not result:

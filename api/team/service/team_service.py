@@ -9,13 +9,39 @@ class TeamService:
         self.team_repository = team_repositry
         self.team_user_repository = team_user_repository
 
-    def get_all(self, user_data):
-        user_id = user_data["sub"]
-        return self.team_repository.get_all(user_id)
+    def get_all(self, user_data=None):
+        """If user_data is set, returns the teams where user is member,
+        else all teams will be returned.
 
-    def get_by_id(self, team_id, user_data):
-        user_id = user_data["sub"]
-        return self.team_repository.get_by_id(team_id, user_id)
+        Args:
+            user_data (dict, optional): User's data from token. Defaults to None.
+
+        Returns:
+            []: If user_data is set, the teams where user is member, else all teams.
+        """
+
+        if user_data:
+            user_id = user_data["sub"]
+            return self.team_repository.get_all(user_id)
+
+        return self.team_repository.get_all()
+
+    def get_by_id(self, team_id, user_data=None):
+        """If user_data is set, returns the team with the searched id where user is member,  # noqa: E501
+        else team with id will be returned even if user is not part of that team.
+
+        Args:
+            team_id (int): ID of the searched team
+            user_data (dict, optional): User's data from token. Defaults to None.
+
+        Returns:
+            None/dict: None if team is not found else the team's data.
+        """
+        if user_data:
+            user_id = user_data["sub"]
+            return self.team_repository.get_by_id(team_id, user_id)
+
+        return self.team_repository.get_by_id(team_id)
 
     def __get_by_name(self, team_name):
         return self.team_repository.get_by_name(team_name)
