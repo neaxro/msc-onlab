@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `tasks` (
     `creation_date` DATETIME NOT NULL,
     `due_date` DATE NOT NULL,
     `status_id` BIGINT UNSIGNED NOT NULL,
-    `responsible_id` VARCHAR(255) NOT NULL,
+    `responsible_id` VARCHAR(255),
     `team_id` BIGINT UNSIGNED NOT NULL,
     FOREIGN KEY (`status_id`) REFERENCES `statuses`(`id`),
     FOREIGN KEY (`team_id`) REFERENCES `teams`(`id`)

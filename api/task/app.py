@@ -21,7 +21,7 @@ def build_app():
 
     api = Api(app)
     api.add_resource(HealthController, "/health", endpoint="health")
-    api.add_resource(TaskController, "/tasks", endpoint="task")
+    api.add_resource(TaskController, "/tasks", "/tasks/<task_id>", endpoint="task")
 
     return app
 

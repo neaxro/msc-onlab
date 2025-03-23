@@ -48,3 +48,43 @@ class TaskRepository:
             raise e
         finally:
             cur.close()
+
+    def get_by_id(self, task_id):
+        try:
+            cur = self.connection.cursor(pymysql.cursors.DictCursor)
+            cur.execute(
+                """
+                SELECT * FROM tasks
+                WHERE id = %s
+                """,
+                (task_id,),
+            )
+
+            result = cur.fetchone()
+
+            return result
+        except Exception as e:
+            self.connection.rollback()
+            raise e
+        finally:
+            cur.close()
+
+    def insert(self, title, description, due_date, responsible_id, team_id, status_id):
+        try:
+            cur = self.connection.cursor(pymysql.cursors.DictCursor)
+            cur.execute(
+                """
+                INSERT INTO tasks (title, description, creation_date, due_date, responsible_id, team_id, status_id)  # noqa: E501
+                VALUES (%s, %s, NOW(), %s, %s, %s, %s)
+                """,
+                (title, description, due_date, responsible_id, team_id, status_id),
+            )
+
+            self.connection.commit()
+
+            return cur.lastrowid
+        except Exception as e:
+            self.connection.rollback()
+            raise e
+        finally:
+            cur.close()

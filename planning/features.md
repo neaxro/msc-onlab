@@ -141,8 +141,8 @@ Android application for creating and assigning teams tasks. After logging in, yo
 | Detail          | Mode | URI        | HTTP Codes  | Description  | State |
 |-----------------|:----:|------------|-------------|-------------|:-----:|
 | Get all tasks in team (brief)| GET| /tasks?teamId={teamId}?assignedFor={userId} | 200, 500| List tasks for a specific team. | :white_check_mark: |
-| Get task by ID| GET| /tasks/{task_id} | 200, 500| List tasks for a specific team. Include subtasks | :construction: |
-| Create task| POST| /tasks?forTeam={teamId} | 201, 500| List tasks for a specific team. | :construction: |
+| Get task by ID| GET| /tasks/{task_id} | 200, 500| List tasks for a specific team. Include subtasks | :white_check_mark: |
+| Create task| POST| /tasks?forTeam={teamId} | 201, 500| List tasks for a specific team. | :white_check_mark: |
 | Modify task| PATCH| /tasks/{task_id} | 200, 500| Modify task details (title, description, status, etc.) | :construction: |
 | Delete task| DELETE| /tasks/{task_id} | 200, 500| Delete a task. | :construction: |
 | Assign user to task| PATCH| /tasks/{task_id}/assign/{user_id} | 200, 500| Assign a user to a task. | :construction: |
