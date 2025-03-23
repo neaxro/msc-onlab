@@ -131,6 +131,7 @@ Android application for creating and assigning teams tasks. After logging in, yo
 | Create team| POST| /teams | 201, 400, 500| Create a new team (requires name and description). | :white_check_mark: |
 | Modify team| PATCH| /teams/{team_id} | 200, 500| Modify a team's name or description. | :white_check_mark: |
 | Delete team| DELETE| /teams/{team_id} | 200, 500| Delete a team. | :white_check_mark: |
+| Add user to team| POST| /teams/{team_id}/user/{user_id} | 200, 500| Adds user to team. | :construction: |
 
 ## :date: Task service
 
