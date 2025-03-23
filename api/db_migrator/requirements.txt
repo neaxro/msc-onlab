@@ -1,0 +1,4 @@
+yoyo-migrations
+pymysql
+cryptography
+retry
