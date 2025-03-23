@@ -13,9 +13,6 @@ class MembershipController(Resource):
             team_repositry=TeamRepository(), team_user_repository=TeamUserRepository()
         )
 
-    def get(self):
-        return "Hello!", 200
-
     @requires_auth
     @count_requests
     @time_request

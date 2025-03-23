@@ -28,9 +28,9 @@ class Config:
         self.TIMEZONE = os.getenv("TIMEZONE", "Europe/Budapest")
 
         # MySQL database related config
-        self.MYSQL_TASK_USER = os.getenv("MYSQL_USER", "task_service_user")
-        self.MYSQL_TASK_PASSWORD = os.getenv("MYSQL_PASSWORD", "pass")
+        self.MYSQL_USER = os.getenv("MYSQL_USER", "task_service_user")
+        self.MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "pass")
         self.MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "msc_onlab")
-        self.MYSQL_TASK_TABLE = os.getenv("MYSQL_TASK_TABLE", "tasks")
+        self.MYSQL_TABLE = os.getenv("MYSQL_TASK_TABLE", "tasks")
         self.MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
         self.MYSQL_PORT = int(os.getenv("MYSQL_PORT", 3306))
