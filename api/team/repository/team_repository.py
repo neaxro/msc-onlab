@@ -136,9 +136,50 @@ class TeamRepository:
                 data,
             )
 
+            team_id = cur.lastrowid
+            self.__create_statuses_for_team(cur, team_id)
             self.connection.commit()
 
-            return cur.lastrowid
+            return team_id
+        except Exception as e:
+            self.connection.rollback()
+            raise e
+        finally:
+            cur.close()
+
+    def __create_statuses_for_team(self, cur, team_id):
+        """
+        Inserts default statuses for the team.
+        """
+
+        cur.execute(
+            """
+            INSERT INTO statuses (name, team_id)
+            VALUES
+                ('TODO', %s),
+                ('BLOCKED', %s),
+                ('IN PROGRESS', %s),
+                ('IN REVIEW', %s),
+                ('DONE', %s),
+                ('CANCELLED', %s)
+            """,
+            (team_id,) * 6,
+        )
+
+    def get_team_statuses(self, team_id):
+        try:
+            cur = self.connection.cursor(pymysql.cursors.DictCursor)
+            cur.execute(
+                """
+            SELECT *
+            FROM statuses s
+            WHERE s.team_id = %s
+            """,
+                (team_id,),
+            )
+            result = cur.fetchall()
+
+            return result
         except Exception as e:
             self.connection.rollback()
             raise e

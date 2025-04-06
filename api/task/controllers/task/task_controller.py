@@ -1,6 +1,7 @@
 from flask import current_app, jsonify, request
 from flask_restful import Resource
 from repository.task_repository import TaskRepository
+from repository.team_repository import TeamRepository
 from service.task_service import TaskService
 from utils.metrics import count_requests, latency_request, time_request
 from utils.token_check import get_decoded_token_from_request, requires_auth
@@ -10,7 +11,7 @@ class TaskController(Resource):
     """Controller for handling task-related API requests."""
 
     def __init__(self):
-        self.task_service = TaskService(TaskRepository())
+        self.task_service = TaskService(TaskRepository(), TeamRepository())
 
     @requires_auth
     @count_requests
@@ -86,12 +87,16 @@ class TaskController(Resource):
                     "Invalid due_date format. Expected 'YYYY-MM-DD'", 400
                 )
 
+            # Get token for further api call
+            auth_header = request.headers.get("Authorization", None)
+
             new_task_id = self.task_service.insert(
                 title=data["title"],
                 description=data["description"],
                 due_date=due_date,
                 responsible_id=data.get("responsible_id"),  # Nullable field
                 team_id=data["team_id"],
+                auth_header=auth_header,
             )
 
             current_app.logger.info(

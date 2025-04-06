@@ -17,6 +17,26 @@ class MembershipController(Resource):
     @count_requests
     @time_request
     @latency_request
+    def get(self, team_id=None, user_id=None):
+        try:
+            user_data = get_decoded_token_from_request()
+
+            if team_id:
+                result = self.team_service.get_teams_users(team_id, user_data)
+                return jsonify(result)
+
+            if user_id:
+                result = self.team_service.get_users_teams(user_id, user_data)
+                return jsonify(result)
+
+        except Exception as e:
+            current_app.logger.info(f"Something went wrong. Error: {str(e)}")
+            return {"error": "Something went wrong", "details": str(e)}, 500
+
+    @requires_auth
+    @count_requests
+    @time_request
+    @latency_request
     def post(self, team_id, invited_user_id):
         try:
             user_data = get_decoded_token_from_request()

@@ -133,8 +133,9 @@ Android application for creating and assigning teams tasks. After logging in, yo
 | Delete team| DELETE| /teams/{team_id} | 200, 500| Delete a team. | :white_check_mark: |
 | Add user to team| POST| /membership/{team_id}/invited/{invited_user_id} | 200, 500| Adds user to team. | :white_check_mark: |
 | Removes user from team| DELETE| /membership/{team_id}/invited/{invited_user_id} | 200, 500| Removes user from team. | :white_check_mark: |
-| Get users of team| GET | /membership/{team_id} | 200, 500| Get all user's data from team | :construction: |
-| Get teams for user | GET | /membership/{user_id} | 200, 500| Get all user's data from team | :construction: |
+| Get users of team| GET | /membership/{team_id}/members | 200, 500| Get all user's data from team | :triangular_flag_on_post: |
+| Get teams where user is member | GET | /membership/{user_id}/teams | 200, 500| Get all teams data where user is member | :white_check_mark: |
+| Team info | GET | /teams/{team_id}/info | 200, 500| Get team's details, such as task statuses and its ids... | :white_check_mark: |
 
 ## :date: Task service
 

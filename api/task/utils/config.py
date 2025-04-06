@@ -34,3 +34,7 @@ class Config:
         self.MYSQL_TABLE = os.getenv("MYSQL_TASK_TABLE", "tasks")
         self.MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
         self.MYSQL_PORT = int(os.getenv("MYSQL_PORT", 3306))
+
+        # Service mesh related config
+        self.TEAM_SERVICE_HOST = os.getenv("TEAM_SERVICE_HOST", "localhost")
+        self.TEAM_SERVICE_PORT = os.getenv("TEAM_SERVICE_PORT", 5001)

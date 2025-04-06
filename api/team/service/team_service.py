@@ -46,6 +46,22 @@ class TeamService:
     def __get_by_name(self, team_name):
         return self.team_repository.get_by_name(team_name)
 
+    def get_users_teams(self, user_id, user_data):
+        # TODO: Return the users data not just the ids
+        return self.team_user_repository.get_users_teams(user_id)
+
+    def get_teams_users(self, team_id, user_data):
+        return self.team_user_repository.get_team_menbers(team_id)
+
+    def team_info(self, team_id, user_data):
+        team_data = self.get_by_id(team_id, user_data)
+        team_statuses = self.team_repository.get_team_statuses(team_id)
+
+        if not team_data:
+            raise Exception(f"Team with id {team_id} does not exist!")
+
+        return {"data": team_data, "statuses": team_statuses}
+
     def insert(self, data, user_data):
         # Check data before creating anything
         if not data["name"] or not data["description"]:

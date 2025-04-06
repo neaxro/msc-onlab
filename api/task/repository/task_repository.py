@@ -21,7 +21,11 @@ class TaskRepository:
             if user_id:
                 cur.execute(
                     """
-                    SELECT * FROM tasks t
+                    SELECT t.id, t.title, t.description, t.creation_date,
+                        t.due_date, t.responsible_id, t.team_id,
+                        s.name as status
+                    FROM tasks t
+                    INNER JOIN statuses s ON s.id = t.status_id
                     WHERE
                         t.team_id = %s AND
                         t.responsible_id = %s
@@ -34,7 +38,11 @@ class TaskRepository:
             else:
                 cur.execute(
                     """
-                    SELECT * FROM tasks t
+                    SELECT t.id, t.title, t.description, t.creation_date,
+                        t.due_date, t.responsible_id, t.team_id,
+                        s.name as status
+                    FROM tasks t
+                    INNER JOIN statuses s ON s.id = t.status_id
                     WHERE
                         t.team_id = %s
                     """,
@@ -54,8 +62,12 @@ class TaskRepository:
             cur = self.connection.cursor(pymysql.cursors.DictCursor)
             cur.execute(
                 """
-                SELECT * FROM tasks
-                WHERE id = %s
+                SELECT t.id, t.title, t.description, t.creation_date,
+                    t.due_date, t.responsible_id, t.team_id,
+                    s.name as status
+                FROM tasks t
+                INNER JOIN statuses s ON s.id = t.status_id
+                WHERE t.id = %s
                 """,
                 (task_id,),
             )
