@@ -3,6 +3,7 @@ import logging
 from controllers.health_controller import Health
 from controllers.login_controller import Login
 from controllers.register_controller import Register
+from controllers.user_controller import User
 from flask import Flask
 from flask_restful import Api
 from prometheus_client import make_wsgi_app
@@ -24,6 +25,7 @@ def build_app():
     api.add_resource(Health, "/health", endpoint="health")
     api.add_resource(Login, "/login", endpoint="login")
     api.add_resource(Register, "/register", endpoint="register")
+    api.add_resource(User, "/user/<user_id>", endpoint="user")
 
     return app
 

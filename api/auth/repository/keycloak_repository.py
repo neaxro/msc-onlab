@@ -44,3 +44,34 @@ class KeycloakRepository:
         )
 
         return user_id
+
+    def get_user_by_id(self, user_id, metadata=False):
+        user = self.keycloak_admin.get_user(user_id, metadata)
+        user.pop("access")
+
+        return user
+
+    def modify_user(self, user_id, first_name, last_name, email, password):
+        response = self.keycloak_admin.update_user(
+            user_id,
+            {
+                "email": email,
+                "firstName": first_name,
+                "lastName": last_name,
+                "enabled": True,
+                "emailVerified": True,
+                "credentials": [
+                    {"type": "password", "value": password, "temporary": False}
+                ],
+            },
+        )
+
+        return response
+
+    def enable_user(self, user_id):
+        response = self.keycloak_admin.enable_user(user_id)
+        return response
+
+    def disable_user(self, user_id):
+        response = self.keycloak_admin.disable_user(user_id)
+        return response

@@ -117,9 +117,9 @@ Android application for creating and assigning teams tasks. After logging in, yo
 |-----------------|:----:|------------|-------------|-------------|:-----:|
 | Login           | POST  | /login     | 200, 401, 500    | Login a user with username/password. | :white_check_mark:
 | Register        | POST  | /register  | 200, 401, 500    | Register a new user. | :white_check_mark:
-| Get User by ID  | GET | /users/{user_id} | 200, 404, 500 |	Get user details by ID. | :construction:
-| Modify User by ID  | PATCH | /users/{user_id} | 200, 400, 404, 500 |	Modify user details by ID. | :construction:
-| Delete User by ID  | DELETE | /users/{user_id} | 204, 404, 500 |	Delete user details by ID. | :construction:
+| Get User by ID  | GET | /users/{user_id} | 200, 404, 500 |	Get user details by ID. | :white_check_mark:
+| Modify User by ID  | PATCH | /users/{user_id} | 200, 400, 404, 500 |	Modify user details by ID. | :white_check_mark:
+| Disable User by ID  | DELETE | /users/{user_id} | 204, 404, 500 |	Disable user, so login is restricted. | :white_check_mark:
 
 ## :office: Team service
 > Response codes may change by the time
