@@ -1,11 +1,11 @@
 import logging
 
+from controllers.health_controller import Health
+from controllers.login_controller import Login
+from controllers.register_controller import Register
 from flask import Flask
 from flask_restful import Api
-from health.health_controller import Health
-from login.login_controller import Login
 from prometheus_client import make_wsgi_app
-from register.register_controller import Register
 from utils.config import Config
 from utils.logging_config import setup_logger
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
