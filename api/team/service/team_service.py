@@ -1,13 +1,18 @@
+from repository.auth_service_repository import AuthServiceRepository
 from repository.team_repository import TeamRepository
 from repository.team_user_repository import TeamUserRepository
 
 
 class TeamService:
     def __init__(
-        self, team_repositry: TeamRepository, team_user_repository: TeamUserRepository
+        self,
+        team_repositry: TeamRepository,
+        team_user_repository: TeamUserRepository,
+        auth_service_repository: AuthServiceRepository,
     ):
         self.team_repository = team_repositry
         self.team_user_repository = team_user_repository
+        self.auth_service_repository = auth_service_repository
 
     def get_all(self, user_data=None):
         """If user_data is set, returns the teams where user is member,
@@ -47,11 +52,23 @@ class TeamService:
         return self.team_repository.get_by_name(team_name)
 
     def get_users_teams(self, user_id, user_data):
-        # TODO: Return the users data not just the ids
         return self.team_user_repository.get_users_teams(user_id)
 
-    def get_teams_users(self, team_id, user_data):
-        return self.team_user_repository.get_team_menbers(team_id)
+    def get_teams_users(self, team_id, user_data, auth_header):
+        try:
+            members = self.team_user_repository.get_team_menbers(team_id)
+            data = []
+
+            for member in members:
+                user_id = member.get("user_id")
+                user_data = self.auth_service_repository.get_user_by_id(
+                    user_id, auth_header
+                )
+                data.append(user_data)
+
+            return data
+        except Exception as e:
+            raise e
 
     def team_info(self, team_id, user_data):
         team_data = self.get_by_id(team_id, user_data)

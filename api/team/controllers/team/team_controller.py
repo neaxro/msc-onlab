@@ -1,5 +1,6 @@
 from flask import current_app, jsonify, request
 from flask_restful import Resource
+from repository.auth_service_repository import AuthServiceRepository
 from repository.team_repository import TeamRepository
 from repository.team_user_repository import TeamUserRepository
 from service.team_service import TeamService
@@ -10,7 +11,9 @@ from utils.token_check import get_decoded_token_from_request, requires_auth
 class TeamController(Resource):
     def __init__(self):
         self.team_service = TeamService(
-            team_repositry=TeamRepository(), team_user_repository=TeamUserRepository()
+            team_repositry=TeamRepository(),
+            team_user_repository=TeamUserRepository(),
+            auth_service_repository=AuthServiceRepository(),
         )
 
     @requires_auth

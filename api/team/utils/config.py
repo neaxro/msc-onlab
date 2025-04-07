@@ -34,3 +34,7 @@ class Config:
         self.MYSQL_TEAM_TABLE = os.getenv("MYSQL_TEAM_TABLE", "teams")
         self.MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
         self.MYSQL_PORT = int(os.getenv("MYSQL_PORT", 3306))
+
+        # Service mesh related config
+        self.AUTH_SERVICE_HOST = os.getenv("AUTH_SERVICE_HOST", "localhost")
+        self.AUTH_SERVICE_PORT = os.getenv("AUTH_SERVICE_PORT", 5000)
