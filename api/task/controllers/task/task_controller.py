@@ -49,6 +49,7 @@ class TaskController(Resource):
             return jsonify(tasks)
 
         except Exception as e:
+            current_app.logger.error(f"Unexpected error: {str(e)}")
             return self.handle_error(f"Unexpected error: {str(e)}", 500)
 
     def _fetch_task_by_id(self, task_id, username, auth_header):
@@ -64,6 +65,7 @@ class TaskController(Resource):
             return jsonify(task)
 
         except Exception as e:
+            current_app.logger.error(f"Error fetching task: {str(e)}")
             return self.handle_error(f"Error fetching task {task_id}: {str(e)}", 500)
 
     @requires_auth
@@ -114,6 +116,7 @@ class TaskController(Resource):
 
             return response
         except Exception as e:
+            current_app.logger.error(f"Error creating task: {str(e)}")
             return self.handle_error(f"Error creating task: {str(e)}", 500)
 
     @staticmethod
@@ -121,3 +124,36 @@ class TaskController(Resource):
         """Logs and returns a formatted error response."""
         current_app.logger.error(message)
         return {"error": message}, status_code
+
+    @requires_auth
+    @count_requests
+    @time_request
+    @latency_request
+    def patch(self):
+        """Handles modifying a task."""
+        try:
+            user_data = get_decoded_token_from_request()
+            username = user_data.get("preferred_username", "Unknown User")
+
+            data = request.get_json()
+
+            current_app.logger.info(f"Attempting to modify task with id '{data['id']}'")
+
+            modified_rows = self.task_service.modify(data)
+
+            current_app.logger.info(
+                f"Task successfully modified with id '{data['id']}', by {username}"
+            )
+
+            response = jsonify(
+                {
+                    "message": "Task successfully modified!",
+                    "modified_rows": modified_rows,
+                }
+            )
+            response.status_code = 204
+
+            return response
+        except Exception as e:
+            current_app.logger.error(f"Error modifying task: {str(e)}")
+            return self.handle_error(f"Error modifying task: {str(e)}", 500)

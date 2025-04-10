@@ -63,3 +63,19 @@ class TaskService:
             )
         except Exception as e:
             raise e
+
+    def modify(self, task_data):
+        """Updates the task attributes which are not None. Other values are kept as they are."""  # noqa: E501
+
+        task_id = task_data.get("id", None)
+        if not task_id:
+            raise Exception("Task's id must be provided!")
+
+        return self.task_repository.modify(
+            task_id=task_id,
+            title=task_data.get("title", None),
+            description=task_data.get("description", None),
+            due_date=task_data.get("due_date", None),
+            status_id=task_data.get("status_id", None),
+            responsible_id=task_data.get("responsible_id", None),
+        )

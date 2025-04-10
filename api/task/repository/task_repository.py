@@ -100,3 +100,55 @@ class TaskRepository:
             raise e
         finally:
             cur.close()
+
+    def modify(
+        self,
+        task_id,
+        title=None,
+        description=None,
+        due_date=None,
+        status_id=None,
+        responsible_id=None,
+    ):
+        try:
+            cur = self.connection.cursor(pymysql.cursors.DictCursor)
+
+            fields = []
+            values = []
+
+            if title is not None:
+                fields.append("title = %s")
+                values.append(title)
+            if description is not None:
+                fields.append("description = %s")
+                values.append(description)
+            if due_date is not None:
+                fields.append("due_date = %s")
+                values.append(due_date)
+            if status_id is not None:
+                fields.append("status_id = %s")
+                values.append(status_id)
+            if responsible_id is not None:
+                fields.append("responsible_id = %s")
+                values.append(responsible_id)
+
+            if not fields:
+                raise ValueError("No fields provided to update.")
+
+            values.append(task_id)
+
+            sql = f"""
+                UPDATE tasks
+                SET {', '.join(fields)}
+                WHERE id = %s
+            """
+
+            cur.execute(sql, values)
+            self.connection.commit()
+
+            return cur.rowcount
+        except Exception as e:
+            self.connection.rollback()
+            raise e
+        finally:
+            cur.close()
