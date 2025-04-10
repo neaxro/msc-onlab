@@ -41,10 +41,24 @@ class TaskService:
 
         return task
 
-    def insert(
-        self, title, description, due_date, responsible_id, team_id, auth_header
-    ):
+    def insert(self, data, auth_header):
         """Creates a new task and returns the created task."""
+
+        # Validate required fields
+        required_fields = ["title", "description", "due_date", "team_id"]
+        for field in required_fields:
+            if field not in data or data[field] is None:
+                raise Exception(f"Missing required field: {field}")
+
+        # Convert due_date if necessary
+        due_date = data.get("due_date")
+        if not isinstance(due_date, str):  # Ensure it's a string
+            raise Exception("Invalid due_date format. Expected 'YYYY-MM-DD'")
+
+        title = data["title"]
+        description = data["description"]
+        responsible_id = data.get("responsible_id")  # Nullable field
+        team_id = data["team_id"]
 
         try:
             team_data = self.team_repository.get_teams_info(team_id, auth_header)

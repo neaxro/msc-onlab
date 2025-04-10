@@ -77,33 +77,11 @@ class TaskController(Resource):
         try:
             user_data = get_decoded_token_from_request()
             username = user_data.get("preferred_username", "Unknown User")
+            auth_header = request.headers.get("Authorization", None)
 
             data = request.get_json()
 
-            # Validate required fields
-            required_fields = ["title", "description", "due_date", "team_id"]
-            for field in required_fields:
-                if field not in data or data[field] is None:
-                    return self.handle_error(f"Missing required field: {field}", 400)
-
-            # Convert due_date if necessary
-            due_date = data.get("due_date")
-            if not isinstance(due_date, str):  # Ensure it's a string
-                return self.handle_error(
-                    "Invalid due_date format. Expected 'YYYY-MM-DD'", 400
-                )
-
-            # Get token for further api call
-            auth_header = request.headers.get("Authorization", None)
-
-            new_task_id = self.task_service.insert(
-                title=data["title"],
-                description=data["description"],
-                due_date=due_date,
-                responsible_id=data.get("responsible_id"),  # Nullable field
-                team_id=data["team_id"],
-                auth_header=auth_header,
-            )
+            new_task_id = self.task_service.insert(data, auth_header)
 
             current_app.logger.info(
                 f"Task with id '{new_task_id}' created successfully by {username}."
@@ -116,7 +94,6 @@ class TaskController(Resource):
 
             return response
         except Exception as e:
-            current_app.logger.error(f"Error creating task: {str(e)}")
             return self.handle_error(f"Error creating task: {str(e)}", 500)
 
     @staticmethod
@@ -155,5 +132,4 @@ class TaskController(Resource):
 
             return response
         except Exception as e:
-            current_app.logger.error(f"Error modifying task: {str(e)}")
             return self.handle_error(f"Error modifying task: {str(e)}", 500)
