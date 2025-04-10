@@ -183,8 +183,10 @@ services:
       MYSQL_TASK_TABLE: tasks
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
-      TEAM_SERVICE_HOST: localhost
+      TEAM_SERVICE_HOST: team
       TEAM_SERVICE_PORT: 5001
+      AUTH_SERVICE_HOST: auth
+      AUTH_SERVICE_PORT: 5000
     ports:
       - 5002:5002
     healthcheck:

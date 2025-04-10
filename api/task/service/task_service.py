@@ -1,3 +1,4 @@
+from repository.auth_service_repository import AuthServiceRepository
 from repository.task_repository import TaskRepository
 from repository.team_repository import TeamRepository
 
@@ -5,18 +6,40 @@ from repository.team_repository import TeamRepository
 class TaskService:
     """Handles business logic for tasks."""
 
-    def __init__(self, task_repositry: TaskRepository, team_repository: TeamRepository):
+    def __init__(
+        self,
+        task_repositry: TaskRepository,
+        team_repository: TeamRepository,
+        auth_repository: AuthServiceRepository,
+    ):
         self.task_repository = task_repositry
         self.team_repository = team_repository
+        self.auth_repository = auth_repository
 
-    # TODO: Include user data not just assigned_id
-    def get_all(self, team_id, user_id=None):
+    def _get_responsible_data_from_task(self, task, auth_header):
+        responsible_id = task["responsible_id"]
+        return self.auth_repository.get_user_by_id(responsible_id, auth_header)
+
+    def _replace_user_id_to_data(self, task, auth_header):
+        responsible_data = self._get_responsible_data_from_task(task, auth_header)
+        task.pop("responsible_id")
+        task["responsible"] = responsible_data
+
+    def get_all(self, team_id, auth_header, user_id=None):
         """Fetches all tasks for a given team, optionally filtering by user."""
-        return self.task_repository.get_all(team_id, user_id)
+        tasks = self.task_repository.get_all(team_id, user_id)
 
-    def get_by_id(self, task_id):
+        for task in tasks:
+            self._replace_user_id_to_data(task, auth_header)
+
+        return tasks
+
+    def get_by_id(self, task_id, auth_header):
         """Fetches a specific task by ID."""
-        return self.task_repository.get_by_id(task_id)
+        task = self.task_repository.get_by_id(task_id)
+        self._replace_user_id_to_data(task, auth_header)
+
+        return task
 
     def insert(
         self, title, description, due_date, responsible_id, team_id, auth_header

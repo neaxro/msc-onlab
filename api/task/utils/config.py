@@ -38,3 +38,7 @@ class Config:
         # Service mesh related config
         self.TEAM_SERVICE_HOST = os.getenv("TEAM_SERVICE_HOST", "localhost")
         self.TEAM_SERVICE_PORT = os.getenv("TEAM_SERVICE_PORT", 5001)
+
+        # Service mesh related config
+        self.AUTH_SERVICE_HOST = os.getenv("AUTH_SERVICE_HOST", "localhost")
+        self.AUTH_SERVICE_PORT = os.getenv("AUTH_SERVICE_PORT", 5000)
