@@ -133,3 +133,33 @@ class TaskController(Resource):
             return response
         except Exception as e:
             return self.handle_error(f"Error modifying task: {str(e)}", 500)
+
+    @requires_auth
+    @count_requests
+    @time_request
+    @latency_request
+    def delete(self, task_id):
+        """Handles deleting a task."""
+        try:
+            user_data = get_decoded_token_from_request()
+            username = user_data.get("preferred_username", "Unknown User")
+
+            current_app.logger.info(f"Attempting to delete task with id '{task_id}'")
+
+            modified_rows = self.task_service.delete(task_id)
+
+            current_app.logger.info(
+                f"Task successfully deleted with id '{task_id}', by {username}"
+            )
+
+            response = jsonify(
+                {
+                    "message": "Task successfully deleted!",
+                    "modified_rows": modified_rows,
+                }
+            )
+            response.status_code = 204
+
+            return response
+        except Exception as e:
+            return self.handle_error(f"Error deleting task: {str(e)}", 500)

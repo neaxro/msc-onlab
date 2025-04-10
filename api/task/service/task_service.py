@@ -93,3 +93,7 @@ class TaskService:
             status_id=task_data.get("status_id", None),
             responsible_id=task_data.get("responsible_id", None),
         )
+
+    def delete(self, task_id):
+        """Deletes task with task_id"""
+        return self.task_repository.delete(task_id)

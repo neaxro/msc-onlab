@@ -152,3 +152,23 @@ class TaskRepository:
             raise e
         finally:
             cur.close()
+
+    def delete(self, task_id):
+        try:
+            cur = self.connection.cursor(pymysql.cursors.DictCursor)
+            cur.execute(
+                """
+                DELETE FROM tasks
+                WHERE id =%s
+                """,
+                (task_id,),
+            )
+
+            self.connection.commit()
+
+            return cur.rowcount
+        except Exception as e:
+            self.connection.rollback()
+            raise e
+        finally:
+            cur.close()
