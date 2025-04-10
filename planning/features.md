@@ -144,23 +144,11 @@ Android application for creating and assigning teams tasks. After logging in, yo
 | Get all tasks in team (brief)| GET| /tasks?teamId={teamId}?assignedFor={userId} | 200, 500| List tasks for a specific team. | :white_check_mark: |
 | Get task by ID| GET| /tasks/{task_id} | 200, 500| List tasks for a specific team. Include subtasks | :white_check_mark: |
 | Create task| POST| /tasks?forTeam={teamId} | 201, 500| List tasks for a specific team. | :white_check_mark: |
-| Modify task| PATCH| /tasks/{task_id} | 200, 500| Modify task details (title, description, status, etc.) | :construction: |
-| Delete task| DELETE| /tasks/{task_id} | 200, 500| Delete a task. | :construction: |
-| Assign user to task| PATCH| /tasks/{task_id}/assign/{user_id} | 200, 500| Assign a user to a task. | :construction: |
-| Unassign user from task| PATCH| /tasks/{task_id}/unassign/{user_id} | 200, 500| Unassign a user from a task. | :construction: |
-| Unassign user from task| PATCH| /tasks/{task_id}/unassign/{user_id} | 200, 500| Unassign a user from a task. | :construction: |
+| Modify task| PATCH| /tasks/{task_id} | 204, 500| Modify task details (title, description, status, etc.) | :white_check_mark: |
+| Delete task| DELETE| /tasks/{task_id} | 204, 500| Delete a task. | :white_check_mark: |
 | Create subtask| POST| /tasks/{task_id}/subtasks | 201, 500| Create a new subtask for a task. | :construction: |
 | Modify subtask| PATCH| /subtasks/{subtask_id} | 200, 500| Modify subtask details (title, status, etc.). | :construction: |
 | Delete subtask| DELETE| /subtasks/{subtask_id} | 200, 500| Delete a subtask. | :construction: |
-
-## :chart_with_upwards_trend: Status service
-| Detail          | Mode | URI        | HTTP Codes  | Description  | State |
-|-----------------|:----:|------------|-------------|-------------|:-----:|
-| Get all statuses for team| GET| /statuses?forTeam={teamId}| 200, 500| Get all statuses for a team. | :construction: |
-| Create new status| POST| /statuses?forTeam={teamId}| 201, 500| Create a new status for a team. | :construction: |
-| Modify status| PATCH| /statuses/{status_id}| 200, 500| Modify an existing status. | :construction: |
-| Delete status| DELETE| /statuses/{status_id}| 200, 500| Delete a status from a team. | :construction: |
-
 
 ## :love_letter: Invitation
 > Response codes may change by the time
