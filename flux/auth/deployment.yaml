@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app-msc-dipterv-dev-auth
-          image: axelnemes/msc-dipterv-dev:auth-2025-05-04-474faaa01da8e0c9a200ad3e277915797d3f69c5 # {"$imagepolicy": "flux-system:msc-dipterv-dev-auth"}
+          image: axelnemes/msc-dipterv-dev:auth-2025-05-04-e0d51c63cef6a92e8b03770131689fef2012c864 # {"$imagepolicy": "flux-system:msc-dipterv-dev-auth"}
           imagePullPolicy: IfNotPresent
           resources:
             requests:
