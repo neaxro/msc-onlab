@@ -22,6 +22,13 @@ services:
         paths:
           - /task
 
+  - name: invitation_service
+    url: http://invitation:5003/
+    routes:
+      - name: invitation_route
+        paths:
+          - /invitation
+
   - name: keycloak_service
     url: http://keycloak:8080
     routes:

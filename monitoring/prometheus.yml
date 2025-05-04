@@ -24,3 +24,9 @@ scrape_configs:
       - targets:
         - kong:8000
     metrics_path: /task/metrics
+
+  - job_name: backend-invitation
+    static_configs:
+      - targets:
+        - kong:8000
+    metrics_path: /invitation/metrics

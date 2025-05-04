@@ -16,6 +16,10 @@ GRANT ALL PRIVILEGES ON msc_onlab.* TO 'team_service_user'@'%';
 CREATE USER 'task_service_user'@'%' IDENTIFIED BY 'pass';
 GRANT ALL PRIVILEGES ON msc_onlab.* TO 'task_service_user'@'%';
 
+-- Create invitation_service_user (if not already created)
+-- and grant all privileges on the msc_onlab database to the user
+CREATE USER 'invitation_service_user'@'%' IDENTIFIED BY 'pass';
+GRANT ALL PRIVILEGES ON msc_onlab.* TO 'invitation_service_user'@'%';
 -- Apply the changes
 FLUSH PRIVILEGES;
 
