@@ -9,6 +9,8 @@ on:
       - 'api/auth/**'
       - 'api/team/**'
       - 'api/task/**'
+      - 'api/invitation/**'
+      - 'api/db_migrator/**'
 
 env:
   BUILD_ENVIRONMENT: dev
@@ -26,6 +28,17 @@ jobs:
       - id: environment
         name: Get build environment
         run: echo "build_environment=$BUILD_ENVIRONMENT" >> "$GITHUB_OUTPUT"
+
+  bap-db-migrator:
+    needs:
+      - gather-informations
+    uses: ./.github/workflows/db-migrator.yaml
+    with:
+      environment: ${{ needs.gather-informations.outputs.build_environment }}
+      date: ${{ needs.gather-informations.outputs.build_time }}
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
   bap-auth:
     needs:
@@ -53,6 +66,17 @@ jobs:
     needs:
       - gather-informations
     uses: ./.github/workflows/task-service.yaml
+    with:
+      environment: ${{ needs.gather-informations.outputs.build_environment }}
+      date: ${{ needs.gather-informations.outputs.build_time }}
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  bap-invitation:
+    needs:
+      - gather-informations
+    uses: ./.github/workflows/invitation-service.yaml
     with:
       environment: ${{ needs.gather-informations.outputs.build_environment }}
       date: ${{ needs.gather-informations.outputs.build_time }}

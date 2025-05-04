@@ -1,0 +1,40 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      date:
+        required: true
+        type: string
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+      DOCKERHUB_TOKEN:
+        required: true
+
+jobs:
+  db-migrator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./api/db_migrator
+          push: true
+          tags: axelnemes/msc-dipterv-${{ inputs.environment }}:db-migrator-${{ inputs.date }}-${{ github.sha }}
+          platforms: linux/arm64, linux/amd64
