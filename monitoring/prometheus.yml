@@ -18,3 +18,9 @@ scrape_configs:
       - targets:
         - kong:8000
     metrics_path: /team/metrics
+
+  - job_name: backend-task
+    static_configs:
+      - targets:
+        - kong:8000
+    metrics_path: /task/metrics
