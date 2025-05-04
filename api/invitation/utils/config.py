@@ -42,3 +42,6 @@ class Config:
         # Service mesh related config
         self.AUTH_SERVICE_HOST = os.getenv("AUTH_SERVICE_HOST", "localhost")
         self.AUTH_SERVICE_PORT = os.getenv("AUTH_SERVICE_PORT", 5000)
+
+        # Invitation behaviour related config
+        self.EXPIRATION_DAYS = int(os.getenv("EXPIRATION_DAYS", 7))

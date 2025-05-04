@@ -146,13 +146,14 @@ Android application for creating and assigning teams tasks. After logging in, yo
 | Create task| POST| /tasks?forTeam={teamId} | 201, 500| List tasks for a specific team. | :white_check_mark: |
 | Modify task| PATCH| /tasks/{task_id} | 204, 500| Modify task details (title, description, status, etc.) | :white_check_mark: |
 | Delete task| DELETE| /tasks/{task_id} | 204, 500| Delete a task. | :white_check_mark: |
-| Create subtask| POST| /tasks/{task_id}/subtasks | 201, 500| Create a new subtask for a task. | :construction: |
-| Modify subtask| PATCH| /subtasks/{subtask_id} | 200, 500| Modify subtask details (title, status, etc.). | :construction: |
-| Delete subtask| DELETE| /subtasks/{subtask_id} | 200, 500| Delete a subtask. | :construction: |
+| Create subtask| POST| /tasks/{task_id}/subtasks | 201, 500| Create a new subtask for a task. | :white_check_mark: |
+| Modify subtask| PATCH| /subtasks/{subtask_id} | 200, 500| Modify subtask details (title, status, etc.). | :white_check_mark: |
+| Delete subtask| DELETE| /subtasks/{subtask_id} | 200, 500| Delete a subtask. | :white_check_mark: |
 
 ## :love_letter: Invitation
-> Response codes may change by the time
 
-> Sends invitation email to the email address and the given url will redirects the use to the application.
-
-Todo...
+| Detail          | Mode | URI        | HTTP Codes  | Description  | State |
+|-----------------|:----:|------------|-------------|-------------|:-----:|
+| List available invitations| GET| /invitations | 200, 500| Creates an invitation | :white_check_mark: |
+| Invite user| POST| /invitations | 204, 500| Creates an invitation | :white_check_mark: |
+| Accept/Decline invitation| PATCH| /invitations?decision{accept/decline}?token={token} | 200, 500| Accepts invitation so user will be part of team or declines it. | :construction: |
