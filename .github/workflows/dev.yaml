@@ -5,10 +5,10 @@ on:
   push:
     branches:
       - dev
-    # paths:
-    #   - 'api/auth/**'
-    #   - 'api/team/**'
-    #   - 'api/task/**'
+    paths:
+      - 'api/auth/**'
+      - 'api/team/**'
+      - 'api/task/**'
 
 env:
   BUILD_ENVIRONMENT: dev
