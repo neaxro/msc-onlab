@@ -1,24 +1,83 @@
+from repository.auth_service_repository import AuthServiceRepository
 from repository.team_repository import TeamRepository
 from repository.team_user_repository import TeamUserRepository
 
 
 class TeamService:
     def __init__(
-        self, team_repositry: TeamRepository, team_user_repository: TeamUserRepository
+        self,
+        team_repositry: TeamRepository,
+        team_user_repository: TeamUserRepository,
+        auth_service_repository: AuthServiceRepository,
     ):
         self.team_repository = team_repositry
         self.team_user_repository = team_user_repository
+        self.auth_service_repository = auth_service_repository
 
-    def get_all(self, user_data):
-        user_id = user_data["sub"]
-        return self.team_repository.get_all(user_id)
+    def get_all(self, user_data=None):
+        """If user_data is set, returns the teams where user is member,
+        else all teams will be returned.
 
-    def get_by_id(self, team_id, user_data):
-        user_id = user_data["sub"]
-        return self.team_repository.get_by_id(team_id, user_id)
+        Args:
+            user_data (dict, optional): User's data from token. Defaults to None.
+
+        Returns:
+            []: If user_data is set, the teams where user is member, else all teams.
+        """
+
+        if user_data:
+            user_id = user_data["sub"]
+            return self.team_repository.get_all(user_id)
+
+        return self.team_repository.get_all()
+
+    def get_by_id(self, team_id, user_data=None):
+        """If user_data is set, returns the team with the searched id where user is member,  # noqa: E501
+        else team with id will be returned even if user is not part of that team.
+
+        Args:
+            team_id (int): ID of the searched team
+            user_data (dict, optional): User's data from token. Defaults to None.
+
+        Returns:
+            None/dict: None if team is not found else the team's data.
+        """
+        if user_data:
+            user_id = user_data["sub"]
+            return self.team_repository.get_by_id(team_id, user_id)
+
+        return self.team_repository.get_by_id(team_id)
 
     def __get_by_name(self, team_name):
         return self.team_repository.get_by_name(team_name)
+
+    def get_users_teams(self, user_id, user_data):
+        return self.team_user_repository.get_users_teams(user_id)
+
+    def get_teams_users(self, team_id, user_data, auth_header):
+        try:
+            members = self.team_user_repository.get_team_menbers(team_id)
+            data = []
+
+            for member in members:
+                user_id = member.get("user_id")
+                user_data = self.auth_service_repository.get_user_by_id(
+                    user_id, auth_header
+                )
+                data.append(user_data)
+
+            return data
+        except Exception as e:
+            raise e
+
+    def team_info(self, team_id, user_data):
+        team_data = self.get_by_id(team_id, user_data)
+        team_statuses = self.team_repository.get_team_statuses(team_id)
+
+        if not team_data:
+            raise Exception(f"Team with id {team_id} does not exist!")
+
+        return {"data": team_data, "statuses": team_statuses}
 
     def insert(self, data, user_data):
         # Check data before creating anything
@@ -88,3 +147,39 @@ class TeamService:
             )
 
         return self.team_repository.delete(team_id)
+
+    def add_user(self, team_id, invited_user_id, user_data):
+        user_id = user_data["sub"]
+        team_data = self.team_repository.get_by_id(team_id, user_id)
+        user_membership = self.team_user_repository.is_user_part_of_team(
+            team_id, invited_user_id
+        )
+
+        if not team_data:
+            raise Exception(f"Team with id {team_id} does not exist!")
+
+        if user_membership is not None:
+            raise Exception(
+                f"User ({invited_user_id}) already member of team {team_data['name']}!"
+            )
+
+        # Assign user to team
+        return self.team_user_repository.insert(team_id, invited_user_id)
+
+    def remove_user(self, team_id, invited_user_id, user_data):
+        user_id = user_data["sub"]
+        team_data = self.team_repository.get_by_id(team_id, user_id)
+        user_membership = self.team_user_repository.is_user_part_of_team(
+            team_id, invited_user_id
+        )
+
+        if not team_data:
+            raise Exception(f"Team with id {team_id} does not exist!")
+
+        if user_membership is None:
+            raise Exception(
+                f"User ({invited_user_id}) is not member of team {team_data['name']}!"
+            )
+
+        # Remove user from team
+        return self.team_user_repository.delete(team_id, invited_user_id)

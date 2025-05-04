@@ -1,11 +1,20 @@
 -- Switch to the target database (you must ensure this database exists)
 USE msc_onlab;
 
--- Create the user (if not already created)
-CREATE USER 'team_service_user'@'%' IDENTIFIED BY 'pass';
+-- Create db_migrator_service_user (if not already created)
+-- and grant all privileges on the msc_onlab database to the user
+CREATE USER 'db_migrator_service_user'@'%' IDENTIFIED BY 'pass';
+GRANT ALL PRIVILEGES ON msc_onlab.* TO 'db_migrator_service_user'@'%';
 
--- Grant all privileges on the msc_onlab database to the user
+-- Create team_service_user (if not already created)
+-- and grant all privileges on the msc_onlab database to the user
+CREATE USER 'team_service_user'@'%' IDENTIFIED BY 'pass';
 GRANT ALL PRIVILEGES ON msc_onlab.* TO 'team_service_user'@'%';
+
+-- Create task_service_user (if not already created)
+-- and grant all privileges on the msc_onlab database to the user
+CREATE USER 'task_service_user'@'%' IDENTIFIED BY 'pass';
+GRANT ALL PRIVILEGES ON msc_onlab.* TO 'task_service_user'@'%';
 
 -- Apply the changes
 FLUSH PRIVILEGES;

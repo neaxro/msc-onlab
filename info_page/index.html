@@ -52,96 +52,312 @@
         .open-link {
             margin-left: 10px;
         }
+
+        /* Styling for tab navigation */
+        .tabs {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tabs a {
+            margin-right: 20px;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .tabs a.active {
+            border-bottom: 2px solid #333;
+            color: #000;
+        }
+
+        /* Hide tab content by default */
+        .tab-content {
+            display: none;
+        }
+
+        /* Show active tab content */
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 
 <body>
     <h2>Service Overview</h2>
-    <table>
-        <tr>
-            <th>Category</th>
-            <th>Service Name</th>
-            <th>Native URL</th>
-            <th>Kong URL (if applicable)</th>
-            <th>Compose URL</th>
-            <th>Username</th>
-            <th>Password</th>
-        </tr>
 
-        <tr class="db">
-            <td rowspan="2">Database</td>
-            <td>MySQL</td>
-            <td>localhost:3306</td>
-            <td>-</td>
-            <td>http://mysql:3306</td>
-            <td>dev</td>
-            <td>pass</td>
-        </tr>
-        <tr class="db">
-            <td>PostgreSQL</td>
-            <td>localhost:5432</td>
-            <td>-</td>
-            <td>http://postgresql:5432</td>
-            <td>admin</td>
-            <td>pass</td>
-        </tr>
+    <!-- Tab navigation -->
+    <div class="tabs">
+        <a href="#service-info" class="tab-link active">Service Info</a>
+        <a href="#test-database" class="tab-link">Test Database</a>
+    </div>
 
-        <tr class="backend">
-            <td rowspan="2">Backend</td>
-            <td>Auth Service</td>
-            <td>http://localhost:5000 <a class="open-link" href="http://localhost:5000" target="_blank">Open</a></td>
-            <td>http://kong:8000/auth <a class="open-link" href="http://kong:8000/auth" target="_blank">Open</a></td>
-            <td>http://auth:5000</td>
-            <td>-</td>
-            <td>-</td>
-        </tr>
-        <tr class="backend">
-            <td>Team Service</td>
-            <td>http://localhost:5001 <a class="open-link" href="http://localhost:5001" target="_blank">Open</a></td>
-            <td>http://kong:8000/team <a class="open-link" href="http://kong:8000/team"
-                    target="_blank">Open</a></td>
-            <td>http://team:5001</td>
-            <td>-</td>
-            <td>-</td>
-        </tr>
+    <!-- Service Info Tab Content -->
+    <div id="service-info" class="tab-content active">
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Service Name</th>
+                <th>Native URL</th>
+                <th>Kong URL (if applicable)</th>
+                <th>Compose URL</th>
+                <th>Username</th>
+                <th>Password</th>
+            </tr>
 
-        <tr class="monitoring">
-            <td rowspan="2">Monitoring</td>
-            <td>Prometheus</td>
-            <td>http://localhost:9090 <a class="open-link" href="http://localhost:9090" target="_blank">Open</a></td>
-            <td>-</td>
-            <td>http://prometheus:9090</td>
-            <td>-</td>
-            <td>-</td>
-        </tr>
-        <tr class="monitoring">
-            <td>Grafana</td>
-            <td>http://localhost:3000 <a class="open-link" href="http://localhost:3000" target="_blank">Open</a></td>
-            <td>-</td>
-            <td>http://grafana:3000</td>
-            <td>admin</td>
-            <td>pass</td>
-        </tr>
+            <tr class="db">
+                <td rowspan="2">Database</td>
+                <td>MySQL</td>
+                <td>localhost:3306</td>
+                <td>-</td>
+                <td>http://mysql:3306</td>
+                <td>dev</td>
+                <td>pass</td>
+            </tr>
+            <tr class="db">
+                <td>PostgreSQL</td>
+                <td>localhost:5432</td>
+                <td>-</td>
+                <td>http://postgresql:5432</td>
+                <td>admin</td>
+                <td>pass</td>
+            </tr>
 
-        <tr class="gateway">
-            <td rowspan="2">Gateway / Identity</td>
-            <td>Kong API Gateway</td>
-            <td>http://localhost:8000 <a class="open-link" href="http://localhost:8000" target="_blank">Open</a></td>
-            <td>-</td>
-            <td>http://kong:8000</td>
-            <td>-</td>
-            <td>-</td>
-        </tr>
-        <tr class="gateway">
-            <td>Keycloak</td>
-            <td>http://localhost:8080 <a class="open-link" href="http://localhost:8080" target="_blank">Open</a></td>
-            <td>http://kong:8000/keycloak <a class="open-link" href="http://kong:8000/keycloak" target="_blank">Open</a>
-            </td>
-            <td>http://keycloak:8080</td>
-            <td>admin</td>
-            <td>pass</td>
-        </tr>
-    </table>
+            <tr class="backend">
+                <td rowspan="3">Backend</td>
+                <td>Auth Service</td>
+                <td>http://localhost:5000 <a class="open-link" href="http://localhost:5000" target="_blank">Open</a>
+                </td>
+                <td>http://kong:8000/auth <a class="open-link" href="http://kong:8000/auth" target="_blank">Open</a>
+                </td>
+                <td>http://auth:5000</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr class="backend">
+                <td>Team Service</td>
+                <td>http://localhost:5001 <a class="open-link" href="http://localhost:5001" target="_blank">Open</a>
+                </td>
+                <td>http://kong:8000/team <a class="open-link" href="http://kong:8000/team" target="_blank">Open</a>
+                </td>
+                <td>http://team:5001</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr class="backend">
+                <td>Task Service</td>
+                <td>http://localhost:5002 <a class="open-link" href="http://localhost:5002" target="_blank">Open</a>
+                </td>
+                <td>http://kong:8000/task <a class="open-link" href="http://kong:8000/task" target="_blank">Open</a>
+                </td>
+                <td>http://task:5002</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+
+            <tr class="monitoring">
+                <td rowspan="2">Monitoring</td>
+                <td>Prometheus</td>
+                <td>http://localhost:9090 <a class="open-link" href="http://localhost:9090" target="_blank">Open</a>
+                </td>
+                <td>-</td>
+                <td>http://prometheus:9090</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr class="monitoring">
+                <td>Grafana</td>
+                <td>http://localhost:3000 <a class="open-link" href="http://localhost:3000" target="_blank">Open</a>
+                </td>
+                <td>-</td>
+                <td>http://grafana:3000</td>
+                <td>admin</td>
+                <td>pass</td>
+            </tr>
+
+            <tr class="gateway">
+                <td rowspan="2">Gateway / Identity</td>
+                <td>Kong API Gateway</td>
+                <td>http://localhost:8000 <a class="open-link" href="http://localhost:8000" target="_blank">Open</a>
+                </td>
+                <td>-</td>
+                <td>http://kong:8000</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr class="gateway">
+                <td>Keycloak</td>
+                <td>http://localhost:8080 <a class="open-link" href="http://localhost:8080" target="_blank">Open</a>
+                </td>
+                <td>http://kong:8000/keycloak <a class="open-link" href="http://kong:8000/keycloak"
+                        target="_blank">Open</a>
+                </td>
+                <td>http://keycloak:8080</td>
+                <td>admin</td>
+                <td>pass</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Test Database Tab Content -->
+    <!-- Test Database Tab Content -->
+    <div id="test-database" class="tab-content">
+        <h3>Test Database Visualization</h3>
+
+        <!-- Teams Data -->
+        <h4>Teams</h4>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Development Team</td>
+                <td>Team focused on software development</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Marketing Team</td>
+                <td>Team responsible for marketing activities</td>
+            </tr>
+        </table>
+
+        <!-- Team User Data -->
+        <h4>Team Users</h4>
+        <table>
+            <tr>
+                <th>Team ID</th>
+                <th>User ID</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>87faba81-8d4b-40f8-8aa3-044d3838c4d8</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>fcb453a0-6a8a-4ebc-a898-74e7c10acc64</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>b0a62cbd-a24f-40cd-8a37-44f934abcbf8</td>
+            </tr>
+        </table>
+
+        <!-- Statuses Data -->
+        <h4>Statuses</h4>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Team ID</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>To Do</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>In Progress</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Completed</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>To Do</td>
+                <td>2</td>
+            </tr>
+        </table>
+
+        <!-- Tasks Data -->
+        <h4>Tasks</h4>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Creation Date</th>
+                <th>Due Date</th>
+                <th>Status ID</th>
+                <th>Responsible ID</th>
+                <th>Team ID</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Build New Feature</td>
+                <td>Develop a new feature for the product</td>
+                <td>2025-03-01 10:00:00</td>
+                <td>2025-03-10</td>
+                <td>1</td>
+                <td>87faba81-8d4b-40f8-8aa3-044d3838c4d8</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Marketing Campaign</td>
+                <td>Prepare a new marketing campaign for launch</td>
+                <td>2025-03-05 09:00:00</td>
+                <td>2025-03-15</td>
+                <td>4</td>
+                <td>b0a62cbd-a24f-40cd-8a37-44f934abcbf8</td>
+                <td>2</td>
+            </tr>
+        </table>
+
+        <!-- Subtasks Data -->
+        <h4>Subtasks</h4>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Done</th>
+                <th>Task ID</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Write Documentation</td>
+                <td>true</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Code Review</td>
+                <td>false</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Design Ads</td>
+                <td>true</td>
+                <td>2</td>
+            </tr>
+        </table>
+
+    </div>
+
+
+    <script>
+        // Switch tabs when a tab link is clicked
+        const tabs = document.querySelectorAll('.tab-link');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.querySelector(tab.getAttribute('href')).classList.add('active');
+            });
+        });
+    </script>
 </body>
 
 </html>

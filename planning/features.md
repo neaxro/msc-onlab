@@ -117,9 +117,9 @@ Android application for creating and assigning teams tasks. After logging in, yo
 |-----------------|:----:|------------|-------------|-------------|:-----:|
 | Login           | POST  | /login     | 200, 401, 500    | Login a user with username/password. | :white_check_mark:
 | Register        | POST  | /register  | 200, 401, 500    | Register a new user. | :white_check_mark:
-| Get User by ID  | GET | /users/{user_id} | 200, 404, 500 |	Get user details by ID. | :construction:
-| Modify User by ID  | PATCH | /users/{user_id} | 200, 400, 404, 500 |	Modify user details by ID. | :construction:
-| Delete User by ID  | DELETE | /users/{user_id} | 204, 404, 500 |	Delete user details by ID. | :construction:
+| Get User by ID  | GET | /users/{user_id} | 200, 404, 500 |	Get user details by ID. | :white_check_mark:
+| Modify User by ID  | PATCH | /users/{user_id} | 200, 400, 404, 500 |	Modify user details by ID. | :white_check_mark:
+| Disable User by ID  | DELETE | /users/{user_id} | 204, 404, 500 |	Disable user, so login is restricted. | :white_check_mark:
 
 ## :office: Team service
 > Response codes may change by the time
@@ -131,31 +131,24 @@ Android application for creating and assigning teams tasks. After logging in, yo
 | Create team| POST| /teams | 201, 400, 500| Create a new team (requires name and description). | :white_check_mark: |
 | Modify team| PATCH| /teams/{team_id} | 200, 500| Modify a team's name or description. | :white_check_mark: |
 | Delete team| DELETE| /teams/{team_id} | 200, 500| Delete a team. | :white_check_mark: |
+| Add user to team| POST| /membership/{team_id}/invited/{invited_user_id} | 200, 500| Adds user to team. | :white_check_mark: |
+| Removes user from team| DELETE| /membership/{team_id}/invited/{invited_user_id} | 200, 500| Removes user from team. | :white_check_mark: |
+| Get users of team| GET | /membership/{team_id}/members | 200, 500| Get all user's data from team | :white_check_mark: |
+| Get teams where user is member | GET | /membership/{user_id}/teams | 200, 500| Get all teams data where user is member | :white_check_mark: |
+| Team info | GET | /teams/{team_id}/info | 200, 500| Get team's details, such as task statuses and its ids... | :white_check_mark: |
 
 ## :date: Task service
 
 | Detail          | Mode | URI        | HTTP Codes  | Description  | State |
 |-----------------|:----:|------------|-------------|-------------|:-----:|
-| Get all tasks in team (brief)| GET| /tasks?teamId={teamId}?assignedFor={userId} | 200, 500| List tasks for a specific team. | :construction: |
-| Get task by ID| GET| /tasks/{task_id} | 200, 500| List tasks for a specific team. Include subtasks | :construction: |
-| Create task| POST| /tasks?forTeam={teamId} | 201, 500| List tasks for a specific team. | :construction: |
-| Modify task| PATCH| /tasks/{task_id} | 200, 500| Modify task details (title, description, status, etc.) | :construction: |
-| Delete task| DELETE| /tasks/{task_id} | 200, 500| Delete a task. | :construction: |
-| Assign user to task| PATCH| /tasks/{task_id}/assign/{user_id} | 200, 500| Assign a user to a task. | :construction: |
-| Unassign user from task| PATCH| /tasks/{task_id}/unassign/{user_id} | 200, 500| Unassign a user from a task. | :construction: |
-| Unassign user from task| PATCH| /tasks/{task_id}/unassign/{user_id} | 200, 500| Unassign a user from a task. | :construction: |
+| Get all tasks in team (brief)| GET| /tasks?teamId={teamId}?assignedFor={userId} | 200, 500| List tasks for a specific team. | :white_check_mark: |
+| Get task by ID| GET| /tasks/{task_id} | 200, 500| List tasks for a specific team. Include subtasks | :white_check_mark: |
+| Create task| POST| /tasks?forTeam={teamId} | 201, 500| List tasks for a specific team. | :white_check_mark: |
+| Modify task| PATCH| /tasks/{task_id} | 204, 500| Modify task details (title, description, status, etc.) | :white_check_mark: |
+| Delete task| DELETE| /tasks/{task_id} | 204, 500| Delete a task. | :white_check_mark: |
 | Create subtask| POST| /tasks/{task_id}/subtasks | 201, 500| Create a new subtask for a task. | :construction: |
 | Modify subtask| PATCH| /subtasks/{subtask_id} | 200, 500| Modify subtask details (title, status, etc.). | :construction: |
 | Delete subtask| DELETE| /subtasks/{subtask_id} | 200, 500| Delete a subtask. | :construction: |
-
-## :chart_with_upwards_trend: Status service
-| Detail          | Mode | URI        | HTTP Codes  | Description  | State |
-|-----------------|:----:|------------|-------------|-------------|:-----:|
-| Get all statuses for team| GET| /statuses?forTeam={teamId}| 200, 500| Get all statuses for a team. | :construction: |
-| Create new status| POST| /statuses?forTeam={teamId}| 201, 500| Create a new status for a team. | :construction: |
-| Modify status| PATCH| /statuses/{status_id}| 200, 500| Modify an existing status. | :construction: |
-| Delete status| DELETE| /statuses/{status_id}| 200, 500| Delete a status from a team. | :construction: |
-
 
 ## :love_letter: Invitation
 > Response codes may change by the time

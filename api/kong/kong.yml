@@ -15,6 +15,13 @@ services:
         paths:
           - /team
 
+  - name: task_service
+    url: http://task:5002/
+    routes:
+      - name: task_route
+        paths:
+          - /task
+
   - name: keycloak_service
     url: http://keycloak:8080
     routes:

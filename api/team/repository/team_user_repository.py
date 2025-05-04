@@ -28,6 +28,61 @@ class TeamUserRepository:
         finally:
             cur.close()
 
+    def get_users_teams(self, user_id):
+        """
+        Get all teams where user is member.
+        """
+
+        try:
+            cur = self.connection.cursor(pymysql.cursors.DictCursor)
+            cur.execute(
+                """
+                SELECT t.id, t.name, t.description
+                FROM team_user tu
+                INNER JOIN teams t on t.id = tu.team_id
+                WHERE tu.user_id = %s;
+                """,
+                (user_id,),
+            )
+
+            result = cur.fetchall()
+
+            if not result:
+                return []  # No team found for the user
+            return result
+        except Exception as e:
+            self.connection.rollback()
+            raise e
+        finally:
+            cur.close()
+
+    def get_team_menbers(self, team_id):
+        """
+        Get all users within team which id is team_id.
+        """
+
+        try:
+            cur = self.connection.cursor(pymysql.cursors.DictCursor)
+            cur.execute(
+                """
+                SELECT tu.user_id
+                FROM team_user tu
+                WHERE tu.team_id = %s;
+                """,
+                (team_id,),
+            )
+
+            result = cur.fetchall()
+
+            if not result:
+                return []  # No team found for the user
+            return result
+        except Exception as e:
+            self.connection.rollback()
+            raise e
+        finally:
+            cur.close()
+
     def insert(self, team_id, user_id):
         try:
             cur = self.connection.cursor(pymysql.cursors.DictCursor)
@@ -35,6 +90,26 @@ class TeamUserRepository:
                 """
                 INSERT INTO team_user (team_id, user_id)
                 VALUES (%s, %s)
+                """,
+                (team_id, user_id),
+            )
+
+            self.connection.commit()
+
+            return cur.rowcount
+        except Exception as e:
+            self.connection.rollback()
+            raise e
+        finally:
+            cur.close()
+
+    def delete(self, team_id, user_id):
+        try:
+            cur = self.connection.cursor(pymysql.cursors.DictCursor)
+            cur.execute(
+                """
+                DELETE FROM team_user
+                WHERE team_id=%s and user_id=%s
                 """,
                 (team_id, user_id),
             )
