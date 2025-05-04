@@ -1,9 +1,9 @@
 import logging
 
-from controllers.health.health_controller import HealthController
-from controllers.team.membership_controller import MembershipController
-from controllers.team.team_controller import TeamController
-from controllers.team.team_info_controller import TeamInfoController
+from controllers.health_controller import HealthController
+from controllers.membership_controller import MembershipController
+from controllers.team_controller import TeamController
+from controllers.team_info_controller import TeamInfoController
 from flask import Flask
 from flask_restful import Api
 from prometheus_client import make_wsgi_app

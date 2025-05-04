@@ -11,5 +11,5 @@ class Health(Resource):
     @time_request
     @latency_request
     def get(self):
-        current_app.logger.info("Sending health signal.")
+        current_app.logger.debug("Sending health signal.")
         return "Healthy", 200
