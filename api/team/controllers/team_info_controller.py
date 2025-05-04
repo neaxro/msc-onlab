@@ -5,7 +5,7 @@ from repository.team_repository import TeamRepository
 from repository.team_user_repository import TeamUserRepository
 from service.team_service import TeamService
 from utils.metrics import count_requests, latency_request, time_request
-from utils.token_check import get_decoded_token_from_request, requires_auth
+from utils.token_check import requires_auth
 
 
 class TeamInfoController(Resource):
@@ -22,8 +22,7 @@ class TeamInfoController(Resource):
     @latency_request
     def get(self, team_id):
         try:
-            user_data = get_decoded_token_from_request()
-            team_info = self.team_service.team_info(team_id, user_data)
+            team_info = self.team_service.team_info(team_id)
 
             return jsonify(team_info)
 

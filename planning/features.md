@@ -156,4 +156,4 @@ Android application for creating and assigning teams tasks. After logging in, yo
 |-----------------|:----:|------------|-------------|-------------|:-----:|
 | List available invitations| GET| /invitations | 200, 500| Creates an invitation | :white_check_mark: |
 | Invite user| POST| /invitations | 204, 500| Creates an invitation | :white_check_mark: |
-| Accept/Decline invitation| PATCH| /invitations?decision{accept/decline}?token={token} | 200, 500| Accepts invitation so user will be part of team or declines it. | :construction: |
+| Accept/Decline invitation| PATCH| /invitations?decision{accept/decline}?token={token} | 200, 500| Accepts invitation so user will be part of team or declines it. | :white_check_mark: |

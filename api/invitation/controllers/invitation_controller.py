@@ -21,14 +21,23 @@ class InvitationController(Resource):
     @time_request
     @latency_request
     def get(self):
-        return "Hello"
+        """List pending invitations for current user"""
+        try:
+            user_data = get_decoded_token_from_request()
+            auth_header = request.headers.get("Authorization", None)
+            pending = self.invitation_service.get_pending_invitations(
+                user_data["sub"], auth_header
+            )
+            return jsonify(pending)
+        except Exception as e:
+            return self.handle_error(f"Error listing invitations: {str(e)}", 500)
 
     @requires_auth
     @count_requests
     @time_request
     @latency_request
     def post(self):
-        """Handles creating a new task."""
+        """Handles creating a new invitation."""
         try:
             user_data = get_decoded_token_from_request()
             username = user_data.get("preferred_username", "Unknown User")
@@ -59,3 +68,28 @@ class InvitationController(Resource):
         """Logs and returns a formatted error response."""
         current_app.logger.error(message)
         return {"error": message}, status_code
+
+    @requires_auth
+    @count_requests
+    @time_request
+    @latency_request
+    def patch(self):
+        """Accept or decline an invitation based on token and decision"""
+        try:
+            user_data = get_decoded_token_from_request()
+            auth_header = request.headers.get("Authorization", None)
+            token = request.args.get("token")
+            decision = request.args.get("decision")
+
+            if not token or decision not in ("accept", "decline"):
+                return self.handle_error(
+                    "Missing or invalid 'decision' or 'token' parameter.", 400
+                )
+
+            self.invitation_service.respond_to_invitation(
+                user_data["sub"], token, decision, auth_header
+            )
+            return {"message": f"Invitation {decision}ed successfully."}, 200
+
+        except Exception as e:
+            return self.handle_error(f"Error processing invitation: {str(e)}", 500)

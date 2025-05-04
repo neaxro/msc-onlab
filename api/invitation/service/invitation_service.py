@@ -23,10 +23,24 @@ class InvitationService:
         self.team_repository = team_repository
         self.expiration_days = config.EXPIRATION_DAYS
 
-    def _get_invited_user(self, user_id, auth_header):
+    def get_pending_invitations(self, user_id, auth_header):
+        invitations = self.invitation_repository.get_pending_for_user(user_id)
+
+        for invitation in invitations:
+            invitation["inviter"] = self._get_user_data(
+                invitation["inviter_user_id"], auth_header
+            )
+            invitation.pop("inviter_user_id")
+
+            invitation["team"] = self._get_team_data(invitation["team_id"], auth_header)
+            invitation.pop("team_id")
+
+        return invitations
+
+    def _get_user_data(self, user_id, auth_header):
         return self.auth_repository.get_user_by_id(user_id, auth_header)
 
-    def _get_team(self, team_id, auth_header):
+    def _get_team_data(self, team_id, auth_header):
         return self.team_repository.get_teams_info(team_id, auth_header)
 
     def insert(self, data, inviter_user_id, auth_header):
@@ -37,9 +51,13 @@ class InvitationService:
                 raise Exception(f"Missing required field: {field}")
 
         invited_user_id = data["invited_user_id"]
-        invited_user = self._get_invited_user(invited_user_id, auth_header)
+        invited_user = self._get_user_data(invited_user_id, auth_header)
 
         team_id = data["team_id"]
+        team_users = self.team_repository.get_all_members(team_id, auth_header)
+
+        if any(user["id"] == invited_user_id for user in team_users):
+            raise Exception("Invited user is already present in the team!")
 
         token = secrets.token_urlsafe(32)
         email = invited_user["email"]
@@ -55,3 +73,25 @@ class InvitationService:
             email=email,
             expires=expires,
         )
+
+    def respond_to_invitation(self, user_id, token, decision, auth_header):
+        invitation = self.invitation_repository.get_invitation_by_token(token)
+        if not invitation:
+            raise Exception("Invalid or expired invitation token.")
+
+        if invitation["invited_user_id"] != user_id:
+            raise Exception("User is not invited by this invitation!")
+
+        if decision == "accept":
+            self.team_repository.add_user_to_team(
+                user_id=invitation["invited_user_id"],
+                team_id=invitation["team_id"],
+                auth_header=auth_header,
+            )
+
+        updated_rows = self.invitation_repository.update_invitation_status(
+            token, accepted=(decision == "accept")
+        )
+
+        if updated_rows == 0:
+            raise Exception("Invitation could not be updated.")

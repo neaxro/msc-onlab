@@ -70,7 +70,7 @@ class TeamService:
         except Exception as e:
             raise e
 
-    def team_info(self, team_id, user_data):
+    def team_info(self, team_id, user_data=None):
         team_data = self.get_by_id(team_id, user_data)
         team_statuses = self.team_repository.get_team_statuses(team_id)
 
@@ -149,8 +149,7 @@ class TeamService:
         return self.team_repository.delete(team_id)
 
     def add_user(self, team_id, invited_user_id, user_data):
-        user_id = user_data["sub"]
-        team_data = self.team_repository.get_by_id(team_id, user_id)
+        team_data = self.team_repository.get_by_id(team_id)
         user_membership = self.team_user_repository.is_user_part_of_team(
             team_id, invited_user_id
         )
