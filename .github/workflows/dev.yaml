@@ -18,17 +18,21 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       build_time: ${{ steps.date.outputs.date }}
+      build_environment: ${{ steps.date.outputs.build_environment }}
     steps:
       - id: date
         name: Get current date
         run: echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+      - id: environment
+        name: Get current date
+        run: echo "build_environment=$BUILD_ENVIRONMENT" >> "$GITHUB_OUTPUT"
 
   bap-auth:
     needs:
       - gather-informations
     uses: ./.github/workflows/auth-service.yaml
     with:
-      environment: ${{ env.BUILD_ENVIRONMENT }}
+      environment: ${{ needs.gather-informations.outputs.build_environment }}
       date: ${{ needs.gather-informations.outputs.build_time }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -39,7 +43,7 @@ jobs:
       - gather-informations
     uses: ./.github/workflows/team-service.yaml
     with:
-      environment: ${{ env.BUILD_ENVIRONMENT }}
+      environment: ${{ needs.gather-informations.outputs.build_environment }}
       date: ${{ needs.gather-informations.outputs.build_time }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -50,7 +54,7 @@ jobs:
       - gather-informations
     uses: ./.github/workflows/task-service.yaml
     with:
-      environment: ${{ env.BUILD_ENVIRONMENT }}
+      environment: ${{ needs.gather-informations.outputs.build_environment }}
       date: ${{ needs.gather-informations.outputs.build_time }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
