@@ -41,7 +41,7 @@ class SubtaskRepository:
             cur = self.connection.cursor(pymysql.cursors.DictCursor)
             cur.execute(
                 """
-                SELECT title, done
+                SELECT id, title, done
                 FROM subtasks s
                 WHERE s.task_id = %s
                 """,
@@ -70,6 +70,9 @@ class SubtaskRepository:
                 """,
                 (title, done, task_id),
             )
+
+            self.connection.commit()
+
             return cur.lastrowid
         except Exception as e:
             self.connection.rollback()
@@ -102,7 +105,7 @@ class SubtaskRepository:
             values.append(subtask_id)
 
             sql = f"""
-                UPDATE subtask_id
+                UPDATE subtasks
                 SET {', '.join(fields)}
                 WHERE id = %s
             """

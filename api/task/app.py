@@ -1,7 +1,8 @@
 import logging
 
-from controllers.health.health_controller import HealthController
-from controllers.task.task_controller import TaskController
+from controllers.health_controller import HealthController
+from controllers.subtask_controller import SubtaskController
+from controllers.task_controller import TaskController
 from flask import Flask
 from flask_restful import Api
 from prometheus_client import make_wsgi_app
@@ -22,6 +23,9 @@ def build_app():
     api = Api(app)
     api.add_resource(HealthController, "/health", endpoint="health")
     api.add_resource(TaskController, "/tasks", "/tasks/<task_id>", endpoint="task")
+    api.add_resource(
+        SubtaskController, "/subtasks", "/subtasks/<subtask_id>", endpoint="subtask"
+    )
 
     return app
 
