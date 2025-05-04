@@ -23,34 +23,34 @@ jobs:
         name: Get current date
         run: echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
-  auth-service:
+  bap-auth:
     needs:
       - gather-informations
     uses: ./.github/workflows/auth-service.yaml
     with:
-      environment: $BUILD_ENVIRONMENT
+      environment: ${{ env.BUILD_ENVIRONMENT }}
       date: ${{ needs.gather-informations.outputs.build_time }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
-  team-service:
+  bap-team:
     needs:
       - gather-informations
     uses: ./.github/workflows/team-service.yaml
     with:
-      environment: $BUILD_ENVIRONMENT
+      environment: ${{ env.BUILD_ENVIRONMENT }}
       date: ${{ needs.gather-informations.outputs.build_time }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
-  task-service:
+  bap-task:
     needs:
       - gather-informations
     uses: ./.github/workflows/task-service.yaml
     with:
-      environment: $BUILD_ENVIRONMENT
+      environment: ${{ env.BUILD_ENVIRONMENT }}
       date: ${{ needs.gather-informations.outputs.build_time }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
