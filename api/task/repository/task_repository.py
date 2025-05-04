@@ -81,7 +81,9 @@ class TaskRepository:
         finally:
             cur.close()
 
-    def insert(self, title, description, due_date, responsible_id, team_id, status_id):
+    def insert(
+        self, title, description, due_date, responsible_id, team_id, status_id, subtasks
+    ):
         try:
             cur = self.connection.cursor(pymysql.cursors.DictCursor)
             cur.execute(
@@ -92,14 +94,29 @@ class TaskRepository:
                 (title, description, due_date, responsible_id, team_id, status_id),
             )
 
+            task_id = cur.lastrowid
+
+            # Insert subtasks for task
+            for subtask in subtasks:
+                self.__insert_subtask(cur, task_id, subtask["title"], subtask["done"])
+
             self.connection.commit()
 
-            return cur.lastrowid
+            return task_id
         except Exception as e:
             self.connection.rollback()
             raise e
         finally:
             cur.close()
+
+    def __insert_subtask(self, cur, task_id, title, done):
+        cur.execute(
+            """
+            INSERT INTO subtasks (title, done, task_id)
+            VALUES (%s, %s, %s)
+            """,
+            (title, done, task_id),
+        )
 
     def modify(
         self,

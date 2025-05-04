@@ -1,4 +1,5 @@
 from repository.auth_service_repository import AuthServiceRepository
+from repository.subtask_repository import SubtaskRepository
 from repository.task_repository import TaskRepository
 from repository.team_repository import TeamRepository
 
@@ -9,10 +10,12 @@ class TaskService:
     def __init__(
         self,
         task_repositry: TaskRepository,
+        subtask_repository: SubtaskRepository,
         team_repository: TeamRepository,
         auth_repository: AuthServiceRepository,
     ):
         self.task_repository = task_repositry
+        self.subtask_repository = subtask_repository
         self.team_repository = team_repository
         self.auth_repository = auth_repository
 
@@ -25,12 +28,21 @@ class TaskService:
         task.pop("responsible_id")
         task["responsible"] = responsible_data
 
+    def _add_subtasks_to_data(self, task):
+        subtasks = [
+            {**subtask, "done": bool(subtask["done"])}
+            for subtask in self.subtask_repository.get_all(task["id"])
+        ]
+
+        task["subtasks"] = subtasks
+
     def get_all(self, team_id, auth_header, user_id=None):
         """Fetches all tasks for a given team, optionally filtering by user."""
         tasks = self.task_repository.get_all(team_id, user_id)
 
         for task in tasks:
             self._replace_user_id_to_data(task, auth_header)
+            self._add_subtasks_to_data(task)
 
         return tasks
 
@@ -38,8 +50,13 @@ class TaskService:
         """Fetches a specific task by ID."""
         task = self.task_repository.get_by_id(task_id)
         self._replace_user_id_to_data(task, auth_header)
+        self._add_subtasks_to_data(task)
 
         return task
+
+    def __check_user_is_in_team(self, user_id, team_id, auth_header):
+        team_members = self.team_repository.get_all_members(team_id, auth_header)
+        return any(user["id"] == user_id for user in team_members)
 
     def insert(self, data, auth_header):
         """Creates a new task and returns the created task."""
@@ -55,10 +72,23 @@ class TaskService:
         if not isinstance(due_date, str):  # Ensure it's a string
             raise Exception("Invalid due_date format. Expected 'YYYY-MM-DD'")
 
+        # Check assigned user is present in the team
+        found_user = self.__check_user_is_in_team(
+            user_id=data["responsible_id"],
+            team_id=data["team_id"],
+            auth_header=auth_header,
+        )
+
+        if not found_user:
+            raise Exception(
+                "Responsible user with responsible_id is not found in team!"
+            )
+
         title = data["title"]
         description = data["description"]
         responsible_id = data.get("responsible_id")  # Nullable field
         team_id = data["team_id"]
+        subtasks = data.get("subtasks")
 
         try:
             team_data = self.team_repository.get_teams_info(team_id, auth_header)
@@ -74,6 +104,7 @@ class TaskService:
                 responsible_id=responsible_id,
                 team_id=team_id,
                 status_id=todo_status_code,
+                subtasks=subtasks if subtasks else [],
             )
         except Exception as e:
             raise e

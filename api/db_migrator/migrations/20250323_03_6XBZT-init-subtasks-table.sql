@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS `subtasks` (
     `title` VARCHAR(255) NOT NULL,
     `done` BOOLEAN NOT NULL,
     `task_id` BIGINT UNSIGNED NOT NULL,
-    FOREIGN KEY (`task_id`) REFERENCES `tasks`(`id`)
+    FOREIGN KEY (`task_id`) REFERENCES `tasks`(`id`) ON DELETE CASCADE
 );
