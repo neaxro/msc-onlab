@@ -5,11 +5,11 @@ metadata:
 data:
   MYSQL_HOST: mysql-primary.db-mysql.svc.cluster.local
   MYSQL_PORT: "3306"
-  MYSQL_DATABASE: msc_onlab
-  MYSQL_MIGRATOR_USER: db_migrator_service_user
-  MYSQL_TEAM_USER: team_service_user
-  MYSQL_TASK_USER: task_service_user
-  MYSQL_INVITATION_USER: invitation_service_user
+  MYSQL_DATABASE: msc_onlab_dev
+  MYSQL_MIGRATOR_USER: db_migrator_service_user_dev
+  MYSQL_TEAM_USER: team_service_user_dev
+  MYSQL_TASK_USER: task_service_user_dev
+  MYSQL_INVITATION_USER: invitation_service_user_dev
   MYSQL_TEAM_TABLE: teams
   MYSQL_TASK_TABLE: tasks
   MYSQL_INVITATION_TABLE: invitations

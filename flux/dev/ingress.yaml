@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: dipterv.msc.nemes.live
+    - host: dev.dipterv.msc.nemes.live
       http:
         paths:
           - path: /
