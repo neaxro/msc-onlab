@@ -2,6 +2,7 @@ name: "[DEV] Build and Push"
 run-name: "[DEV] Build and Push: ${{ github.sha }}"
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - dev
