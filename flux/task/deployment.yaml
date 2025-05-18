@@ -38,19 +38,19 @@ spec:
                 name: mysql-config
           env:
             - name: METRICS_PREFIX
-              value: msc_onlab_dev
+              value: "msc_onlab_dev"
             - name: METRICS_APP_NAME
-              value: task
+              value: "task"
             - name: TEAM_SERVICE_HOST
-              value: team.app-msc-dipterv-dev.svc.cluster.local
+              value: "team.app-msc-dipterv-dev.svc.cluster.local"
             - name: TEAM_SERVICE_PORT
-              value: 5001
+              value: "5001"
             - name: AUTH_SERVICE_HOST
-              value: auth.app-msc-dipterv-dev.svc.cluster.local
+              value: "auth.app-msc-dipterv-dev.svc.cluster.local"
             - name: AUTH_SERVICE_PORT
-              value: 5000
+              value: "5000"
             - name: TIMEZONE
-              value: Europe/Budapest
+              value: "Europe/Budapest"
           livenessProbe:
             httpGet:
               path: /health
