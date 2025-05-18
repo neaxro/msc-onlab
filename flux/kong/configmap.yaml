@@ -31,7 +31,7 @@ data:
               - /task
 
       - name: invitation_service
-        url: http://invitation.app-msc-dipterv-dev.svc.cluster.local:5002
+        url: http://invitation.app-msc-dipterv-dev.svc.cluster.local:5003
         routes:
           - name: invitation_route
             paths:
