@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app-msc-dipterv-dev-task
-          image: axelnemes/msc-dipterv-dev:task-202505180937-acd259d # {"$imagepolicy": "flux-system:msc-dipterv-dev-task"}
+          image: axelnemes/msc-dipterv-dev:task-202505181110-8589594 # {"$imagepolicy": "flux-system:msc-dipterv-dev-task"}
           imagePullPolicy: IfNotPresent
           resources:
             requests:
