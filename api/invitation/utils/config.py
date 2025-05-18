@@ -28,10 +28,12 @@ class Config:
         self.TIMEZONE = os.getenv("TIMEZONE", "Europe/Budapest")
 
         # MySQL database related config
-        self.MYSQL_TEAM_USER = os.getenv("MYSQL_USER", "invitation_service_user")
-        self.MYSQL_TEAM_PASSWORD = os.getenv("MYSQL_PASSWORD", "pass")
+        self.MYSQL_INVITATION_USER = os.getenv(
+            "MYSQL_INVITATION_USER", "invitation_service_user"
+        )
+        self.MYSQL_INVITATION_PASSWORD = os.getenv("MYSQL_INVITATION_PASSWORD", "pass")
         self.MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "msc_onlab")
-        self.MYSQL_TEAM_TABLE = os.getenv("MYSQL_TEAM_TABLE", "invitations")
+        self.MYSQL_INVITATION_TABLE = os.getenv("MYSQL_INVITATION_TABLE", "invitations")
         self.MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
         self.MYSQL_PORT = int(os.getenv("MYSQL_PORT", 3306))
 

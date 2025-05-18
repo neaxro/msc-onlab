@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: team
+  name: task
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-msc-dipterv-dev-team
+      app: app-msc-dipterv-dev-task
   template:
     metadata:
       labels:
-        app: app-msc-dipterv-dev-team
+        app: app-msc-dipterv-dev-task
     spec:
       containers:
-        - name: app-msc-dipterv-dev-team
-          image: axelnemes/msc-dipterv-dev:team-202505180937-acd259d # {"$imagepolicy": "flux-system:msc-dipterv-dev-team"}
+        - name: app-msc-dipterv-dev-task
+          image: axelnemes/msc-dipterv-dev # {"$imagepolicy": "flux-system:msc-dipterv-dev-task"}
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -25,7 +25,7 @@ spec:
               memory: "256Mi"
           ports:
             - name: http
-              containerPort: 5001
+              containerPort: 5002
               protocol: TCP
           envFrom:
             - configMapRef:
@@ -40,7 +40,11 @@ spec:
             - name: METRICS_PREFIX
               value: msc_onlab_dev
             - name: METRICS_APP_NAME
-              value: team
+              value: task
+            - name: TEAM_SERVICE_HOST
+              value: team.app-msc-dipterv-dev.svc.cluster.local
+            - name: TEAM_SERVICE_PORT
+              value: 5001
             - name: AUTH_SERVICE_HOST
               value: auth.app-msc-dipterv-dev.svc.cluster.local
             - name: AUTH_SERVICE_PORT
@@ -50,7 +54,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: 5001
+              port: 5002
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -58,7 +62,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health
-              port: 5001
+              port: 5002
             initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 2
@@ -66,7 +70,7 @@ spec:
           startupProbe:
             httpGet:
               path: /health
-              port: 5001
+              port: 5002
             failureThreshold: 30
             periodSeconds: 10
       securityContext:

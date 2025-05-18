@@ -13,8 +13,8 @@ def apply_migration():
     config = Config()
 
     connection_string = "mysql://{user}:{password}@{host}:{port}/{dbname}".format(
-        user=config.MYSQL_USER,
-        password=config.MYSQL_PASSWORD,
+        user=config.MYSQL_MIGRATOR_USER,
+        password=config.MYSQL_MIGRATOR_PASSWORD,
         host=config.MYSQL_HOST,
         port=config.MYSQL_PORT,
         dbname=config.MYSQL_DATABASE,

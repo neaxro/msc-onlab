@@ -9,8 +9,8 @@ class InvitationRepository:
 
         self.connection = pymysql.connect(
             host=config.MYSQL_HOST,
-            user=config.MYSQL_TEAM_USER,
-            password=config.MYSQL_TEAM_PASSWORD,
+            user=config.MYSQL_INVITATION_USER,
+            password=config.MYSQL_INVITATION_PASSWORD,
             database=config.MYSQL_DATABASE,
             port=config.MYSQL_PORT,
         )
