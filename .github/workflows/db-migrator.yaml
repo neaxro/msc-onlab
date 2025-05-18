@@ -7,6 +7,9 @@ on:
       date:
         required: true
         type: string
+      sha:
+        required: true
+        type: string
     secrets:
       DOCKERHUB_USERNAME:
         required: true
@@ -36,5 +39,5 @@ jobs:
         with:
           context: ./api/db_migrator
           push: true
-          tags: axelnemes/msc-dipterv-${{ inputs.environment }}:db-migrator-${{ inputs.date }}-${{ github.sha }}
+          tags: axelnemes/msc-dipterv-${{ inputs.environment }}:db-migrator-${{ inputs.date }}-${{ inputs.sha }}
           platforms: linux/arm64, linux/amd64
