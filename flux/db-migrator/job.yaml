@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migrator
+spec:
+  template:
+    spec:
+      containers:
+      - name: db-migrator
+        image: axelnemes/msc-dipterv-dev:db-migrator # {"$imagepolicy": "flux-system:msc-dipterv-dev-db-migrator"}
+        envFrom:
+          - configMapRef:
+              name: mysql-config
+          - secretRef:
+              name: mysql-config
+        env:
+          - name: TIMEZONE
+            value: Europe/Budapest
+      restartPolicy: Never
+  backoffLimit: 4

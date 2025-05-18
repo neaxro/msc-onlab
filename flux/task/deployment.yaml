@@ -1,22 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: team
+  name: task
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-msc-dipterv-dev-team
+      app: app-msc-dipterv-dev-task
   template:
     metadata:
       labels:
-        app: app-msc-dipterv-dev-team
+        app: app-msc-dipterv-dev-task
     spec:
       containers:
-        - name: app-msc-dipterv-dev-team
-          image: axelnemes/app-msc-dipterv-dev # {"$imagepolicy": "flux-system:msc-dipterv-dev-team"}
+        - name: app-msc-dipterv-dev-task
+          image: axelnemes/msc-dipterv-dev # {"$imagepolicy": "flux-system:msc-dipterv-dev-task"}
           imagePullPolicy: IfNotPresent
-
           resources:
             requests:
               cpu: "100m"
@@ -24,12 +23,10 @@ spec:
             limits:
               cpu: "200m"
               memory: "256Mi"
-
           ports:
             - name: http
-              containerPort: 5001
+              containerPort: 5002
               protocol: TCP
-
           envFrom:
             - configMapRef:
                 name: keycloak-config
@@ -43,7 +40,11 @@ spec:
             - name: METRICS_PREFIX
               value: msc_onlab_dev
             - name: METRICS_APP_NAME
-              value: team
+              value: task
+            - name: TEAM_SERVICE_HOST
+              value: team.app-msc-dipterv-dev.svc.cluster.local
+            - name: TEAM_SERVICE_PORT
+              value: 5001
             - name: AUTH_SERVICE_HOST
               value: auth.app-msc-dipterv-dev.svc.cluster.local
             - name: AUTH_SERVICE_PORT
@@ -53,56 +54,52 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: 5001
+              port: 5002
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
-
           readinessProbe:
             httpGet:
               path: /health
-              port: 5001
+              port: 5002
             initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 2
             failureThreshold: 3
-
           startupProbe:
             httpGet:
               path: /health
-              port: 5001
+              port: 5002
             failureThreshold: 30
             periodSeconds: 10
-
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
         capabilities:
           drop:
             - all
-
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-            - matchExpressions:
-              - key: node-role.kubernetes.io/worker
-                operator: In
-                values:
-                - worker
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/worker
+                    operator: In
+                    values:
+                      - worker
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 50
-            preference:
-              matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: In
-                values:
-                - rpw01
-          - weight: 1
-            preference:
-              matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: In
-                values:
-                - rpw02
+            - weight: 50
+              preference:
+                matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - rpw01
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - rpw02

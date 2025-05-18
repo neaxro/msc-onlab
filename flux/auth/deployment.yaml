@@ -35,7 +35,13 @@ spec:
                 name: keycloak-config
             - secretRef:
                 name: keycloak-config
-
+          env:
+            - name: METRICS_PREFIX
+              value: msc_onlab_dev
+            - name: METRICS_APP_NAME
+              value: auth
+            - name: TIMEZONE
+              value: Europe/Budapest
           livenessProbe:
             httpGet:
               path: /health

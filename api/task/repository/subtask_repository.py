@@ -9,8 +9,8 @@ class SubtaskRepository:
 
         self.connection = pymysql.connect(
             host=config.MYSQL_HOST,
-            user=config.MYSQL_USER,
-            password=config.MYSQL_PASSWORD,
+            user=config.MYSQL_TASK_USER,
+            password=config.MYSQL_TASK_PASSWORD,
             database=config.MYSQL_DATABASE,
             port=config.MYSQL_PORT,
         )

@@ -28,8 +28,8 @@ class Config:
         self.TIMEZONE = os.getenv("TIMEZONE", "Europe/Budapest")
 
         # MySQL database related config
-        self.MYSQL_TEAM_USER = os.getenv("MYSQL_USER", "team_service_user")
-        self.MYSQL_TEAM_PASSWORD = os.getenv("MYSQL_PASSWORD", "pass")
+        self.MYSQL_TEAM_USER = os.getenv("MYSQL_TEAM_USER", "team_service_user")
+        self.MYSQL_TEAM_PASSWORD = os.getenv("MYSQL_TEAM_PASSWORD", "pass")
         self.MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "msc_onlab")
         self.MYSQL_TEAM_TABLE = os.getenv("MYSQL_TEAM_TABLE", "teams")
         self.MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")

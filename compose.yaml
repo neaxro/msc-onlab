@@ -94,11 +94,12 @@ services:
       context: api/db_migrator
       dockerfile: Dockerfile
     environment:
-      MYSQL_USER: db_migrator_service_user
-      MYSQL_PASSWORD: pass
+      MYSQL_MIGRATOR_USER: db_migrator_service_user
+      MYSQL_MIGRATOR_PASSWORD: pass
       MYSQL_DATABASE: msc_onlab
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
+      TIMEZONE: Europe/Budapest
     depends_on:
       mysql:
         condition: service_healthy
@@ -112,14 +113,15 @@ services:
       APP_HOST: "0.0.0.0"
       APP_PORT: 5000
       APP_DEBUG: True
-      KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
-      KEYCLOAK_REALM_NAME: msc-onlab-test
-      KEYCLOAK_CLIENT_ID: msc-onlab-microservice-client-test
-      KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
-      KEYCLOAK_ADMIN_USERNAME: realmadmin
-      KEYCLOAK_ADMIN_PASSWORD: Asdasd11
-      METRICS_PREFIX: msc_onlab
-      METRICS_APP_NAME: auth
+      # KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
+      # KEYCLOAK_REALM_NAME: msc-onlab-test
+      # KEYCLOAK_CLIENT_ID: msc-onlab-microservice-client-test
+      # KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
+      # KEYCLOAK_ADMIN_USERNAME: realmadmin
+      # KEYCLOAK_ADMIN_PASSWORD: Asdasd11
+      # METRICS_PREFIX: msc_onlab
+      # METRICS_APP_NAME: auth
+      # TIMEZONE: Europe/Budapest
     ports:
       - 5000:5000
     healthcheck:
@@ -137,20 +139,21 @@ services:
       APP_HOST: "0.0.0.0"
       APP_PORT: 5001
       APP_DEBUG: True
-      KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
-      KEYCLOAK_REALM_NAME: msc-onlab-test
-      KEYCLOAK_CLIENT_ID: msc-onlab-microservice-client-test
-      KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
-      METRICS_PREFIX: msc_onlab
-      METRICS_APP_NAME: team
-      MYSQL_TEAM_USER: team_service_user
-      MYSQL_TEAM_PASSWORD: pass
-      MYSQL_DATABASE: msc_onlab
-      MYSQL_TEAM_TABLE: teams
-      MYSQL_HOST: mysql
-      MYSQL_PORT: 3306
-      AUTH_SERVICE_HOST: auth
-      AUTH_SERVICE_PORT: 5000
+      # KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
+      # KEYCLOAK_REALM_NAME: msc-onlab-test
+      # KEYCLOAK_CLIENT_ID: msc-onlab-microservice-client-test
+      # KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
+      # METRICS_PREFIX: msc_onlab
+      # METRICS_APP_NAME: team
+      # MYSQL_TEAM_USER: team_service_user
+      # MYSQL_TEAM_PASSWORD: pass
+      # MYSQL_DATABASE: msc_onlab
+      # MYSQL_TEAM_TABLE: teams
+      # MYSQL_HOST: mysql
+      # MYSQL_PORT: 3306
+      # AUTH_SERVICE_HOST: auth
+      # AUTH_SERVICE_PORT: 5000
+      # TIMEZONE: Europe/Budapest
     ports:
       - 5001:5001
     healthcheck:
@@ -171,22 +174,23 @@ services:
       APP_HOST: "0.0.0.0"
       APP_PORT: 5002
       APP_DEBUG: True
-      KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
-      KEYCLOAK_REALM_NAME: msc-onlab-test
-      KEYCLOAK_CLIENT_ID: msc-onlab-microservice-client-test
-      KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
-      METRICS_PREFIX: msc_onlab
-      METRICS_APP_NAME: task
-      MYSQL_TASK_USER: task_service_user
-      MYSQL_TASK_PASSWORD: pass
-      MYSQL_DATABASE: msc_onlab
-      MYSQL_TASK_TABLE: tasks
-      MYSQL_HOST: mysql
-      MYSQL_PORT: 3306
-      TEAM_SERVICE_HOST: team
-      TEAM_SERVICE_PORT: 5001
-      AUTH_SERVICE_HOST: auth
-      AUTH_SERVICE_PORT: 5000
+      # KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
+      # KEYCLOAK_REALM_NAME: msc-onlab-test
+      # KEYCLOAK_CLIENT_ID: msc-onlab-microservice-client-test
+      # KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
+      # METRICS_PREFIX: msc_onlab
+      # METRICS_APP_NAME: task
+      # MYSQL_TASK_USER: task_service_user
+      # MYSQL_TASK_PASSWORD: pass
+      # MYSQL_DATABASE: msc_onlab
+      # MYSQL_TASK_TABLE: tasks
+      # MYSQL_HOST: mysql
+      # MYSQL_PORT: 3306
+      # TEAM_SERVICE_HOST: team
+      # TEAM_SERVICE_PORT: 5001
+      # AUTH_SERVICE_HOST: auth
+      # AUTH_SERVICE_PORT: 5000
+      # TIMEZONE: Europe/Budapest
     ports:
       - 5002:5002
     healthcheck:
@@ -207,22 +211,24 @@ services:
       APP_HOST: "0.0.0.0"
       APP_PORT: 5003
       APP_DEBUG: True
-      KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
-      KEYCLOAK_REALM_NAME: msc-onlab-test
-      KEYCLOAK_CLIENT_ID: msc-onlab-microservice-client-test
-      KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
-      METRICS_PREFIX: msc_onlab
-      METRICS_APP_NAME: invitation
-      MYSQL_TASK_USER: invitation_service_user
-      MYSQL_TASK_PASSWORD: pass
-      MYSQL_DATABASE: msc_onlab
-      MYSQL_TASK_TABLE: invitations
-      MYSQL_HOST: mysql
-      MYSQL_PORT: 3306
-      TEAM_SERVICE_HOST: team
-      TEAM_SERVICE_PORT: 5001
-      AUTH_SERVICE_HOST: auth
-      AUTH_SERVICE_PORT: 5000
+      # KEYCLOAK_SERVER_URL: http://keycloak:8080 # Kong OpenID Connect plugin is Enterprise plugin...
+      # KEYCLOAK_REALM_NAME: msc-onlab-test
+      # KEYCLOAK_CLIENT_ID: msc-onlab-microservice-client-test
+      # KEYCLOAK_CLIENT_SECRET: moo8oexa0Aitoon8chohCaeh8eith5ei
+      # METRICS_PREFIX: msc_onlab
+      # METRICS_APP_NAME: invitation
+      # MYSQL_INVITATION_USER: invitation_service_user
+      # MYSQL_INVITATION_PASSWORD: pass
+      # MYSQL_DATABASE: msc_onlab
+      # MYSQL_INVITATION_TABLE: invitations
+      # MYSQL_HOST: mysql
+      # MYSQL_PORT: 3306
+      # TEAM_SERVICE_HOST: team
+      # TEAM_SERVICE_PORT: 5001
+      # AUTH_SERVICE_HOST: auth
+      # AUTH_SERVICE_PORT: 5000
+      # EXPIRATION_DAYS: 7
+      # TIMEZONE: Europe/Budapest
     ports:
       - 5003:5003
     healthcheck:

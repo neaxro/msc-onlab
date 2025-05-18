@@ -22,3 +22,17 @@ data:
           - name: team_route
             paths:
               - /team
+
+      - name: task_service
+        url: http://task.app-msc-dipterv-dev.svc.cluster.local:5002
+        routes:
+          - name: task_route
+            paths:
+              - /task
+
+      - name: invitation_service
+        url: http://invitation.app-msc-dipterv-dev.svc.cluster.local:5002
+        routes:
+          - name: invitation_route
+            paths:
+              - /invitation
