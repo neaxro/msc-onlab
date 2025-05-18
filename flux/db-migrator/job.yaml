@@ -7,14 +7,14 @@ spec:
     spec:
       containers:
       - name: db-migrator
-        image: axelnemes/msc-dipterv-dev:db-migrator # {"$imagepolicy": "flux-system:msc-dipterv-dev-db-migrator"}
+        image: axelnemes/msc-dipterv-dev:db-migrator-202505181110-8589594 # {"$imagepolicy": "flux-system:msc-dipterv-dev-db-migrator"}
         envFrom:
-          - configMapRef:
-              name: mysql-config
-          - secretRef:
-              name: mysql-config
+        - configMapRef:
+            name: mysql-config
+        - secretRef:
+            name: mysql-config
         env:
-          - name: TIMEZONE
-            value: Europe/Budapest
+        - name: TIMEZONE
+          value: Europe/Budapest
       restartPolicy: Never
   backoffLimit: 4
