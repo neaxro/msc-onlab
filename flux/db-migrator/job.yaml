@@ -15,6 +15,6 @@ spec:
               name: mysql-config
         env:
           - name: TIMEZONE
-            value: Europe/Budapest
+            value: "Europe/Budapest"
       restartPolicy: Never
   backoffLimit: 4
