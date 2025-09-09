@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.msc_onlab.helpers.Constants
@@ -35,11 +34,14 @@ import com.example.msc_onlab.helpers.validateHouseholdName
 import com.example.msc_onlab.ui.feature.common.SmartOutlinedTextField
 
 @Composable
-fun DeleteHouseholdDialog(
-    title: String,
+fun EditTeamDialog(
+    currentName: String,
     onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit,
+    onConfirmation: (String) -> Unit,
 ){
+    var newName by rememberSaveable { mutableStateOf(currentName) }
+    var isError by rememberSaveable { mutableStateOf(false) }
+    var errorMessage by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
 
     Dialog(
@@ -48,7 +50,7 @@ fun DeleteHouseholdDialog(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(300.dp)
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
         ) {
@@ -65,13 +67,40 @@ fun DeleteHouseholdDialog(
                     verticalArrangement = Arrangement.Top
                 ) {
                     Text(
-                        text = "Delete household",
+                        text = "Edit household",
                         fontWeight = FontWeight.Bold
                     )
                     HorizontalDivider(modifier = Modifier.scale(0.9f))
                 }
 
-                Text(text = "Are you sure to delete household?")
+                Spacer(modifier = Modifier.padding(vertical = 5.dp))
+
+                SmartOutlinedTextField(
+                    value = newName,
+                    label = {
+                        Icon(
+                            imageVector = Icons.Rounded.House,
+                            contentDescription = "Household name"
+                        )
+                    },
+                    onValueChange = {
+                        val error = validateHouseholdName(householdName = it, context = context)
+                        isError = error !is DataFieldErrors.NoError
+                        errorMessage = error.message
+
+                        if (it.length <= Constants.MAX_HOUSEHOLD_NAME_LENGTH) {
+                            newName = it
+                        }
+                    },
+                    isError = isError,
+                    errorMessage = errorMessage,
+                    singleLine = true,
+                    maxLength = Constants.MAX_HOUSEHOLD_NAME_LENGTH,
+                    readOnly = false,
+                    enabled = true
+                )
+
+                Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -82,9 +111,10 @@ fun DeleteHouseholdDialog(
                     }
 
                     TextButton(
-                        onClick = { onConfirmation() },
+                        onClick = {onConfirmation(newName) },
+                        enabled = !isError
                     ) {
-                        Text(text = "Delete")
+                        Text(text = "Save")
                     }
                 }
             }

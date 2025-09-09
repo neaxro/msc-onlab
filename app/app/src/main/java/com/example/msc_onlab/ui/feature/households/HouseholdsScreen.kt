@@ -44,14 +44,14 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.msc_onlab.ui.feature.common.HouseholdsBriefListItem
+import com.example.msc_onlab.ui.feature.common.TeamBriefListItem
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
 import com.example.msc_onlab.ui.feature.invitation.InvitationsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Households(
+fun Teams(
     viewModel: HouseholdsViewModel = hiltViewModel(),
     onNavigateToTasks: () -> Unit,
     modifier: Modifier = Modifier
@@ -143,11 +143,10 @@ fun Households(
                         contentPadding = PaddingValues(all = 10.dp),
                     ) {
                         items(teams) { team ->
-                            HouseholdsBriefListItem(
+                            TeamBriefListItem(
                                 title = team.name,
                                 id = team.id,
-                                numberOfMembers = 10,       // TODO
-                                numberOfTasks = 10,         // TODO
+                                description = team.description,
                                 onEdit = { id, title ->
                                     //viewModel.evoke(HouseholdAction.ShowSheet(id = id, title = title))
                                 },
@@ -183,7 +182,7 @@ fun Households(
 
 
         if(householdActionData.showEditDialog){
-            EditHouseholdDialog(
+            EditTeamDialog(
                 currentName = householdActionData.title,
                 onDismissRequest = { viewModel.evoke(TeamAction.HideEditDialog) },
                 onConfirmation = { newName ->
@@ -193,7 +192,7 @@ fun Households(
         }
 
         if(householdActionData.showCreateDialog){
-            CreateHouseholdDialog(
+            CreateTeamDialog(
                 onDismissRequest = {
                     viewModel.evoke(TeamAction.HideCreateDialog)
                 },
@@ -204,7 +203,7 @@ fun Households(
         }
 
         if(householdActionData.showDeleteDialog){
-            DeleteHouseholdDialog(
+            DeleteTeamDialog(
                 title = householdActionData.title,
                 onDismissRequest = { viewModel.evoke(TeamAction.HideDeleteDialog) },
                 onConfirmation = { viewModel.evoke(TeamAction.DeleteHousehold) }
@@ -212,7 +211,7 @@ fun Households(
         }
 
         if(householdActionData.showSheet){
-            HouseholdBottomSheet(
+            TeamBottomSheet(
                 householdTitle = householdActionData.title,
                 onDismissRequest = { viewModel.evoke(TeamAction.HideSheet) },
                 sheetState = sheetState,

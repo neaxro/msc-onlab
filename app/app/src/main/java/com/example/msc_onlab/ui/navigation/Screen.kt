@@ -14,7 +14,7 @@ sealed class AppScreens {
     object MainMenu : AppScreens()
 
     @Serializable
-    object Households : AppScreens()
+    object Teams : AppScreens()
 
     @Serializable
     object Tasks : AppScreens()
