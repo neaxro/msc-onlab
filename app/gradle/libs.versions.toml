@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.0"
+agp = "8.13.0"
 dagger = "2.51.1"
 daggerCompiler = "2.51.1"
 hiltAndroid = "2.51.1"
@@ -7,7 +7,7 @@ hiltAndroidCompiler = "2.40.5"
 hiltAndroidCompilerVersion = "2.51.1"
 hiltCompiler = "1.2.0"
 hiltLifecycleViewmodel = "1.0.0-alpha03"
-kotlin = "1.9.0"
+kotlin = "2.1.10"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -44,3 +44,4 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

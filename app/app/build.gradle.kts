@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -52,13 +53,14 @@ android {
     }
 }
 
+/*
 configurations {
     create("cleanedAnnotations")
     implementation {
         exclude(group = "org.jetbrains", module = "annotations")
     }
 }
-
+*/
 
 dependencies {
 
@@ -85,6 +87,7 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("org.jetbrains:annotations:24.1.0")
 
 
     // Retrofit
