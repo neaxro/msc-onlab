@@ -17,6 +17,7 @@ import com.example.msc_onlab.data.model.task.create.CreateTaskData
 import com.example.msc_onlab.data.model.task.create.CreateTaskResponse
 import com.example.msc_onlab.data.model.task.patch.TaskPatchData
 import com.example.msc_onlab.data.model.task.patch.TaskPatchResponse
+import com.example.msc_onlab.data.model.team.TeamDeleteResponse
 import com.example.msc_onlab.data.model.team.TeamInfo
 import com.example.msc_onlab.data.model.team.TeamMembers
 import com.example.msc_onlab.data.model.team.TeamUpdate
@@ -122,4 +123,25 @@ class TeamRepositoryImpl(
         return result
     }
 
+    override suspend fun deleteTeam(teamId: Int): Resource<TeamDeleteResponse> {
+        val result = try{
+            val response = api.deleteTeam(id = teamId)
+
+            // Check server response
+            val res = if(response.code() == 200){
+                Resource.Success(message = "Successfully deleted team!", data = response.body()!!)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result
+    }
 }

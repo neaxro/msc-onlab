@@ -52,13 +52,13 @@ fun DeleteTeamDialog(
                     verticalArrangement = Arrangement.Top
                 ) {
                     Text(
-                        text = "Delete household",
+                        text = "Delete team",
                         fontWeight = FontWeight.Bold
                     )
                     HorizontalDivider(modifier = Modifier.scale(0.9f))
                 }
 
-                Text(text = "Are you sure to delete household?")
+                Text(text = "Are you sure to delete team?")
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),

@@ -187,7 +187,7 @@ fun Teams(
                 currentDescription = teamActionData.description,
                 onDismissRequest = { viewModel.evoke(TeamAction.HideEditDialog) },
                 onConfirmation = { newName, newDescription ->
-                    viewModel.evoke(TeamAction.EditHousehold(newName, newDescription))
+                    viewModel.evoke(TeamAction.EditTeam(newName, newDescription))
                 }
             )
         }
@@ -207,7 +207,7 @@ fun Teams(
             DeleteTeamDialog(
                 title = teamActionData.title,
                 onDismissRequest = { viewModel.evoke(TeamAction.HideDeleteDialog) },
-                onConfirmation = { viewModel.evoke(TeamAction.DeleteHousehold) }
+                onConfirmation = { viewModel.evoke(TeamAction.DeleteTeam) }
             )
         }
 

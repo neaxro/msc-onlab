@@ -53,7 +53,7 @@ class TeamsViewModel @Inject constructor(
         }
     }
 
-    private fun updateHousehold(newTitle: String, newDescription: String){
+    private fun updateTeam(newTitle: String, newDescription: String){
         val data = TeamUpdate(
             name = newTitle,
             description = newDescription
@@ -107,12 +107,11 @@ class TeamsViewModel @Inject constructor(
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            // TODO
-            /* var result = householdRepository.deleteHousehold(householdId = _teamActionData.value.id)
+            var result = teamRepository.deleteTeam(_teamActionData.value.id)
 
             when(result){
                 is Resource.Success -> {
-                    _screenState.value = ScreenState.Success(message = "Household deleted!", show = true)
+                    _screenState.value = ScreenState.Success(message = "Team deleted!", show = true)
                     val resultData = result.data!!
 
                     // Refresh list
@@ -122,7 +121,6 @@ class TeamsViewModel @Inject constructor(
                     _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
-            */
         }
     }
 
@@ -172,13 +170,13 @@ class TeamsViewModel @Inject constructor(
                 }
             }
 
-            is TeamAction.EditHousehold -> {
+            is TeamAction.EditTeam -> {
                 _teamActionData.update {
                     it.copy(
                         showEditDialog = false
                     )
                 }
-                updateHousehold(newTitle = action.newTitle, newDescription = action.newDescription)
+                updateTeam(newTitle = action.newTitle, newDescription = action.newDescription)
             }
 
             TeamAction.HideCreateDialog -> {
@@ -212,7 +210,7 @@ class TeamsViewModel @Inject constructor(
                     )
                 }
             }
-            TeamAction.DeleteHousehold -> {
+            TeamAction.DeleteTeam -> {
                 _teamActionData.update {
                     it.copy(
                         showDeleteDialog = false
@@ -244,13 +242,13 @@ sealed class TeamAction{
     object HideSheet : TeamAction()
     object ShowEditDialog : TeamAction()
     object HideEditDialog : TeamAction()
-    data class EditHousehold(val newTitle: String, val newDescription: String) : TeamAction()
+    data class EditTeam(val newTitle: String, val newDescription: String) : TeamAction()
     object ShowCreateDialog : TeamAction()
     object HideCreateDialog : TeamAction()
     data class CreateHousehold(val title: String) : TeamAction()
     object ShowDeleteDialog : TeamAction()
     object HideDeleteDialog : TeamAction()
-    object DeleteHousehold : TeamAction()
+    object DeleteTeam : TeamAction()
 }
 
 data class TeamActionData(

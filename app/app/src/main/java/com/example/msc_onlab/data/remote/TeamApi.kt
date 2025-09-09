@@ -16,6 +16,7 @@ import com.example.msc_onlab.data.model.task.create.CreateTaskData
 import com.example.msc_onlab.data.model.task.create.CreateTaskResponse
 import com.example.msc_onlab.data.model.task.patch.TaskPatchData
 import com.example.msc_onlab.data.model.task.patch.TaskPatchResponse
+import com.example.msc_onlab.data.model.team.TeamDeleteResponse
 import com.example.msc_onlab.data.model.team.TeamInfo
 import com.example.msc_onlab.data.model.team.TeamMembers
 import com.example.msc_onlab.data.model.team.TeamUpdate
@@ -62,21 +63,22 @@ interface TeamApi {
         @Body teamUpdate: TeamUpdate
     ): Response<TeamUpdateResponse>
 
+    @Headers("Content-Type: application/json")
+    @DELETE("/team/teams/{id}")
+    suspend fun deleteTeam(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("id") id: Int
+    ): Response<TeamDeleteResponse>
+
     /* ------------------- */
 
+    /*
     @Headers("Content-Type: application/json")
     @POST("/household")
     suspend fun createHousehold(
         @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
         @Body newHouseholdData: HouseholdCreateData
     ): Response<HouseholdCreateResponse>
-
-    @Headers("Content-Type: application/json")
-    @DELETE("/household/id/{household_id}")
-    suspend fun deleteHousehold(
-        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
-        @Path("household_id") householdId: String
-    ): Response<HouseholdDeleteResponse>
 
     @Headers("Content-Type: application/json")
     @GET("/household/id/{household_id}/detailed")
@@ -137,4 +139,5 @@ interface TeamApi {
         @Path("household_id") householdId: String,
         @Body taskData: CreateTaskData
     ): Response<CreateTaskResponse>
+     */
 }

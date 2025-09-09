@@ -16,6 +16,7 @@ import com.example.msc_onlab.data.model.task.create.CreateTaskData
 import com.example.msc_onlab.data.model.task.create.CreateTaskResponse
 import com.example.msc_onlab.data.model.task.patch.TaskPatchData
 import com.example.msc_onlab.data.model.task.patch.TaskPatchResponse
+import com.example.msc_onlab.data.model.team.TeamDeleteResponse
 import com.example.msc_onlab.data.model.team.TeamInfo
 import com.example.msc_onlab.data.model.team.TeamMembers
 import com.example.msc_onlab.data.model.team.TeamUpdate
@@ -31,4 +32,6 @@ interface TeamRepository {
     suspend fun getTeamMembers(teamId: Int): Resource<TeamMembers>
 
     suspend fun updateTeam(teamId: Int, update: TeamUpdate): Resource<TeamUpdateResponse>
+
+    suspend fun deleteTeam(teamId: Int): Resource<TeamDeleteResponse>
 }
