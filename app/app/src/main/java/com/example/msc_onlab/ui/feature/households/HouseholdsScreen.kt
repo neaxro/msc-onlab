@@ -31,7 +31,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,14 +42,12 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.msc_onlab.ui.feature.common.HouseholdsBriefListItem
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
 import com.example.msc_onlab.ui.feature.invitation.InvitationsScreen
-import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,10 +59,10 @@ fun Households(
     val context = LocalContext.current
     val lazyListState = rememberLazyListState()
 
-    val households = viewModel.households.collectAsState().value
+    val teams = viewModel.teams.collectAsState().value
     val householdActionData = viewModel.householdActionData.collectAsState().value
 
-    var selectedTabIndex by rememberSaveable { mutableStateOf<HouseholdPage>(HouseholdPage.Households) }
+    var selectedTabIndex by rememberSaveable { mutableStateOf<TeamsPage>(TeamsPage.Households) }
 
     // Bottom Sheet
     val sheetState = rememberModalBottomSheetState()
@@ -90,13 +87,13 @@ fun Households(
     }
 
     LaunchedEffect(Unit) {
-        //viewModel.evoke(HouseholdAction.LoadHouseholds)
+        viewModel.evoke(TeamAction.LoadTeams)
     }
 
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = "Households",
+                title = "Teams",
                 screenState = viewModel.screenState.collectAsState()
             )
         },
@@ -111,9 +108,9 @@ fun Households(
                 exit = slideOutVertically(targetOffsetY = { it * 2 }),
             ) {
                 ExtendedFloatingActionButton(
-                    onClick = { viewModel.evoke(HouseholdAction.ShowCreateDialog) },
-                    icon = { Icon(imageVector = Icons.Rounded.Add, contentDescription = "Create Household") },
-                    text = { Text(text = "New household") },
+                    onClick = { viewModel.evoke(TeamAction.ShowCreateDialog) },
+                    icon = { Icon(imageVector = Icons.Rounded.Add, contentDescription = "Create team") },
+                    text = { Text(text = "New team") },
                 )
             }
         },
@@ -126,7 +123,7 @@ fun Households(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             TabRow(selectedTabIndex = selectedTabIndex.ordinal) {
-                HouseholdPage.entries.forEachIndexed() { index, tabPage ->
+                TeamsPage.entries.forEachIndexed() { index, tabPage ->
                     Tab(
                         selected = index == selectedTabIndex.ordinal,
                         onClick = { selectedTabIndex = tabPage },
@@ -136,8 +133,8 @@ fun Households(
             }
 
             when(selectedTabIndex){
-                HouseholdPage.Households -> {
-                    if (households != null && households.data.isNotEmpty()) {
+                TeamsPage.Households -> {
+                    if (teams != null && teams.isNotEmpty()) {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
@@ -145,39 +142,39 @@ fun Households(
                         state = lazyListState,
                         contentPadding = PaddingValues(all = 10.dp),
                     ) {
-                        items(households.data) { household ->
+                        items(teams) { team ->
                             HouseholdsBriefListItem(
-                                title = household.title,
-                                id = household._id.`$oid`,
-                                numberOfMembers = household.no_people,
-                                numberOfTasks = household.no_active_tasks,
+                                title = team.name,
+                                id = team.id,
+                                numberOfMembers = 10,       // TODO
+                                numberOfTasks = 10,         // TODO
                                 onEdit = { id, title ->
-                                    viewModel.evoke(HouseholdAction.ShowSheet(id = id, title = title))
+                                    //viewModel.evoke(HouseholdAction.ShowSheet(id = id, title = title))
                                 },
                                 onClick = { id ->
-                                    viewModel.evoke(HouseholdAction.SelectHousehold(id))
-                                    onNavigateToTasks()
+                                    //viewModel.evoke(HouseholdAction.SelectHousehold(id))
+                                    //onNavigateToTasks()
                                 },
                             )
-                            if(households.data.last() != household){
+                            if(teams.last() != team){
                                 HorizontalDivider(modifier = Modifier.scale(0.9f))
                             }
                         }
                     }
-                    } else if (households != null) {
+                    } else if (teams != null) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(top = padding.calculateTopPadding())
                         ) {
                             Text(
-                                text = "You do not belong to any households yet.",
+                                text = "You do not belong to any teams yet.",
                                 modifier = Modifier.align(Alignment.Center)
                             )
                         }
                     }
                 }
-                HouseholdPage.Invitations -> {
+                TeamsPage.Invitations -> {
                     isFabVisible.value = false
                     InvitationsScreen()
                 }
@@ -188,9 +185,9 @@ fun Households(
         if(householdActionData.showEditDialog){
             EditHouseholdDialog(
                 currentName = householdActionData.title,
-                onDismissRequest = { viewModel.evoke(HouseholdAction.HideEditDialog) },
+                onDismissRequest = { viewModel.evoke(TeamAction.HideEditDialog) },
                 onConfirmation = { newName ->
-                    viewModel.evoke(HouseholdAction.EditHousehold(newName))
+                    viewModel.evoke(TeamAction.EditHousehold(newName))
                 }
             )
         }
@@ -198,10 +195,10 @@ fun Households(
         if(householdActionData.showCreateDialog){
             CreateHouseholdDialog(
                 onDismissRequest = {
-                    viewModel.evoke(HouseholdAction.HideCreateDialog)
+                    viewModel.evoke(TeamAction.HideCreateDialog)
                 },
                 onConfirmation = { title ->
-                    viewModel.evoke(HouseholdAction.CreateHousehold(title))
+                    viewModel.evoke(TeamAction.CreateHousehold(title))
                 }
             )
         }
@@ -209,24 +206,24 @@ fun Households(
         if(householdActionData.showDeleteDialog){
             DeleteHouseholdDialog(
                 title = householdActionData.title,
-                onDismissRequest = { viewModel.evoke(HouseholdAction.HideDeleteDialog) },
-                onConfirmation = { viewModel.evoke(HouseholdAction.DeleteHousehold) }
+                onDismissRequest = { viewModel.evoke(TeamAction.HideDeleteDialog) },
+                onConfirmation = { viewModel.evoke(TeamAction.DeleteHousehold) }
             )
         }
 
         if(householdActionData.showSheet){
             HouseholdBottomSheet(
                 householdTitle = householdActionData.title,
-                onDismissRequest = { viewModel.evoke(HouseholdAction.HideSheet) },
+                onDismissRequest = { viewModel.evoke(TeamAction.HideSheet) },
                 sheetState = sheetState,
-                onEdit = { viewModel.evoke(HouseholdAction.ShowEditDialog) },
-                onDelete = { viewModel.evoke(HouseholdAction.ShowDeleteDialog) },
+                onEdit = { viewModel.evoke(TeamAction.ShowEditDialog) },
+                onDelete = { viewModel.evoke(TeamAction.ShowDeleteDialog) },
             )
         }
     }
 }
 
-private enum class HouseholdPage(val title: String, val icon: ImageVector){
-    Households("Households", Icons.Rounded.TaskAlt),
+private enum class TeamsPage(val title: String, val icon: ImageVector){
+    Households("Teams", Icons.Rounded.TaskAlt),
     Invitations("Invitations", Icons.Rounded.Edit),
 }

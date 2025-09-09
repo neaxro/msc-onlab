@@ -30,11 +30,11 @@ import com.example.msc_onlab.data.model.household.HouseholdsBrief
 @Composable
 fun HouseholdsBriefListItem(
     title: String,
-    id: String,
+    id: Int,
     numberOfMembers: Int,
     numberOfTasks: Int,
-    onEdit: (String, String) -> Unit,
-    onClick: (String) -> Unit,
+    onEdit: (Int, String) -> Unit,
+    onClick: (Int) -> Unit,
 ){
     Row(
         modifier = Modifier

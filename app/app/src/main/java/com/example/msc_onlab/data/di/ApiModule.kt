@@ -6,6 +6,7 @@ import com.example.msc_onlab.data.remote.InvitationApi
 import com.example.msc_onlab.data.remote.LoginApi
 import com.example.msc_onlab.data.remote.ProfileApi
 import com.example.msc_onlab.data.remote.RegisterApi
+import com.example.msc_onlab.data.remote.TeamApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,6 +49,16 @@ object ApiModule {
             .baseUrl(BASE_URL)
             .build()
             .create(HouseholdApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTeamApi(): TeamApi{
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(BASE_URL)
+            .build()
+            .create(TeamApi::class.java)
     }
 
     @Provides

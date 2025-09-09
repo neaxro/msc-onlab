@@ -6,6 +6,7 @@ import com.example.msc_onlab.data.remote.InvitationApi
 import com.example.msc_onlab.data.remote.LoginApi
 import com.example.msc_onlab.data.remote.ProfileApi
 import com.example.msc_onlab.data.remote.RegisterApi
+import com.example.msc_onlab.data.remote.TeamApi
 import com.example.msc_onlab.data.repository.household.HouseholdRepository
 import com.example.msc_onlab.data.repository.household.HouseholdRepositoryImpl
 import com.example.msc_onlab.data.repository.invitation.InvitationRepository
@@ -16,6 +17,8 @@ import com.example.msc_onlab.data.repository.profile.ProfileRepository
 import com.example.msc_onlab.data.repository.profile.ProfileRepositoryImpl
 import com.example.msc_onlab.data.repository.register.RegisterRepository
 import com.example.msc_onlab.data.repository.register.RegisterRepositoryImpl
+import com.example.msc_onlab.data.repository.team.TeamRepository
+import com.example.msc_onlab.data.repository.team.TeamRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,6 +61,18 @@ object RepositoryModule {
     ): HouseholdRepository {
         return HouseholdRepositoryImpl(
             api = householdApi,
+            app = app
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideTeamRepository(
+        teamApi: TeamApi,
+        app: Application
+    ): TeamRepository {
+        return TeamRepositoryImpl(
+            api = teamApi,
             app = app
         )
     }

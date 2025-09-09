@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.msc_onlab.data.model.household.HouseholdCreateData
 import com.example.msc_onlab.data.model.household.HouseholdUpdateData
-import com.example.msc_onlab.data.model.household.HouseholdsBrief
+import com.example.msc_onlab.data.model.team.TeamsBrief
 import com.example.msc_onlab.data.repository.household.HouseholdRepository
+import com.example.msc_onlab.data.repository.team.TeamRepository
 import com.example.msc_onlab.domain.wrappers.Resource
 import com.example.msc_onlab.domain.wrappers.ScreenState
 import com.example.msc_onlab.helpers.LoggedPersonData
@@ -21,28 +22,32 @@ import javax.inject.Inject
 @HiltViewModel
 class HouseholdsViewModel @Inject constructor(
     private val householdRepository: HouseholdRepository,
+    private val teamRepository: TeamRepository,
     private val applicationContext: Context
 ) : ViewModel() {
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
     val screenState = _screenState.asStateFlow()
 
-    private val _households = MutableStateFlow<HouseholdsBrief?>(null)
-    val households = _households.asStateFlow()
+    //private val _households = MutableStateFlow<HouseholdsBrief?>(null)
+    //val households = _households.asStateFlow()
+
+    private val _teams = MutableStateFlow<TeamsBrief?>(null)
+    val teams = _teams.asStateFlow()
 
     private val _householdActionData = MutableStateFlow<HouseholdActionData>(HouseholdActionData())
     val householdActionData = _householdActionData.asStateFlow()
 
-    private fun loadHouseholds(){
+    private fun loadTeams(){
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            var result = householdRepository.getAllHouseholds(LoggedPersonData.ID!!)
+            var result = teamRepository.getAllTeams()
 
             when(result){
                 is Resource.Success -> {
                     _screenState.value = ScreenState.Success()
 
-                    _households.value = result.data!!
+                    _teams.value = result.data!!
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
@@ -66,7 +71,7 @@ class HouseholdsViewModel @Inject constructor(
                     val resultData = result.data!!
 
                     // Refresh list
-                    loadHouseholds()
+                    loadTeams()
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
@@ -88,7 +93,7 @@ class HouseholdsViewModel @Inject constructor(
                     val resultData = result.data!!
 
                     // Refresh list
-                    loadHouseholds()
+                    loadTeams()
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
@@ -109,7 +114,7 @@ class HouseholdsViewModel @Inject constructor(
                     val resultData = result.data!!
 
                     // Refresh list
-                    loadHouseholds()
+                    loadTeams()
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
@@ -118,18 +123,18 @@ class HouseholdsViewModel @Inject constructor(
         }
     }
 
-    fun evoke(action: HouseholdAction){
+    fun evoke(action: TeamAction){
         when(action){
-            is HouseholdAction.SelectHousehold -> {
+            is TeamAction.SelectHousehold -> {
                 selectHousehold(householdID = action.id)
             }
 
-            HouseholdAction.HideEditDialog -> {
+            TeamAction.HideEditDialog -> {
                 _householdActionData.update {
                     it.copy(showEditDialog = false)
                 }
             }
-            HouseholdAction.ShowEditDialog -> {
+            TeamAction.ShowEditDialog -> {
                 _householdActionData.update {
                     it.copy(
                         showEditDialog = true,
@@ -138,7 +143,7 @@ class HouseholdsViewModel @Inject constructor(
                 }
             }
 
-            is HouseholdAction.CreateHousehold -> {
+            is TeamAction.CreateHousehold -> {
                 _householdActionData.update {
                     it.copy(
                         showCreateDialog = false
@@ -147,7 +152,7 @@ class HouseholdsViewModel @Inject constructor(
                 createHousehold(title = action.title)
             }
 
-            is HouseholdAction.ShowSheet -> {
+            is TeamAction.ShowSheet -> {
                 _householdActionData.update {
                     it.copy(
                         showSheet = true,
@@ -156,7 +161,7 @@ class HouseholdsViewModel @Inject constructor(
                     )
                 }
             }
-            HouseholdAction.HideSheet -> {
+            TeamAction.HideSheet -> {
                 _householdActionData.update {
                     it.copy(
                         showSheet = false
@@ -164,7 +169,7 @@ class HouseholdsViewModel @Inject constructor(
                 }
             }
 
-            is HouseholdAction.EditHousehold -> {
+            is TeamAction.EditHousehold -> {
                 _householdActionData.update {
                     it.copy(
                         showEditDialog = false
@@ -173,14 +178,14 @@ class HouseholdsViewModel @Inject constructor(
                 updateHousehold(newTitle = action.newTitle)
             }
 
-            HouseholdAction.HideCreateDialog -> {
+            TeamAction.HideCreateDialog -> {
                 _householdActionData.update {
                     it.copy(
                         showCreateDialog = false
                     )
                 }
             }
-            HouseholdAction.ShowCreateDialog -> {
+            TeamAction.ShowCreateDialog -> {
                 _householdActionData.update {
                     it.copy(
                         showCreateDialog = true
@@ -188,7 +193,7 @@ class HouseholdsViewModel @Inject constructor(
                 }
             }
 
-            HouseholdAction.ShowDeleteDialog -> {
+            TeamAction.ShowDeleteDialog -> {
                 _householdActionData.update {
                     it.copy(
                         showDeleteDialog = true,
@@ -197,14 +202,14 @@ class HouseholdsViewModel @Inject constructor(
                 }
             }
 
-            HouseholdAction.HideDeleteDialog -> {
+            TeamAction.HideDeleteDialog -> {
                 _householdActionData.update {
                     it.copy(
                         showDeleteDialog = false
                     )
                 }
             }
-            HouseholdAction.DeleteHousehold -> {
+            TeamAction.DeleteHousehold -> {
                 _householdActionData.update {
                     it.copy(
                         showDeleteDialog = false
@@ -214,8 +219,8 @@ class HouseholdsViewModel @Inject constructor(
                 deleteHousehold()
             }
 
-            HouseholdAction.LoadHouseholds -> {
-                loadHouseholds()
+            TeamAction.LoadTeams -> {
+                loadTeams()
             }
         }
     }
@@ -229,20 +234,20 @@ class HouseholdsViewModel @Inject constructor(
     }
 }
 
-sealed class HouseholdAction{
-    object LoadHouseholds : HouseholdAction()
-    data class SelectHousehold(val id: String) : HouseholdAction()
-    data class ShowSheet(val id: String, val title: String) : HouseholdAction()
-    object HideSheet : HouseholdAction()
-    object ShowEditDialog : HouseholdAction()
-    object HideEditDialog : HouseholdAction()
-    data class EditHousehold(val newTitle: String) : HouseholdAction()
-    object ShowCreateDialog : HouseholdAction()
-    object HideCreateDialog : HouseholdAction()
-    data class CreateHousehold(val title: String) : HouseholdAction()
-    object ShowDeleteDialog : HouseholdAction()
-    object HideDeleteDialog : HouseholdAction()
-    object DeleteHousehold : HouseholdAction()
+sealed class TeamAction{
+    object LoadTeams : TeamAction()
+    data class SelectHousehold(val id: String) : TeamAction()
+    data class ShowSheet(val id: String, val title: String) : TeamAction()
+    object HideSheet : TeamAction()
+    object ShowEditDialog : TeamAction()
+    object HideEditDialog : TeamAction()
+    data class EditHousehold(val newTitle: String) : TeamAction()
+    object ShowCreateDialog : TeamAction()
+    object HideCreateDialog : TeamAction()
+    data class CreateHousehold(val title: String) : TeamAction()
+    object ShowDeleteDialog : TeamAction()
+    object HideDeleteDialog : TeamAction()
+    object DeleteHousehold : TeamAction()
 }
 
 data class HouseholdActionData(
