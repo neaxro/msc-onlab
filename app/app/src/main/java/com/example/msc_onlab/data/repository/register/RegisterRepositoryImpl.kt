@@ -18,7 +18,7 @@ class RegisterRepositoryImpl(
             val response = api.register(registerData)
 
             // Check server response
-            val res = if(response.code() == 200){
+            val res = if(response.code() == 201){
                 Resource.Success(message = "Successfully registered!", data = response.body()!!)
             }
             else{

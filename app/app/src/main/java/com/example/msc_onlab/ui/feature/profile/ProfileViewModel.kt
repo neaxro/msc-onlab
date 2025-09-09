@@ -52,7 +52,7 @@ class ProfileViewModel @Inject constructor(
     val errors = _errors.asStateFlow()
 
     init {
-        loadProfile()
+        //loadProfile()
     }
 
     private fun loadProfile(){

@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.msc_onlab.data.model.household.invitation.Invitation
 import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationData
 import com.example.msc_onlab.data.model.login.LoginData
-import com.example.msc_onlab.data.model.login.LoginResponse
 import com.example.msc_onlab.data.repository.invitation.InvitationRepository
 import com.example.msc_onlab.data.repository.login.LoginRepository
 import com.example.msc_onlab.domain.wrappers.Resource

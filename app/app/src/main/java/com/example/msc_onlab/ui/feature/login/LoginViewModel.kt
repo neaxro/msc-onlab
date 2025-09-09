@@ -15,11 +15,8 @@ import com.example.msc_onlab.helpers.DataFieldErrors
 import com.example.msc_onlab.helpers.LoggedPersonData
 import com.example.msc_onlab.helpers.or
 import com.example.msc_onlab.helpers.sha256
-import com.example.msc_onlab.helpers.validateFirstname
-import com.example.msc_onlab.helpers.validateLastname
 import com.example.msc_onlab.helpers.validateUserPassword
 import com.example.msc_onlab.helpers.validateUsername
-import com.example.msc_onlab.ui.feature.profile.ProfileFieldErrors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,12 +54,13 @@ class LoginViewModel @Inject constructor(
     private fun login(){
         _screenState.value = ScreenState.Loading()
 
+
         val hashedLoginData = _loginData.value.copy(
             password = _loginData.value.password.sha256()
         )
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result = loginRepository.loginPerson(loginData = hashedLoginData)
+            val result = loginRepository.loginPerson(loginData = _loginData.value)
 
             when(result){
                 is Resource.Success -> {
@@ -78,7 +76,7 @@ class LoginViewModel @Inject constructor(
                     )
 
                     val loginResponse: LoginResponse = result.data!!
-                    LoggedPersonData.TOKEN = loginResponse.data.token
+                    LoggedPersonData.TOKEN = loginResponse.access_token
 
                     _loginState.value = LoginState.LoggedIn
                 }

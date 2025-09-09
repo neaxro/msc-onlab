@@ -90,7 +90,7 @@ fun Households(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.evoke(HouseholdAction.LoadHouseholds)
+        //viewModel.evoke(HouseholdAction.LoadHouseholds)
     }
 
     Scaffold(

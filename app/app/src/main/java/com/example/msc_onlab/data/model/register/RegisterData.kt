@@ -5,6 +5,6 @@ data class RegisterData(
     val first_name: String = "",
     val last_name: String = "",
     val password: String = "",
-    val profile_picture: String = "",
+    val profile_picture: String = "default",
     val username: String = ""
 )

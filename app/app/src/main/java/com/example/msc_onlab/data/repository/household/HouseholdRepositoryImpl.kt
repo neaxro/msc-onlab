@@ -11,7 +11,6 @@ import com.example.msc_onlab.data.model.household.HouseholdUpdateData
 import com.example.msc_onlab.data.model.household.HouseholdUpdateResponse
 import com.example.msc_onlab.data.model.household.HouseholdsBrief
 import com.example.msc_onlab.data.model.login.LoginData
-import com.example.msc_onlab.data.model.login.LoginResponse
 import com.example.msc_onlab.data.model.members.MembersResponse
 import com.example.msc_onlab.data.model.task.TaskDeleteResponse
 import com.example.msc_onlab.data.model.task.TaskResponse

@@ -1,7 +1,5 @@
 package com.example.msc_onlab.data.remote
 
-import com.example.msc_onlab.data.model.login.LoginData
-import com.example.msc_onlab.data.model.login.LoginResponse
 import com.example.msc_onlab.data.model.register.RegisterData
 import com.example.msc_onlab.data.model.register.RegisterResponse
 import retrofit2.Response
