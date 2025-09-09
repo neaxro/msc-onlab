@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.House
 import androidx.compose.material.icons.rounded.TaskAlt
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
@@ -96,14 +95,14 @@ fun CreateSubtaskDialog(
                         isError = error !is DataFieldErrors.NoError
                         errorMessage = error.message
 
-                        if (it.length <= Constants.MAX_HOUSEHOLD_NAME_LENGTH) {
+                        if (it.length <= Constants.MAX_TEAM_NAME_LENGTH) {
                             title = it
                         }
                     },
                     isError = isError,
                     errorMessage = errorMessage,
                     singleLine = true,
-                    maxLength = Constants.MAX_HOUSEHOLD_NAME_LENGTH,
+                    maxLength = Constants.MAX_TEAM_NAME_LENGTH,
                     readOnly = false,
                     enabled = true,
                     modifier = Modifier.focusRequester(focusRequester)

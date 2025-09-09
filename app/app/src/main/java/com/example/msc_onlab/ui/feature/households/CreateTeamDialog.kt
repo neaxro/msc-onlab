@@ -87,14 +87,14 @@ fun CreateTeamDialog(
                         isError = error !is DataFieldErrors.NoError
                         errorMessage = error.message
 
-                        if (it.length <= Constants.MAX_HOUSEHOLD_NAME_LENGTH) {
+                        if (it.length <= Constants.MAX_TEAM_NAME_LENGTH) {
                             title = it
                         }
                     },
                     isError = isError,
                     errorMessage = errorMessage,
                     singleLine = true,
-                    maxLength = Constants.MAX_HOUSEHOLD_NAME_LENGTH,
+                    maxLength = Constants.MAX_TEAM_NAME_LENGTH,
                     readOnly = false,
                     enabled = true
                 )

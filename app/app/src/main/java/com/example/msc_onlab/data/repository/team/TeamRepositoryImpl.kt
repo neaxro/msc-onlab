@@ -19,6 +19,8 @@ import com.example.msc_onlab.data.model.task.patch.TaskPatchData
 import com.example.msc_onlab.data.model.task.patch.TaskPatchResponse
 import com.example.msc_onlab.data.model.team.TeamInfo
 import com.example.msc_onlab.data.model.team.TeamMembers
+import com.example.msc_onlab.data.model.team.TeamUpdate
+import com.example.msc_onlab.data.model.team.TeamUpdateResponse
 import com.example.msc_onlab.data.model.team.TeamsBrief
 import com.example.msc_onlab.data.remote.HouseholdApi
 import com.example.msc_onlab.data.remote.TeamApi
@@ -80,6 +82,31 @@ class TeamRepositoryImpl(
             // Check server response
             val res = if(response.code() == 200){
                 Resource.Success(message = "Successfully fetched team members!", data = response.body()!!)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result
+    }
+
+    override suspend fun updateTeam(
+        teamId: Int,
+        update: TeamUpdate
+    ): Resource<TeamUpdateResponse> {
+        val result = try{
+            val response = api.updateHousehold(id = teamId, teamUpdate = update)
+
+            // Check server response
+            val res = if(response.code() == 200){
+                Resource.Success(message = "Successfully updated team!", data = response.body()!!)
             }
             else{
                 // Server error

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.House
+import androidx.compose.material.icons.rounded.Textsms
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -36,10 +37,12 @@ import com.example.msc_onlab.ui.feature.common.SmartOutlinedTextField
 @Composable
 fun EditTeamDialog(
     currentName: String,
+    currentDescription: String,
     onDismissRequest: () -> Unit,
-    onConfirmation: (String) -> Unit,
+    onConfirmation: (String, String) -> Unit,
 ){
     var newName by rememberSaveable { mutableStateOf(currentName) }
+    var newDescription by rememberSaveable { mutableStateOf(currentDescription) }
     var isError by rememberSaveable { mutableStateOf(false) }
     var errorMessage by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
@@ -50,7 +53,7 @@ fun EditTeamDialog(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp)
+                .height(500.dp)
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
         ) {
@@ -67,7 +70,7 @@ fun EditTeamDialog(
                     verticalArrangement = Arrangement.Top
                 ) {
                     Text(
-                        text = "Edit household",
+                        text = "Edit team",
                         fontWeight = FontWeight.Bold
                     )
                     HorizontalDivider(modifier = Modifier.scale(0.9f))
@@ -80,7 +83,7 @@ fun EditTeamDialog(
                     label = {
                         Icon(
                             imageVector = Icons.Rounded.House,
-                            contentDescription = "Household name"
+                            contentDescription = "Team name"
                         )
                     },
                     onValueChange = {
@@ -88,14 +91,37 @@ fun EditTeamDialog(
                         isError = error !is DataFieldErrors.NoError
                         errorMessage = error.message
 
-                        if (it.length <= Constants.MAX_HOUSEHOLD_NAME_LENGTH) {
+                        if (it.length <= Constants.MAX_TEAM_NAME_LENGTH) {
                             newName = it
                         }
                     },
                     isError = isError,
                     errorMessage = errorMessage,
                     singleLine = true,
-                    maxLength = Constants.MAX_HOUSEHOLD_NAME_LENGTH,
+                    maxLength = Constants.MAX_TEAM_NAME_LENGTH,
+                    readOnly = false,
+                    enabled = true
+                )
+
+                Spacer(modifier = Modifier.padding(vertical = 5.dp))
+
+                SmartOutlinedTextField(
+                    value = newDescription,
+                    label = {
+                        Icon(
+                            imageVector = Icons.Rounded.Textsms,
+                            contentDescription = "Team description"
+                        )
+                    },
+                    onValueChange = {
+                        if (it.length <= Constants.MAX_TEAM_DESCRIPTION_LENGTH) {
+                            newDescription = it
+                        }
+                    },
+                    isError = isError,
+                    errorMessage = errorMessage,
+                    singleLine = true,
+                    maxLength = Constants.MAX_TEAM_DESCRIPTION_LENGTH,
                     readOnly = false,
                     enabled = true
                 )
@@ -111,7 +137,7 @@ fun EditTeamDialog(
                     }
 
                     TextButton(
-                        onClick = {onConfirmation(newName) },
+                        onClick = {onConfirmation(newName, newDescription) },
                         enabled = !isError
                     ) {
                         Text(text = "Save")

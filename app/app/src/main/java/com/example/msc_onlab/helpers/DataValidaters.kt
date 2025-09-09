@@ -62,8 +62,8 @@ fun validateLastname(lastname: String, @ApplicationContext context: Context): Da
 
 fun validateHouseholdName(householdName: String, @ApplicationContext context: Context): DataFieldErrors {
     if(householdName.isEmpty()) return DataFieldErrors.HouseholdError("Household name cannot be empty!")
-    if(householdName.length < Constants.MIN_HOUSEHOLD_NAME_LENGTH) return DataFieldErrors.HouseholdError("Household name is too short!")
-    if(householdName.length > Constants.MAX_HOUSEHOLD_NAME_LENGTH) return DataFieldErrors.HouseholdError("Household name is too long!")
+    if(householdName.length < Constants.MIN_TEAM_NAME_LENGTH) return DataFieldErrors.HouseholdError("Household name is too short!")
+    if(householdName.length > Constants.MAX_TEAM_NAME_LENGTH) return DataFieldErrors.HouseholdError("Household name is too long!")
     if(containsNumbers(householdName)) return DataFieldErrors.HouseholdError("Household name cannot contain numbers!")
     if(containsSpecialCharacters(householdName)) return DataFieldErrors.HouseholdError("Household name cannot contain special characters!")
 

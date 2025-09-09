@@ -18,6 +18,8 @@ import com.example.msc_onlab.data.model.task.patch.TaskPatchData
 import com.example.msc_onlab.data.model.task.patch.TaskPatchResponse
 import com.example.msc_onlab.data.model.team.TeamInfo
 import com.example.msc_onlab.data.model.team.TeamMembers
+import com.example.msc_onlab.data.model.team.TeamUpdate
+import com.example.msc_onlab.data.model.team.TeamUpdateResponse
 import com.example.msc_onlab.data.model.team.TeamsBrief
 import com.example.msc_onlab.helpers.LoggedPersonData
 import retrofit2.Response
@@ -52,15 +54,15 @@ interface TeamApi {
         @Path("id") teamId: Int,
     ): Response<TeamMembers>
 
-    /* ------------------- */
-
     @Headers("Content-Type: application/json")
-    @PATCH("/household/id/{household_id}")
+    @PATCH("/team/teams/{id}")
     suspend fun updateHousehold(
         @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
-        @Path("household_id") householdId: String,
-        @Body newHouseholdData: HouseholdUpdateData
-    ): Response<HouseholdUpdateResponse>
+        @Path("id") id: Int,
+        @Body teamUpdate: TeamUpdate
+    ): Response<TeamUpdateResponse>
+
+    /* ------------------- */
 
     @Headers("Content-Type: application/json")
     @POST("/household")

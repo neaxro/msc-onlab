@@ -18,6 +18,8 @@ import com.example.msc_onlab.data.model.task.patch.TaskPatchData
 import com.example.msc_onlab.data.model.task.patch.TaskPatchResponse
 import com.example.msc_onlab.data.model.team.TeamInfo
 import com.example.msc_onlab.data.model.team.TeamMembers
+import com.example.msc_onlab.data.model.team.TeamUpdate
+import com.example.msc_onlab.data.model.team.TeamUpdateResponse
 import com.example.msc_onlab.data.model.team.TeamsBrief
 import com.example.msc_onlab.domain.wrappers.Resource
 
@@ -27,4 +29,6 @@ interface TeamRepository {
     suspend fun getTeamInfo(teamId: Int): Resource<TeamInfo>
 
     suspend fun getTeamMembers(teamId: Int): Resource<TeamMembers>
+
+    suspend fun updateTeam(teamId: Int, update: TeamUpdate): Resource<TeamUpdateResponse>
 }

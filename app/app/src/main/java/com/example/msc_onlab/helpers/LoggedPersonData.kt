@@ -21,6 +21,7 @@ object LoggedPersonData {
         }
 
     var SELECTED_HOUSEHOLD_ID: String? = null
+    var SELECTED_TEAM_ID: Int? = null
     var PROFILE_PICTURE: String? = null
 }
 

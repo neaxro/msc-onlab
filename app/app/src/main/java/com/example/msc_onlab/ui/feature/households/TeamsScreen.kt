@@ -52,7 +52,7 @@ import com.example.msc_onlab.ui.feature.invitation.InvitationsScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Teams(
-    viewModel: HouseholdsViewModel = hiltViewModel(),
+    viewModel: TeamsViewModel = hiltViewModel(),
     onNavigateToTasks: () -> Unit,
     modifier: Modifier = Modifier
 ){
@@ -60,7 +60,7 @@ fun Teams(
     val lazyListState = rememberLazyListState()
 
     val teams = viewModel.teams.collectAsState().value
-    val householdActionData = viewModel.householdActionData.collectAsState().value
+    val teamActionData = viewModel.teamActionData.collectAsState().value
 
     var selectedTabIndex by rememberSaveable { mutableStateOf<TeamsPage>(TeamsPage.Households) }
 
@@ -148,11 +148,11 @@ fun Teams(
                                 id = team.id,
                                 description = team.description,
                                 onEdit = { id, title ->
-                                    //viewModel.evoke(HouseholdAction.ShowSheet(id = id, title = title))
+                                    viewModel.evoke(TeamAction.ShowSheet(id = id, title = title))
                                 },
                                 onClick = { id ->
-                                    //viewModel.evoke(HouseholdAction.SelectHousehold(id))
-                                    //onNavigateToTasks()
+                                    viewModel.evoke(TeamAction.SelectTeam(id))
+                                    //onNavigateToTasks()       // TODO("Uncomment when safe")
                                 },
                             )
                             if(teams.last() != team){
@@ -181,17 +181,18 @@ fun Teams(
         }
 
 
-        if(householdActionData.showEditDialog){
+        if(teamActionData.showEditDialog){
             EditTeamDialog(
-                currentName = householdActionData.title,
+                currentName = teamActionData.title,
+                currentDescription = teamActionData.description,
                 onDismissRequest = { viewModel.evoke(TeamAction.HideEditDialog) },
-                onConfirmation = { newName ->
-                    viewModel.evoke(TeamAction.EditHousehold(newName))
+                onConfirmation = { newName, newDescription ->
+                    viewModel.evoke(TeamAction.EditHousehold(newName, newDescription))
                 }
             )
         }
 
-        if(householdActionData.showCreateDialog){
+        if(teamActionData.showCreateDialog){
             CreateTeamDialog(
                 onDismissRequest = {
                     viewModel.evoke(TeamAction.HideCreateDialog)
@@ -202,17 +203,17 @@ fun Teams(
             )
         }
 
-        if(householdActionData.showDeleteDialog){
+        if(teamActionData.showDeleteDialog){
             DeleteTeamDialog(
-                title = householdActionData.title,
+                title = teamActionData.title,
                 onDismissRequest = { viewModel.evoke(TeamAction.HideDeleteDialog) },
                 onConfirmation = { viewModel.evoke(TeamAction.DeleteHousehold) }
             )
         }
 
-        if(householdActionData.showSheet){
+        if(teamActionData.showSheet){
             TeamBottomSheet(
-                householdTitle = householdActionData.title,
+                householdTitle = teamActionData.title,
                 onDismissRequest = { viewModel.evoke(TeamAction.HideSheet) },
                 sheetState = sheetState,
                 onEdit = { viewModel.evoke(TeamAction.ShowEditDialog) },

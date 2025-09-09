@@ -73,7 +73,7 @@ fun TeamBottomSheet(
                 Icon(imageVector = Icons.Rounded.Edit, contentDescription = "Edit")
                 Spacer(modifier = Modifier.padding(horizontal = 10.dp))
                 Text(
-                    text = "Edit household",
+                    text = "Edit team",
                     fontSize = 18.sp
                 )
             }
@@ -89,7 +89,7 @@ fun TeamBottomSheet(
                 Icon(imageVector = Icons.Rounded.Delete, contentDescription = "Delete")
                 Spacer(modifier = Modifier.padding(horizontal = 10.dp))
                 Text(
-                    text = "Delete household",
+                    text = "Delete team",
                     fontSize = 18.sp
                 )
             }
