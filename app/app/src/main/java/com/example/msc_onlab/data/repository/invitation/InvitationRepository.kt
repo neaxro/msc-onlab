@@ -4,10 +4,11 @@ import com.example.msc_onlab.data.model.household.invitation.GetInvitationsRespo
 import com.example.msc_onlab.data.model.household.invitation.RespondeInvitationResponse
 import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationData
 import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationResponse
+import com.example.msc_onlab.data.model.invitation.InvitationActiveInvites
 import com.example.msc_onlab.domain.wrappers.Resource
 
 interface InvitationRepository {
-    suspend fun getInvites(userId: String): Resource<GetInvitationsResponse>
+    suspend fun getInvites(): Resource<InvitationActiveInvites>
 
     suspend fun createInvite(invitationData: CreateInvitationData): Resource<CreateInvitationResponse>
 

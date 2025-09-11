@@ -42,22 +42,27 @@ import androidx.compose.ui.unit.sp
 import com.example.msc_onlab.data.model.household.invitation.Id
 import com.example.msc_onlab.data.model.household.invitation.Invitation
 import com.example.msc_onlab.data.model.household.invitation.Sender
+import com.example.msc_onlab.data.model.invitation.InvitationActiveInvitesItem
 import com.example.msc_onlab.helpers.ResourceLocator
 import com.example.msc_onlab.ui.feature.login.LoginAction
 import com.example.msc_onlab.ui.theme.MsconlabTheme
 import com.example.msc_onlab.ui.theme.Shapes
 import java.time.Instant
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Date
+import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
 fun InvitationCard(
-    invitationData: Invitation,
+    invitationData: InvitationActiveInvitesItem,
     onAccept: (String) -> Unit,
     onDecline: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val daysLeftBeforeExpiration = calculateDaysUntilExpiration(invitationData.expiration_date)
+    val daysLeftBeforeExpiration = calculateDaysUntilExpiration(invitationData.expires)
 
     Card(
         modifier = modifier
@@ -89,7 +94,7 @@ fun InvitationCard(
                     elevation = CardDefaults.elevatedCardElevation(2.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = ResourceLocator.getProfilePicture(invitationData.sender.profile_picture)),
+                        painter = painterResource(id = ResourceLocator.getProfilePicture("default")),
                         contentDescription = "Profile picture",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
@@ -105,7 +110,7 @@ fun InvitationCard(
                         Text(
                             buildAnnotatedString {
                                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)){
-                                    append("${invitationData.sender.first_name} ${invitationData.sender.last_name}")
+                                    append("${invitationData.inviter.firstName} ${invitationData.inviter.lastName}")
                                 }
 
                                 withStyle(style = SpanStyle(fontWeight = FontWeight.Light)){
@@ -113,7 +118,7 @@ fun InvitationCard(
                                 }
 
                                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)){
-                                    append(invitationData.household_name)
+                                    append(invitationData.team.data.name)
                                 }
                             }
                         )
@@ -140,7 +145,7 @@ fun InvitationCard(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Button(
-                            onClick = { onDecline(invitationData.invitation_id) },
+                            onClick = { onDecline(invitationData.token) },
                             modifier = Modifier.width(120.dp),
                             shape = Shapes.small,
                         ) {
@@ -151,7 +156,7 @@ fun InvitationCard(
                         }
 
                         Button(
-                            onClick = { onAccept(invitationData.invitation_id) },
+                            onClick = { onAccept(invitationData.token) },
                             modifier = Modifier.width(120.dp),
                             shape = Shapes.small
                         ) {
@@ -167,6 +172,19 @@ fun InvitationCard(
     }
 }
 
+fun calculateDaysUntilExpiration(expirationDateStr: String): Long {
+    val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)
+
+    // Parse expiration date
+    val expirationDate = ZonedDateTime.parse(expirationDateStr, formatter)
+
+    // Current time in UTC
+    val now = ZonedDateTime.now(java.time.ZoneOffset.UTC)
+
+    // Difference in days
+    return ChronoUnit.DAYS.between(now, expirationDate)
+}
+/*
 private fun calculateDaysUntilExpiration(expirationTimestamp: Double): Int {
     // Get the current time in milliseconds
     val currentTimestamp = Instant.now().epochSecond
@@ -179,7 +197,9 @@ private fun calculateDaysUntilExpiration(expirationTimestamp: Double): Int {
 
     return daysUntilExpiration.roundToInt()
 }
+ */
 
+/*
 @Preview(showBackground = true)
 @Composable
 private fun InvitationCardPrev() {
@@ -208,3 +228,4 @@ private fun InvitationCardPrev() {
         }
     }
 }
+*/

@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.msc_onlab.data.model.household.invitation.Invitation
 import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationData
+import com.example.msc_onlab.data.model.invitation.InvitationActiveInvites
+import com.example.msc_onlab.data.model.invitation.InvitationActiveInvitesItem
 import com.example.msc_onlab.data.model.login.LoginData
 import com.example.msc_onlab.data.repository.invitation.InvitationRepository
 import com.example.msc_onlab.data.repository.login.LoginRepository
@@ -33,19 +35,19 @@ class InvitationsViewModel @Inject constructor(
     private val _errors = MutableStateFlow<LoginFieldErrors>(LoginFieldErrors())
     val errors = _errors.asStateFlow()
 
-    private val _invitations = MutableStateFlow<List<Invitation>>(listOf())
+    private val _invitations = MutableStateFlow<List<InvitationActiveInvitesItem>>(listOf())
     val invitations = _invitations.asStateFlow()
 
     private fun loadInvitations(){
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result = invitationRepository.getInvites(userId = LoggedPersonData.ID!!)
+            val result = invitationRepository.getInvites()
 
             when(result){
                 is Resource.Success -> {
                     _screenState.value = ScreenState.Success()
-                    _invitations.value = result.data!!.data
+                    _invitations.value = result.data!!
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)

@@ -5,6 +5,7 @@ import com.example.msc_onlab.data.model.household.invitation.GetInvitationsRespo
 import com.example.msc_onlab.data.model.household.invitation.RespondeInvitationResponse
 import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationData
 import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationResponse
+import com.example.msc_onlab.data.model.invitation.InvitationActiveInvites
 import com.example.msc_onlab.data.remote.HouseholdApi
 import com.example.msc_onlab.data.remote.InvitationApi
 import com.example.msc_onlab.domain.wrappers.Resource
@@ -13,9 +14,9 @@ class InvitationRepositoryImpl(
     private val api: InvitationApi,
     private val app: Application
 ) : InvitationRepository {
-    override suspend fun getInvites(userId: String): Resource<GetInvitationsResponse> {
+    override suspend fun getInvites(): Resource<InvitationActiveInvites> {
         val result = try{
-            val response = api.getInvitations(userId = userId)
+            val response = api.getInvitations()
 
             // Check server response
             val res = if(response.code() == 200){

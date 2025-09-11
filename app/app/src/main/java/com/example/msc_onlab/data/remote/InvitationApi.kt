@@ -4,6 +4,7 @@ import com.example.msc_onlab.data.model.household.invitation.create.CreateInvita
 import com.example.msc_onlab.data.model.household.invitation.GetInvitationsResponse
 import com.example.msc_onlab.data.model.household.invitation.RespondeInvitationResponse
 import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationResponse
+import com.example.msc_onlab.data.model.invitation.InvitationActiveInvites
 import com.example.msc_onlab.helpers.LoggedPersonData
 import retrofit2.Response
 import retrofit2.http.Body
@@ -15,11 +16,10 @@ import retrofit2.http.Path
 
 interface InvitationApi {
     @Headers("Content-Type: application/json")
-    @GET("/household/invite/{user_id}")
+    @GET("/invitation/invitations")
     suspend fun getInvitations(
         @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
-        @Path("user_id") userId: String,
-    ): Response<GetInvitationsResponse>
+    ): Response<InvitationActiveInvites>
 
     @Headers("Content-Type: application/json")
     @POST("/household/invite")
