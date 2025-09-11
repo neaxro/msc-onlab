@@ -1,11 +1,10 @@
 package com.example.msc_onlab.data.repository.invitation
 
 import android.app.Application
-import com.example.msc_onlab.data.model.household.invitation.GetInvitationsResponse
-import com.example.msc_onlab.data.model.household.invitation.RespondeInvitationResponse
-import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationData
-import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationResponse
+import com.example.msc_onlab.data.model.invitation.FindUserByUsernameResponse
 import com.example.msc_onlab.data.model.invitation.InvitationActiveInvites
+import com.example.msc_onlab.data.model.invitation.InvitationCreateData
+import com.example.msc_onlab.data.model.invitation.InvitationCreateResponse
 import com.example.msc_onlab.data.model.invitation.InvitationRespondResponse
 import com.example.msc_onlab.data.remote.HouseholdApi
 import com.example.msc_onlab.data.remote.InvitationApi
@@ -37,12 +36,34 @@ class InvitationRepositoryImpl(
         return result
     }
 
-    override suspend fun createInvite(invitationData: CreateInvitationData): Resource<CreateInvitationResponse> {
+    override suspend fun findUser(username: String): Resource<FindUserByUsernameResponse> {
+        val result = try{
+            val response = api.findUserByUsername(username = username)
+
+            // Check server response
+            val res = if(response.code() == 200){
+                Resource.Success(message = "Successfully find user!", data = response.body()!!)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result
+    }
+
+    override suspend fun createInvite(invitationData: InvitationCreateData): Resource<InvitationCreateResponse> {
         val result = try{
             val response = api.createInvitation(invitationData = invitationData)
 
             // Check server response
-            val res = if(response.code() == 200){
+            val res = if(response.code() == 201){
                 Resource.Success(message = "Successfully created an invitation!", data = response.body()!!)
             }
             else{

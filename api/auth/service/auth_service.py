@@ -41,6 +41,12 @@ class AuthService:
 
         return self.keycloak_repository.get_user_by_id(user_id, metadata)
 
+    def get_user_by_name(self, username):
+        if not username:
+            raise Exception("User's username is required!")
+
+        return self.keycloak_repository.get_user_by_username(username)
+
     def modify_user(self, user_id, data):
         if not user_id:
             raise Exception("User's id is required!")

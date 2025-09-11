@@ -39,9 +39,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.msc_onlab.data.model.household.invitation.Id
-import com.example.msc_onlab.data.model.household.invitation.Invitation
-import com.example.msc_onlab.data.model.household.invitation.Sender
 import com.example.msc_onlab.data.model.invitation.InvitationActiveInvitesItem
 import com.example.msc_onlab.helpers.ResourceLocator
 import com.example.msc_onlab.ui.feature.login.LoginAction
@@ -114,7 +111,7 @@ fun InvitationCard(
                                 }
 
                                 withStyle(style = SpanStyle(fontWeight = FontWeight.Light)){
-                                    append(" invited you to the household ")
+                                    append(" invited you to the team ")
                                 }
 
                                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)){

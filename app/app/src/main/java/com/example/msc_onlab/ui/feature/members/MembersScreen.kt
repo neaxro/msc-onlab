@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.msc_onlab.helpers.LoggedPersonData
 import com.example.msc_onlab.ui.feature.common.InvitationDialog
 import com.example.msc_onlab.ui.feature.common.MemberBriefListItem
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
@@ -54,7 +55,7 @@ fun MembersScreen(
 
     var showInvitationDialog by rememberSaveable { mutableStateOf(false) }
 
-    val isFabVisible = rememberSaveable { mutableStateOf(true) }
+    val isFabVisible = rememberSaveable { mutableStateOf(LoggedPersonData.SELECTED_TEAM_ID != null) }
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
@@ -64,7 +65,7 @@ fun MembersScreen(
                 }
 
                 // Show FAB
-                if (available.y > 1) {
+                if (available.y > 1 && LoggedPersonData.SELECTED_TEAM_ID != null) {
                     isFabVisible.value = true
                 }
 
@@ -128,7 +129,7 @@ fun MembersScreen(
                     .padding(top = padding.calculateTopPadding())
             ) {
                 Text(
-                    text = "Select a household first!",
+                    text = "Select a team first!",
                     fontWeight = FontWeight.Light,
                     modifier = Modifier.align(Alignment.Center),
                 )

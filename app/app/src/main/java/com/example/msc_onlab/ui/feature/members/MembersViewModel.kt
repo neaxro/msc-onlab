@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.msc_onlab.data.model.household.HouseholdCreateData
 import com.example.msc_onlab.data.model.household.HouseholdTasksResponse
-import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationData
+import com.example.msc_onlab.data.model.invitation.InvitationCreateData
 import com.example.msc_onlab.data.model.members.MembersResponse
 import com.example.msc_onlab.data.repository.household.HouseholdRepository
 import com.example.msc_onlab.data.repository.invitation.InvitationRepository
@@ -60,13 +60,14 @@ class MembersViewModel @Inject constructor(
     private fun inviteUser(username: String){
         _screenState.value = ScreenState.Loading()
 
-        val invitationData = CreateInvitationData(
-            household_id = LoggedPersonData.SELECTED_HOUSEHOLD_ID!!,
-            sender_id = LoggedPersonData.ID!!,
-            invited_user_name = username
-        )
-
         viewModelScope.launch(Dispatchers.IO) {
+            val user = invitationRepository.findUser(username).data!!
+
+            val invitationData = InvitationCreateData(
+                invited_user_id = user.id,
+                team_id = LoggedPersonData.SELECTED_TEAM_ID!!
+            )
+
             val result = invitationRepository.createInvite(invitationData)
 
             when(result){

@@ -51,6 +51,17 @@ class KeycloakRepository:
 
         return user
 
+    def get_user_by_username(self, username):
+        users = self.keycloak_admin.get_users({"username": username})
+
+        if not users:
+            return None
+
+        user = users[0]
+        user.pop("access", None)
+
+        return user
+
     def modify_user(self, user_id, first_name, last_name, email, password):
         response = self.keycloak_admin.update_user(
             user_id,

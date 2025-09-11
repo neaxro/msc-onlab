@@ -1,10 +1,9 @@
 package com.example.msc_onlab.data.remote
 
-import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationData
-import com.example.msc_onlab.data.model.household.invitation.GetInvitationsResponse
-import com.example.msc_onlab.data.model.household.invitation.RespondeInvitationResponse
-import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationResponse
+import com.example.msc_onlab.data.model.invitation.FindUserByUsernameResponse
 import com.example.msc_onlab.data.model.invitation.InvitationActiveInvites
+import com.example.msc_onlab.data.model.invitation.InvitationCreateData
+import com.example.msc_onlab.data.model.invitation.InvitationCreateResponse
 import com.example.msc_onlab.data.model.invitation.InvitationRespondResponse
 import com.example.msc_onlab.helpers.LoggedPersonData
 import retrofit2.Response
@@ -25,11 +24,18 @@ interface InvitationApi {
     ): Response<InvitationActiveInvites>
 
     @Headers("Content-Type: application/json")
-    @POST("/household/invite")
+    @GET("/auth/user-search/{username}")
+    suspend fun findUserByUsername(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("username") username: String
+    ): Response<FindUserByUsernameResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("/invitation/invitations")
     suspend fun createInvitation(
         @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
-        @Body invitationData: CreateInvitationData,
-    ): Response<CreateInvitationResponse>
+        @Body invitationData: InvitationCreateData,
+    ): Response<InvitationCreateResponse>
 
     @Headers("Content-Type: application/json")
     @PATCH("/invitation/invitations")
