@@ -5,6 +5,7 @@ import com.example.msc_onlab.data.model.household.invitation.RespondeInvitationR
 import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationData
 import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationResponse
 import com.example.msc_onlab.data.model.invitation.InvitationActiveInvites
+import com.example.msc_onlab.data.model.invitation.InvitationRespondResponse
 import com.example.msc_onlab.domain.wrappers.Resource
 
 interface InvitationRepository {
@@ -12,7 +13,5 @@ interface InvitationRepository {
 
     suspend fun createInvite(invitationData: CreateInvitationData): Resource<CreateInvitationResponse>
 
-    suspend fun acceptInvite(invitationId: String): Resource<RespondeInvitationResponse>
-
-    suspend fun declineInvite(invitationId: String): Resource<RespondeInvitationResponse>
+    suspend fun respondInvitation(decision: Boolean, invitationToken: String): Resource<InvitationRespondResponse>
 }

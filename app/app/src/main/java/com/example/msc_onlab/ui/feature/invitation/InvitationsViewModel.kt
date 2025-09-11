@@ -1,22 +1,13 @@
 package com.example.msc_onlab.ui.feature.invitation
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.msc_onlab.data.model.household.invitation.Invitation
-import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationData
-import com.example.msc_onlab.data.model.invitation.InvitationActiveInvites
 import com.example.msc_onlab.data.model.invitation.InvitationActiveInvitesItem
-import com.example.msc_onlab.data.model.login.LoginData
 import com.example.msc_onlab.data.repository.invitation.InvitationRepository
-import com.example.msc_onlab.data.repository.login.LoginRepository
 import com.example.msc_onlab.domain.wrappers.Resource
 import com.example.msc_onlab.domain.wrappers.ScreenState
-import com.example.msc_onlab.helpers.LoggedPersonData
-import com.example.msc_onlab.helpers.sha256
 import com.example.msc_onlab.ui.feature.login.LoginFieldErrors
-import com.example.msc_onlab.ui.feature.login.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,11 +47,11 @@ class InvitationsViewModel @Inject constructor(
         }
     }
 
-    private fun acceptInvitation(invitationId: String){
+    private fun acceptInvitation(invitationToken: String){
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result = invitationRepository.acceptInvite(invitationId)
+            val result = invitationRepository.respondInvitation(true,invitationToken)
 
             when(result){
                 is Resource.Success -> {
@@ -73,11 +64,11 @@ class InvitationsViewModel @Inject constructor(
         }
     }
 
-    private fun declineInvitation(invitationId: String){
+    private fun declineInvitation(invitationToken: String){
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result = invitationRepository.declineInvite(invitationId)
+            val result = invitationRepository.respondInvitation(false, invitationToken)
 
             when(result){
                 is Resource.Success -> {
@@ -97,12 +88,12 @@ class InvitationsViewModel @Inject constructor(
             }
 
             is InvitationAction.AcceptInvite -> {
-                acceptInvitation(action.invitationId)
+                acceptInvitation(action.invitationToken)
                 loadInvitations()
             }
 
             is InvitationAction.DeclineInvite -> {
-                declineInvitation(action.invitationId)
+                declineInvitation(action.invitationToken)
                 loadInvitations()
             }
         }
@@ -111,6 +102,6 @@ class InvitationsViewModel @Inject constructor(
 
 sealed class InvitationAction{
     object LoadInvitations : InvitationAction()
-    data class AcceptInvite(val invitationId: String) : InvitationAction()
-    data class DeclineInvite(val invitationId: String) : InvitationAction()
+    data class AcceptInvite(val invitationToken: String) : InvitationAction()
+    data class DeclineInvite(val invitationToken: String) : InvitationAction()
 }

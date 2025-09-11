@@ -58,11 +58,11 @@ fun InvitationsScreen(
                 items(invitations) { invitation ->
                     InvitationCard(
                         invitationData = invitation,
-                        onAccept = { invitationId ->
-                            viewModel.evoke(InvitationAction.AcceptInvite(invitationId))
+                        onAccept = { invitationToken ->
+                            viewModel.evoke(InvitationAction.AcceptInvite(invitationToken))
                         },
-                        onDecline = { invitationId ->
-                            viewModel.evoke(InvitationAction.DeclineInvite(invitationId))
+                        onDecline = { invitationToken ->
+                            viewModel.evoke(InvitationAction.DeclineInvite(invitationToken))
                         },
                         modifier = Modifier.padding(
                             start = 10.dp,

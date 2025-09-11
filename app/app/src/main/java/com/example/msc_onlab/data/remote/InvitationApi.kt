@@ -5,14 +5,17 @@ import com.example.msc_onlab.data.model.household.invitation.GetInvitationsRespo
 import com.example.msc_onlab.data.model.household.invitation.RespondeInvitationResponse
 import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationResponse
 import com.example.msc_onlab.data.model.invitation.InvitationActiveInvites
+import com.example.msc_onlab.data.model.invitation.InvitationRespondResponse
 import com.example.msc_onlab.helpers.LoggedPersonData
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface InvitationApi {
     @Headers("Content-Type: application/json")
@@ -29,16 +32,10 @@ interface InvitationApi {
     ): Response<CreateInvitationResponse>
 
     @Headers("Content-Type: application/json")
-    @POST("/household/accept-invite/{invitation_id}")
-    suspend fun acceptInvitation(
+    @PATCH("/invitation/invitations")
+    suspend fun respondInvitation(
         @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
-        @Path("invitation_id") invitationId: String,
-    ): Response<RespondeInvitationResponse>
-
-    @Headers("Content-Type: application/json")
-    @POST("/household/decline-invite/{invitation_id}")
-    suspend fun declineInvitation(
-        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
-        @Path("invitation_id") invitationId: String,
-    ): Response<RespondeInvitationResponse>
+        @Query("decision") decision: String,
+        @Query("token") invitationToken: String
+    ): Response<InvitationRespondResponse>
 }

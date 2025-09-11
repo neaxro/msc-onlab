@@ -6,6 +6,7 @@ import com.example.msc_onlab.data.model.household.invitation.RespondeInvitationR
 import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationData
 import com.example.msc_onlab.data.model.household.invitation.create.CreateInvitationResponse
 import com.example.msc_onlab.data.model.invitation.InvitationActiveInvites
+import com.example.msc_onlab.data.model.invitation.InvitationRespondResponse
 import com.example.msc_onlab.data.remote.HouseholdApi
 import com.example.msc_onlab.data.remote.InvitationApi
 import com.example.msc_onlab.domain.wrappers.Resource
@@ -58,35 +59,18 @@ class InvitationRepositoryImpl(
         return result
     }
 
-    override suspend fun acceptInvite(invitationId: String): Resource<RespondeInvitationResponse> {
+    override suspend fun respondInvitation(
+        decision: Boolean,
+        invitationToken: String
+    ): Resource<InvitationRespondResponse> {
         val result = try{
-            val response = api.acceptInvitation(invitationId = invitationId)
+            val response = api.respondInvitation(
+                decision = if (decision) "accept" else "decline",
+                invitationToken = invitationToken)
 
             // Check server response
             val res = if(response.code() == 200){
                 Resource.Success(message = "Successfully accepted invitation!", data = response.body()!!)
-            }
-            else{
-                // Server error
-                Resource.Error(message = response.errorBody()!!.string())
-            }
-
-            res
-        } catch (e: Exception){
-            // Network error
-            Resource.Error("Network error occurred.")
-        }
-
-        return result
-    }
-
-    override suspend fun declineInvite(invitationId: String): Resource<RespondeInvitationResponse> {
-        val result = try{
-            val response = api.declineInvitation(invitationId = invitationId)
-
-            // Check server response
-            val res = if(response.code() == 200){
-                Resource.Success(message = "Successfully declined invitation!", data = response.body()!!)
             }
             else{
                 // Server error
