@@ -86,7 +86,29 @@ class TaskRepositoryImpl(
 
             // Check server response
             val res = if(response.code() == 204){
-                Resource.Success(message = "Successfully created new task!", data = Unit)
+                Resource.Success(message = "Successfully updated task!", data = Unit)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result
+    }
+
+    override suspend fun deleteTask(taskId: Int): Resource<Unit> {
+        val result = try{
+            val response = api.deleteTask(taskId = taskId)
+
+            // Check server response
+            val res = if(response.code() == 204){
+                Resource.Success(message = "Successfully deleted task!", data = Unit)
             }
             else{
                 // Server error

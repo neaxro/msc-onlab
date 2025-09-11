@@ -135,25 +135,18 @@ class EditTaskViewModel @Inject constructor(
     private fun deleteTask(){
         _screenState.value = ScreenState.Loading()
 
-        /*
         viewModelScope.launch(Dispatchers.IO) {
-            var result = householdRepository.deleteTask(
-                householdId = LoggedPersonData.SELECTED_HOUSEHOLD_ID!!,
-                taskId = taskId
-            )
+            val result = taskRepository.deleteTask(taskId)
 
             when(result){
                 is Resource.Success -> {
                     _screenState.value = ScreenState.Success()
-
-                    val deleteData = result.data!!
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
         }
-         */
     }
 
     private fun updateResponsible(newResponsibleId: String) {

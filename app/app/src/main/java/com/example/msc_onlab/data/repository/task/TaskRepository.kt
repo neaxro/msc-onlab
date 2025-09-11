@@ -16,4 +16,6 @@ interface TaskRepository {
     suspend fun createTask(taskData: CreateTaskData): Resource<CreateTaskResponse>
 
     suspend fun updateTask(updateData: UpdateTaskData): Resource<Unit>
+
+    suspend fun deleteTask(taskId: Int): Resource<Unit>
 }

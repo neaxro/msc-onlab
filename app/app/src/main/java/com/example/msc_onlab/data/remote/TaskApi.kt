@@ -8,6 +8,7 @@ import com.example.msc_onlab.data.model.task.v2.update.UpdateTaskData
 import com.example.msc_onlab.helpers.LoggedPersonData
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
@@ -44,5 +45,12 @@ interface TaskApi {
     suspend fun updateTask(
         @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
         @Body updateData: UpdateTaskData
+    ): Response<Unit>
+
+    @Headers("Content-Type: application/json")
+    @DELETE("/task/tasks/{task_id}")
+    suspend fun deleteTask(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("task_id") taskId: Int
     ): Response<Unit>
 }
