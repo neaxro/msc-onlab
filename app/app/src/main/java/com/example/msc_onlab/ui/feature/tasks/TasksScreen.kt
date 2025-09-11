@@ -117,12 +117,7 @@ fun TasksScreen(
                 ) {
                     items(tasks) { task ->
                         TaskBriefListItem(
-                            title = task.title,
-                            id = task.id,
-                            responsibleProfilePictureName = "default",
-                            responsibleName = task.responsible.firstName,
-                            dueDate = task.due_date,
-                            isDone = task.isDone(),
+                            task = task,
                             onEdit = { id, title ->
                                 onEdit(id)
                             },
