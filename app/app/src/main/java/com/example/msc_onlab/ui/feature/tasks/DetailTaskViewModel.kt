@@ -12,6 +12,7 @@ import com.example.msc_onlab.data.model.task.ResponsibleId
 import com.example.msc_onlab.data.model.task.getPathData
 import com.example.msc_onlab.data.model.task.v2.GetTasksResponseItem
 import com.example.msc_onlab.data.model.task.v2.update.UpdateTaskData
+import com.example.msc_onlab.data.model.team.TeamInfo
 import com.example.msc_onlab.data.model.team.TeamMembersItem
 import com.example.msc_onlab.data.repository.household.HouseholdRepository
 import com.example.msc_onlab.data.repository.invitation.InvitationRepository
@@ -31,6 +32,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,6 +52,9 @@ class EditTaskViewModel @Inject constructor(
     private val _members = MutableStateFlow<List<TeamMembersItem>>(listOf())
     val members = _members.asStateFlow()
 
+    private val _teamInfo = MutableStateFlow<TeamInfo?>(null)
+    val teamInfo = _teamInfo.asStateFlow()
+
     private val _errors = MutableStateFlow<EditTaskFieldErrors>(EditTaskFieldErrors())
     val errors = _errors.asStateFlow()
 
@@ -63,6 +68,26 @@ class EditTaskViewModel @Inject constructor(
 
         if(LoggedPersonData.SELECTED_TEAM_ID != null) {
             getMembers()
+            getTeamInfo()
+        }
+    }
+
+    private fun getTeamInfo() {
+        _screenState.value = ScreenState.Loading()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            var result = teamRepository.getTeamInfo(LoggedPersonData.SELECTED_TEAM_ID!!)
+
+            when(result){
+                is Resource.Success -> {
+                    _screenState.value = ScreenState.Success()
+
+                    _teamInfo.value = result.data!!
+                }
+                is Resource.Error -> {
+                    _screenState.value = ScreenState.Error(message = result.message!!)
+                }
+            }
         }
     }
 
@@ -107,14 +132,13 @@ class EditTaskViewModel @Inject constructor(
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            // TODO: FIX
             val status = teamRepository.getTeamInfo(LoggedPersonData.SELECTED_TEAM_ID!!).data!!
 
             val updateData = UpdateTaskData(
                 description = _task.value!!.description,
                 due_date = _task.value!!.due_date,
                 id = _task.value!!.id,
-                status_id = status.statuses.first().id,
+                status_id = status.statuses.first { it -> it.name == _task.value!!.status }.id,
                 responsible_id = _task.value!!.responsible.id,
                 title = _task.value!!.title
             )
@@ -253,6 +277,11 @@ class EditTaskViewModel @Inject constructor(
             EditTasksAction.DeleteTask -> {
                 deleteTask()
             }
+
+            is EditTasksAction.UpdateStatus -> {
+                val selectedStatus = _teamInfo.value?.statuses?.first { status -> status.id == action.statusId }
+                _task.update { it?.copy(status = selectedStatus!!.name) }
+            }
         }
     }
 }
@@ -262,6 +291,7 @@ sealed class EditTasksAction{
     data class UpdateDueDate(val dueDate: String) : EditTasksAction()
     data class UpdateResponsible(val responsibleId: String) : EditTasksAction()
     data class UpdateDescription(val description: String) : EditTasksAction()
+    data class UpdateStatus(val statusId: Int) : EditTasksAction()
     data class ChangeSubtaskStatus(val subtaskId: Int, val status: Boolean) : EditTasksAction()
     data class DeleteSubtask(val subtaskId: Int) : EditTasksAction()
     object SaveTask : EditTasksAction()

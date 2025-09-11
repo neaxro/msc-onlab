@@ -104,7 +104,7 @@ fun TaskBriefListItem(
                 Spacer(modifier = Modifier.padding(vertical = 3.dp))
 
                 ListItemDetail("Responsible", "${task.responsible.firstName}, ${task.responsible.lastName}")
-                ListItemDetail("Due date", task.transformDate())
+                ListItemDetail("Due date", task.due_date)
 
                 Spacer(modifier = Modifier.padding(vertical = 3.dp))
                 StatusBadge(task.status)
@@ -162,13 +162,6 @@ fun StatusBadge(
             fontWeight = FontWeight.SemiBold,
         )
     }
-}
-
-fun GetTasksResponseItem.transformDate(): String {
-    val inputFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)
-    val outputFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
-    val date = LocalDate.parse(this.due_date, inputFormatter)
-    return date.format(outputFormatter)
 }
 
 

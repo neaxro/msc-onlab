@@ -37,7 +37,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.msc_onlab.data.model.task.v2.isDone
 import com.example.msc_onlab.ui.feature.common.DeleteDialog
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar

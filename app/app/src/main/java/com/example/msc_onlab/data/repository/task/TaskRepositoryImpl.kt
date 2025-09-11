@@ -5,6 +5,7 @@ import com.example.msc_onlab.data.model.task.v2.GetTasksResponseItem
 import com.example.msc_onlab.data.model.task.v2.TasksResponse
 import com.example.msc_onlab.data.model.task.v2.create.CreateTaskData
 import com.example.msc_onlab.data.model.task.v2.create.CreateTaskResponse
+import com.example.msc_onlab.data.model.task.v2.transformDate
 import com.example.msc_onlab.data.model.task.v2.update.UpdateTaskData
 import com.example.msc_onlab.data.remote.TaskApi
 import com.example.msc_onlab.domain.wrappers.Resource
@@ -20,7 +21,9 @@ class TaskRepositoryImpl(
 
             // Check server response
             val res = if(response.code() == 200){
-                Resource.Success(message = "Successfully fetched all tasks!", data = response.body()!!)
+                val data = response.body()!!
+                data.forEach { it.transformDate() }
+                Resource.Success(message = "Successfully fetched all tasks!", data = data)
             }
             else{
                 // Server error
@@ -42,7 +45,9 @@ class TaskRepositoryImpl(
 
             // Check server response
             val res = if(response.code() == 200){
-                Resource.Success(message = "Successfully fetched task!", data = response.body()!!)
+                val data = response.body()!!
+                data.transformDate()
+                Resource.Success(message = "Successfully fetched task!", data = data)
             }
             else{
                 // Server error

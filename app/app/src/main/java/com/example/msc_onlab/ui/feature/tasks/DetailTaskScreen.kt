@@ -54,6 +54,7 @@ import com.example.msc_onlab.ui.feature.common.MemberDropDownMenu
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
 import com.example.msc_onlab.ui.feature.common.SmartOutlinedTextField
+import com.example.msc_onlab.ui.feature.common.StatusDropDownMenu
 import com.example.msc_onlab.ui.feature.common.SubtaskBriefListItem
 import com.example.msc_onlab.ui.theme.MsconlabTheme
 import com.example.msc_onlab.ui.theme.Shapes
@@ -69,6 +70,7 @@ fun EditTaskScreen(
     val context = LocalContext.current
     val task = viewModel.task.collectAsState().value
     val members = viewModel.members.collectAsState().value
+    val teamInfo = viewModel.teamInfo.collectAsState().value
     val errors = viewModel.errors.collectAsState().value
 
     var selectedTabIndex by rememberSaveable { mutableStateOf<TaskEditPage>(TaskEditPage.SubtasksPage) }
@@ -94,7 +96,7 @@ fun EditTaskScreen(
         },
         modifier = modifier.fillMaxSize(),
     ) { padding ->
-        if(task != null && members != null) {
+        if(task != null && members.isNotEmpty() && teamInfo != null) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -175,6 +177,17 @@ fun EditTaskScreen(
                                 maxLength = Constants.MAX_TASK_DESCRIPTION_LENGTH,
                                 readOnly = readOnly,
                                 enabled = true
+                            )
+
+                            Spacer(modifier = Modifier.padding(vertical = 10.dp))
+
+                            StatusDropDownMenu(
+                                teamStatuses = teamInfo.statuses,
+                                selected = task.status,
+                                onValueChange = { id ->
+                                    viewModel.evoke(EditTasksAction.UpdateStatus(id))
+                                },
+                                label = { Text(text = "Status") }
                             )
 
                             Spacer(modifier = Modifier.padding(vertical = 15.dp))
