@@ -100,7 +100,7 @@ fun MembersScreen(
         },
         floatingActionButtonPosition = FabPosition.Center
     ) { padding ->
-        if (members != null && members.data.isNotEmpty()) {
+        if (members.isNotEmpty()) {
             LazyColumn(
                 modifier = modifier
                     .fillMaxSize()
@@ -108,15 +108,15 @@ fun MembersScreen(
                 state = lazyListState,
                 contentPadding = PaddingValues(all = 10.dp),
             ) {
-                items(members.data) { member ->
+                items(members) { member ->
                     MemberBriefListItem(
-                        id = member._id.`$oid`,
-                        firstName = member.first_name,
-                        lastName = member.last_name,
+                        id = member.id,
+                        firstName = member.firstName,
+                        lastName = member.lastName,
                         email = member.email,
-                        responsibleProfilePictureName = member.profile_picture
+                        responsibleProfilePictureName = "default"
                     )
-                    if(members.data.last() != member){
+                    if(members.last() != member){
                         HorizontalDivider(modifier = Modifier.scale(0.9f))
                     }
                 }

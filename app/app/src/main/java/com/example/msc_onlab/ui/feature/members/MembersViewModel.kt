@@ -7,8 +7,10 @@ import com.example.msc_onlab.data.model.household.HouseholdCreateData
 import com.example.msc_onlab.data.model.household.HouseholdTasksResponse
 import com.example.msc_onlab.data.model.invitation.InvitationCreateData
 import com.example.msc_onlab.data.model.members.MembersResponse
+import com.example.msc_onlab.data.model.team.TeamMembersItem
 import com.example.msc_onlab.data.repository.household.HouseholdRepository
 import com.example.msc_onlab.data.repository.invitation.InvitationRepository
+import com.example.msc_onlab.data.repository.team.TeamRepository
 import com.example.msc_onlab.domain.wrappers.Resource
 import com.example.msc_onlab.domain.wrappers.ScreenState
 import com.example.msc_onlab.helpers.LoggedPersonData
@@ -23,18 +25,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MembersViewModel @Inject constructor(
-    private val householdRepository: HouseholdRepository,
+    private val teamRepository: TeamRepository,
     private val invitationRepository: InvitationRepository,
     private val applicationContext: Context
 ) : ViewModel() {
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
     val screenState = _screenState.asStateFlow()
 
-    private val _members = MutableStateFlow<MembersResponse?>(null)
+    private val _members = MutableStateFlow<List<TeamMembersItem>>(listOf())
     val members = _members.asStateFlow()
 
     init {
-        if(LoggedPersonData.SELECTED_HOUSEHOLD_ID != null){
+        if(LoggedPersonData.SELECTED_TEAM_ID != null){
             getMembers()
         }
     }
@@ -43,7 +45,7 @@ class MembersViewModel @Inject constructor(
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            var result = householdRepository.getMembers(householdId = LoggedPersonData.SELECTED_HOUSEHOLD_ID!!)
+            val result = teamRepository.getTeamMembers(teamId = LoggedPersonData.SELECTED_TEAM_ID!!)
 
             when(result){
                 is Resource.Success -> {
