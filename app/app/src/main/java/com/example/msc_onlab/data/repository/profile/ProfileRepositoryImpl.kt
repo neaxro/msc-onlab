@@ -2,9 +2,8 @@ package com.example.msc_onlab.data.repository.profile
 
 import android.app.Application
 import com.example.msc_onlab.data.model.profile.GetProfileResponse
-import com.example.msc_onlab.data.model.profile.ProfileResponse
 import com.example.msc_onlab.data.model.profile.UpdateProfileData
-import com.example.msc_onlab.data.remote.LoginApi
+import com.example.msc_onlab.data.model.profile.UpdateProfileResponse
 import com.example.msc_onlab.data.remote.ProfileApi
 import com.example.msc_onlab.domain.wrappers.Resource
 
@@ -34,9 +33,9 @@ class ProfileRepositoryImpl (
         return result
     }
 
-    override suspend fun updateProfile(updateData: UpdateProfileData): Resource<ProfileResponse> {
+    override suspend fun updateProfile(userId: String, updateData: UpdateProfileData): Resource<UpdateProfileResponse> {
         val result = try{
-            val response = api.patchProfile(updateProfileData = updateData)
+            val response = api.patchProfile(userId = userId, updateProfileData = updateData)
 
             // Check server response
             val res = if(response.code() == 200){

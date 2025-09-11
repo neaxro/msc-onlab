@@ -2,12 +2,10 @@ package com.example.msc_onlab.ui.feature.profile
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.provider.ContactsContract.Data
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.msc_onlab.data.model.login.LoginData
-import com.example.msc_onlab.data.model.profile.Id
-import com.example.msc_onlab.data.model.profile.ProfileData
+import com.example.msc_onlab.data.model.profile.GetProfileResponse
 import com.example.msc_onlab.data.model.profile.UpdateProfileData
 import com.example.msc_onlab.data.repository.login.LoginRepository
 import com.example.msc_onlab.data.repository.profile.ProfileRepository
@@ -18,21 +16,18 @@ import com.example.msc_onlab.helpers.DataFieldErrors
 import com.example.msc_onlab.helpers.LoggedPersonData
 import com.example.msc_onlab.helpers.clear
 import com.example.msc_onlab.helpers.or
-import com.example.msc_onlab.helpers.sha256
 import com.example.msc_onlab.helpers.validateFirstname
 import com.example.msc_onlab.helpers.validateLastname
 import com.example.msc_onlab.helpers.validatePasswordsMatch
 import com.example.msc_onlab.helpers.validateUserEmail
 import com.example.msc_onlab.helpers.validateUserPassword
 import com.example.msc_onlab.helpers.validateUsername
-import com.example.msc_onlab.ui.feature.register.RegisterFieldErrors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,7 +47,7 @@ class ProfileViewModel @Inject constructor(
     val errors = _errors.asStateFlow()
 
     init {
-        //loadProfile()
+        loadProfile()
     }
 
     private fun loadProfile(){
@@ -65,7 +60,7 @@ class ProfileViewModel @Inject constructor(
                 is Resource.Success -> {
                     _screenState.value = ScreenState.Success()
 
-                    _user.value = result.data!!.data.toTempData()
+                    _user.value = result.data!!.toTempData()
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
@@ -78,7 +73,7 @@ class ProfileViewModel @Inject constructor(
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            var result = profileRepository.updateProfile(updateData)
+            var result = profileRepository.updateProfile(userId = LoggedPersonData.ID!!, updateData = updateData)
 
             when(result){
                 is Resource.Success -> {
@@ -91,7 +86,7 @@ class ProfileViewModel @Inject constructor(
                     )
 
                     // Update the current token
-                    LoggedPersonData.TOKEN = result.data!!.data
+                    // LoggedPersonData.TOKEN = result.data!!.data
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
@@ -248,7 +243,7 @@ class ProfileViewModel @Inject constructor(
             var result = loginRepository.loginPerson(
                 LoginData(
                     username = LoggedPersonData.USERNAME!!,
-                    password = typedOldPassword.sha256()
+                    password = typedOldPassword
                 )
             )
 
@@ -346,7 +341,7 @@ fun ProfileFieldErrors.anyErrors(): Boolean {
 }
 
 data class UpdateProfileTempData(
-    val id: Id,
+    val id: String,
     val email: String,
     val firstName: String,
     val lastName: String,
@@ -357,13 +352,13 @@ data class UpdateProfileTempData(
     val newRePassword: String
 )
 
-private fun ProfileData.toTempData(): UpdateProfileTempData{
+private fun GetProfileResponse.toTempData(): UpdateProfileTempData{
     return UpdateProfileTempData(
-        id = this._id,
+        id = this.id,
         email = this.email,
-        firstName = this.first_name,
-        lastName = this.last_name,
-        profilePicture = this.profile_picture,
+        firstName = this.firstName,
+        lastName = this.lastName,
+        profilePicture = "default",
         username = this.username,
         oldPassword = "",
         newPassword = "",
@@ -373,12 +368,10 @@ private fun ProfileData.toTempData(): UpdateProfileTempData{
 
 private fun UpdateProfileTempData.toUpdateData(isPasswordChange: Boolean): UpdateProfileData {
     return UpdateProfileData(
-        _id = this.id,
         username = this.username,
         email = this.email,
         first_name = this.firstName,
         last_name = this.lastName,
-        profile_picture = this.profilePicture,
-        password = if(isPasswordChange) this.newPassword.sha256() else this.oldPassword.sha256()
+        password = if(isPasswordChange) this.newPassword else this.oldPassword
     )
 }

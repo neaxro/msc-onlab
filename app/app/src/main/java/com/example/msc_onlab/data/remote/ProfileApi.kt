@@ -1,10 +1,8 @@
 package com.example.msc_onlab.data.remote
 
 import com.example.msc_onlab.data.model.profile.GetProfileResponse
-import com.example.msc_onlab.data.model.profile.ProfileResponse
 import com.example.msc_onlab.data.model.profile.UpdateProfileData
-import com.example.msc_onlab.data.model.task.patch.TaskPatchData
-import com.example.msc_onlab.data.model.task.patch.TaskPatchResponse
+import com.example.msc_onlab.data.model.profile.UpdateProfileResponse
 import com.example.msc_onlab.helpers.LoggedPersonData
 import retrofit2.Response
 import retrofit2.http.Body
@@ -17,16 +15,17 @@ import retrofit2.http.Path
 interface ProfileApi {
 
     @Headers("Content-Type: application/json")
-    @GET("/user/{user_id}")
+    @GET("/auth/user/{user_id}")
     suspend fun getProfile(
         @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
         @Path("user_id") userId: String,
     ): Response<GetProfileResponse>
 
     @Headers("Content-Type: application/json")
-    @PATCH("/user")
+    @PATCH("/auth/user/{user_id}")
     suspend fun patchProfile(
         @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("user_id") userId: String,
         @Body updateProfileData: UpdateProfileData
-    ): Response<ProfileResponse>
+    ): Response<UpdateProfileResponse>
 }

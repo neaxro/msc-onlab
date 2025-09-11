@@ -13,9 +13,9 @@ object LoggedPersonData {
             if (value.isEmpty()) return
 
             jwt = JWT(value)
-            this.ID = jwt.getClaim("id").asString()
-            this.USERNAME = jwt.getClaim("username").asString()
-            this.PROFILE_PICTURE = jwt.getClaim("profile_picture").asString()
+            this.ID = jwt.getClaim("sub").asString()
+            this.USERNAME = jwt.getClaim("preferred_username").asString()
+            this.PROFILE_PICTURE = "default"
 
             field = value
         }
