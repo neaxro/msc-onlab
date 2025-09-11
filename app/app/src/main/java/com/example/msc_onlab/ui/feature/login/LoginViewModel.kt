@@ -54,11 +54,6 @@ class LoginViewModel @Inject constructor(
     private fun login(){
         _screenState.value = ScreenState.Loading()
 
-
-        val hashedLoginData = _loginData.value.copy(
-            password = _loginData.value.password.sha256()
-        )
-
         viewModelScope.launch(Dispatchers.IO) {
             val result = loginRepository.loginPerson(loginData = _loginData.value)
 

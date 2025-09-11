@@ -48,12 +48,8 @@ class RegisterViewModel @Inject constructor(
 
         _screenState.value = ScreenState.Loading()
 
-        val hashedRegisterData = _registerData.value.copy(
-            password = _registerData.value.password.sha256()
-        )
-
         viewModelScope.launch(Dispatchers.IO) {
-            var result = registerRepository.register(registerData = hashedRegisterData)
+            var result = registerRepository.register(registerData = _registerData.value)
 
             when(result){
                 is Resource.Success -> {
