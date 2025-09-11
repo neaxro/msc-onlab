@@ -40,14 +40,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.example.msc_onlab.data.model.members.Id
 import com.example.msc_onlab.data.model.members.MemberData
+import com.example.msc_onlab.data.model.team.TeamMembers
+import com.example.msc_onlab.data.model.team.TeamMembersItem
 import com.example.msc_onlab.helpers.ResourceLocator
 import com.example.msc_onlab.ui.theme.MsconlabTheme
 import java.lang.reflect.Member
 
 @Composable
 fun MemberDropDownMenu(
-    members: List<MemberData>,
-    selected: MemberData,
+    members: List<TeamMembersItem>,
+    selected: TeamMembersItem,
     onValueChange: (String) -> Unit,
     label: @Composable() (() -> Unit)? = null,
     modifier: Modifier = Modifier
@@ -92,7 +94,7 @@ fun MemberDropDownMenu(
             members.forEach { member ->
                 DropdownMenuItem(
                     onClick = {
-                        onValueChange(member._id.`$oid`)
+                        onValueChange(member.id)
                         expanded = false
                     },
                     text = {
@@ -104,7 +106,7 @@ fun MemberDropDownMenu(
                                 modifier = Modifier.size(30.dp),
                             ) {
                                 Image(
-                                    painter = painterResource(id = ResourceLocator.getProfilePicture(member.profile_picture)),
+                                    painter = painterResource(id = ResourceLocator.getProfilePicture("default")),
                                     contentDescription = "Profile picture",
                                     contentScale = ContentScale.Crop,
                                 )
@@ -121,10 +123,11 @@ fun MemberDropDownMenu(
     }
 }
 
-private fun getDropdownLabel(member: MemberData): String {
-    return "${member.first_name}, ${member.last_name}"
+private fun getDropdownLabel(member: TeamMembersItem): String {
+    return "${member.firstName}, ${member.lastName}"
 }
 
+/*
 @Preview(showBackground = true)
 @Composable
 fun MemberDropDownMenuPreview() {
@@ -160,3 +163,4 @@ fun MemberDropDownMenuPreview() {
 
     }
 }
+ */

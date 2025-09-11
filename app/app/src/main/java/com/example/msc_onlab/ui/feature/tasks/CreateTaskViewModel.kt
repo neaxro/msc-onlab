@@ -3,10 +3,11 @@ package com.example.msc_onlab.ui.feature.tasks
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.msc_onlab.data.model.members.MemberData
-import com.example.msc_onlab.data.model.task.create.CreateTaskData
-import com.example.msc_onlab.data.model.task.create.Subtask
-import com.example.msc_onlab.data.repository.household.HouseholdRepository
+import com.example.msc_onlab.data.model.task.v2.create.CreateTaskData
+import com.example.msc_onlab.data.model.task.v2.create.Subtask
+import com.example.msc_onlab.data.model.team.TeamMembersItem
+import com.example.msc_onlab.data.repository.task.TaskRepository
+import com.example.msc_onlab.data.repository.team.TeamRepository
 import com.example.msc_onlab.domain.wrappers.Resource
 import com.example.msc_onlab.domain.wrappers.ScreenState
 import com.example.msc_onlab.helpers.DataFieldErrors
@@ -24,38 +25,41 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateTaskViewModel @Inject constructor(
-    private val householdRepository: HouseholdRepository,
+    private val taskRepository: TaskRepository,
+    private val teamRepository: TeamRepository,
     private val applicationContext: Context
 ) : ViewModel() {
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
     val screenState = _screenState.asStateFlow()
 
-    private val _task = MutableStateFlow<CreateTaskData>(CreateTaskData("", "", "", listOf(), ""))
+    private val _task = MutableStateFlow<CreateTaskData>(CreateTaskData())
     val task = _task.asStateFlow()
 
-    private val _members = MutableStateFlow<List<MemberData>?>(null)
+    private val _members = MutableStateFlow<List<TeamMembersItem>>(listOf())
     val members = _members.asStateFlow()
 
     private val _errors = MutableStateFlow<TaskFieldErrors>(TaskFieldErrors())
     val errors = _errors.asStateFlow()
 
     init {
-        getMembers()
+        if(LoggedPersonData.SELECTED_TEAM_ID != null){
+            getMembers()
+        }
     }
 
     private fun getMembers(){
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            var result = householdRepository.getMembers(householdId = LoggedPersonData.SELECTED_HOUSEHOLD_ID!!)
+            var result = teamRepository.getTeamMembers(LoggedPersonData.SELECTED_TEAM_ID!!)
 
             when(result){
                 is Resource.Success -> {
                     _screenState.value = ScreenState.Success()
-                    _members.value = result.data!!.data
+                    _members.value = result.data!!
 
                     // Assign the first member to the task by default
-                    _task.update { it.copy(responsible_id = _members.value!!.first()._id.`$oid`) }
+                    _task.update { it.copy(responsible_id = _members.value.first().id) }
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
@@ -68,15 +72,16 @@ class CreateTaskViewModel @Inject constructor(
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            var result = householdRepository.createTask(
-                householdId = LoggedPersonData.SELECTED_HOUSEHOLD_ID!!,
-                taskData = _task.value
+
+            val result = taskRepository.createTask(
+                taskData = _task.value.copy(
+                    team_id = LoggedPersonData.SELECTED_TEAM_ID!!
+                )
             )
 
             when(result){
                 is Resource.Success -> {
                     _screenState.value = ScreenState.Success()
-                    val result = result.data!!.data
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
@@ -141,7 +146,7 @@ class CreateTaskViewModel @Inject constructor(
 
 
             is CreateTasksAction.AddSubtask -> {
-                val newSubtask = Subtask(title = action.name, type = "checkbox")
+                val newSubtask = Subtask(title = action.name, done = false)
                 val subtasks = listOf(*_task.value.subtasks.toTypedArray(), newSubtask)
 
                 _task.update {

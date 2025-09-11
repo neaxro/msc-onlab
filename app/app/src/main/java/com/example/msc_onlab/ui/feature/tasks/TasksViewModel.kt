@@ -61,9 +61,9 @@ class TasksViewModel @Inject constructor(
 
     private fun updateTask(taskId: Int, state: Boolean){
         _screenState.value = ScreenState.Loading()
-        /*
 
         viewModelScope.launch(Dispatchers.IO) {
+            /*
             var result = householdRepository.patchTask(
                 householdId = LoggedPersonData.SELECTED_HOUSEHOLD_ID!!,
                 taskId = taskId,
@@ -87,8 +87,9 @@ class TasksViewModel @Inject constructor(
                     _screenState.value = ScreenState.Error(message = result.message!!)
                 }
             }
+
+             */
         }
-         */
     }
 
     fun evoke(action: TasksAction){

@@ -1,9 +1,14 @@
 package com.example.msc_onlab.data.repository.task
 
 import android.app.Application
+import com.example.msc_onlab.data.model.task.v2.GetTasksResponseItem
 import com.example.msc_onlab.data.model.task.v2.TasksResponse
+import com.example.msc_onlab.data.model.task.v2.create.CreateTaskData
+import com.example.msc_onlab.data.model.task.v2.create.CreateTaskResponse
+import com.example.msc_onlab.data.model.task.v2.update.UpdateTaskData
 import com.example.msc_onlab.data.remote.TaskApi
 import com.example.msc_onlab.domain.wrappers.Resource
+import retrofit2.Response
 
 class TaskRepositoryImpl(
     private val api: TaskApi,
@@ -16,6 +21,72 @@ class TaskRepositoryImpl(
             // Check server response
             val res = if(response.code() == 200){
                 Resource.Success(message = "Successfully fetched all tasks!", data = response.body()!!)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result
+    }
+
+    override suspend fun getTask(taskId: Int): Resource<GetTasksResponseItem> {
+        val result = try{
+            val response = api.getTask(taskId = taskId)
+
+            // Check server response
+            val res = if(response.code() == 200){
+                Resource.Success(message = "Successfully fetched task!", data = response.body()!!)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result
+    }
+
+    override suspend fun createTask(taskData: CreateTaskData): Resource<CreateTaskResponse> {
+        val result = try{
+            val response = api.createTask(task = taskData)
+
+            // Check server response
+            val res = if(response.code() == 201){
+                Resource.Success(message = "Successfully created new task!", data = response.body()!!)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result
+    }
+
+    override suspend fun updateTask(updateData: UpdateTaskData): Resource<Unit> {
+        val result = try{
+            val response = api.updateTask(updateData = updateData)
+
+            // Check server response
+            val res = if(response.code() == 204){
+                Resource.Success(message = "Successfully created new task!", data = Unit)
             }
             else{
                 // Server error

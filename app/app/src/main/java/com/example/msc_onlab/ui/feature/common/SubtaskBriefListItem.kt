@@ -36,11 +36,11 @@ import com.example.msc_onlab.ui.theme.MsconlabTheme
 
 @Composable
 fun SubtaskBriefListItem(
-    id: String,
+    id: Int,
     isDone: Boolean,
     title: String,
-    onDoneButton: (String, Boolean) -> Unit,
-    onDelete: (String) -> Unit
+    onDoneButton: (Int, Boolean) -> Unit,
+    onDelete: (Int) -> Unit
 ){
     Row(
         modifier = Modifier
@@ -102,6 +102,7 @@ fun SubtaskBriefListItem(
     }
 }
 
+/*
 @Preview(showBackground = true)
 @Composable
 private fun SBLI() {
@@ -118,3 +119,4 @@ private fun SBLI() {
         }
     }
 }
+ */

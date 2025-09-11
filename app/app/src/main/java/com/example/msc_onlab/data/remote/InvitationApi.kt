@@ -1,6 +1,6 @@
 package com.example.msc_onlab.data.remote
 
-import com.example.msc_onlab.data.model.invitation.FindUserByUsernameResponse
+import com.example.msc_onlab.data.model.invitation.FindUserResponse
 import com.example.msc_onlab.data.model.invitation.InvitationActiveInvites
 import com.example.msc_onlab.data.model.invitation.InvitationCreateData
 import com.example.msc_onlab.data.model.invitation.InvitationCreateResponse
@@ -28,7 +28,14 @@ interface InvitationApi {
     suspend fun findUserByUsername(
         @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
         @Path("username") username: String
-    ): Response<FindUserByUsernameResponse>
+    ): Response<FindUserResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("/auth/user/{user_id}")
+    suspend fun findUserById(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("user_id") userId: String
+    ): Response<FindUserResponse>
 
     @Headers("Content-Type: application/json")
     @POST("/invitation/invitations")

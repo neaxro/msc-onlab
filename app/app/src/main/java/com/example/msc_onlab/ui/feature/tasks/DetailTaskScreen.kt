@@ -149,7 +149,7 @@ fun EditTaskScreen(
 
                             MemberDropDownMenu(
                                 members = members,
-                                selected = members.firstOrNull { it._id.`$oid` == task.responsible_id.`$oid` }
+                                selected = members.firstOrNull { it.id == task.responsible.id }
                                     ?: members.first(),
                                 onValueChange = { newResponsibleId ->
                                     viewModel.evoke(
@@ -205,7 +205,7 @@ fun EditTaskScreen(
                             ) {
                                 items(task.subtasks) { subtask ->
                                     SubtaskBriefListItem(
-                                        id = subtask._id.`$oid`,
+                                        id = subtask.id,
                                         isDone = subtask.done,
                                         title = subtask.title,
                                         onDoneButton = { id, isDone ->

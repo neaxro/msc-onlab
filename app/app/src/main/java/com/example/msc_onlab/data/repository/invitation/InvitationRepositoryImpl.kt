@@ -1,7 +1,7 @@
 package com.example.msc_onlab.data.repository.invitation
 
 import android.app.Application
-import com.example.msc_onlab.data.model.invitation.FindUserByUsernameResponse
+import com.example.msc_onlab.data.model.invitation.FindUserResponse
 import com.example.msc_onlab.data.model.invitation.InvitationActiveInvites
 import com.example.msc_onlab.data.model.invitation.InvitationCreateData
 import com.example.msc_onlab.data.model.invitation.InvitationCreateResponse
@@ -36,9 +36,31 @@ class InvitationRepositoryImpl(
         return result
     }
 
-    override suspend fun findUser(username: String): Resource<FindUserByUsernameResponse> {
+    override suspend fun findUser(username: String): Resource<FindUserResponse> {
         val result = try{
             val response = api.findUserByUsername(username = username)
+
+            // Check server response
+            val res = if(response.code() == 200){
+                Resource.Success(message = "Successfully find user!", data = response.body()!!)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result
+    }
+
+    override suspend fun findUserById(userId: String): Resource<FindUserResponse> {
+        val result = try{
+            val response = api.findUserById(userId = userId)
 
             // Check server response
             val res = if(response.code() == 200){

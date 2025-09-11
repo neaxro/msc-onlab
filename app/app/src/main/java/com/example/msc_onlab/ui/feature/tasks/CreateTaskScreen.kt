@@ -76,7 +76,7 @@ fun CreateTaskScreen(
         },
         modifier = modifier.fillMaxSize(),
     ) { padding ->
-        if(members != null) {
+        if(members.isNotEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -132,8 +132,7 @@ fun CreateTaskScreen(
 
                             MemberDropDownMenu(
                                 members = members,
-                                selected = members.firstOrNull { it._id.`$oid` == task.responsible_id }
-                                    ?: members.first(),
+                                selected = members.firstOrNull { it.id == task.responsible_id } ?: members.first(),
                                 onValueChange = { newResponsibleId ->
                                     viewModel.evoke(CreateTasksAction.UpdateResponsible(newResponsibleId))
                                 },
@@ -162,7 +161,7 @@ fun CreateTaskScreen(
                                 onClick = {
                                     controller?.hide()
                                     viewModel.evoke(CreateTasksAction.CreateTask)
-                                    onNavigateBack()
+                                    // onNavigateBack()
                                 },
                                 modifier = Modifier.width(250.dp),
                                 shape = Shapes.small,
