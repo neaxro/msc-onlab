@@ -46,13 +46,13 @@ import com.example.msc_onlab.ui.theme.MsconlabTheme
 @Composable
 fun TaskBriefListItem(
     title: String,
-    id: String,
+    id: Int,
     responsibleProfilePictureName: String,
     responsibleName: String,
     dueDate: String,
     isDone: Boolean,
-    onEdit: (String, String) -> Unit,
-    onClick: (String, Boolean) -> Unit,
+    onEdit: (Int, String) -> Unit,
+    onClick: (Int, Boolean) -> Unit,
 ){
     Row(
         modifier = Modifier

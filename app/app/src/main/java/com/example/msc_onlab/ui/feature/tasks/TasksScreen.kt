@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.msc_onlab.data.model.task.v2.isDone
 import com.example.msc_onlab.ui.feature.common.DeleteDialog
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
@@ -47,7 +48,7 @@ import com.example.msc_onlab.ui.feature.common.TaskBriefListItem
 fun TasksScreen(
     onCreateTask: () -> Unit,
     viewModel: TasksViewModel = hiltViewModel(),
-    onEdit: (String) -> Unit,
+    onEdit: (Int) -> Unit,
     modifier: Modifier = Modifier
 ){
     val context = LocalContext.current
@@ -108,20 +109,20 @@ fun TasksScreen(
         ) {
             // TODO: Row of FilterChips for filtering tasks
 
-            if(tasks != null && tasks.data.isNotEmpty()) {
+            if(tasks.isNotEmpty()) {
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
                     state = lazyListState,
                     contentPadding = PaddingValues(all = 10.dp),
                 ) {
-                    items(tasks.data) { task ->
+                    items(tasks) { task ->
                         TaskBriefListItem(
                             title = task.title,
-                            id = task._id.`$oid`,
-                            responsibleProfilePictureName = task.responsible.profile_picture,
-                            responsibleName = task.responsible.first_name,
+                            id = task.id,
+                            responsibleProfilePictureName = "default",
+                            responsibleName = task.responsible.firstName,
                             dueDate = task.due_date,
-                            isDone = task.done,
+                            isDone = task.isDone(),
                             onEdit = { id, title ->
                                 onEdit(id)
                             },
@@ -132,7 +133,7 @@ fun TasksScreen(
                                 ))
                             }
                         )
-                        if(tasks.data.last() != task){
+                        if(tasks.last() != task){
                             HorizontalDivider(modifier = Modifier.scale(0.9f))
                         }
                     }

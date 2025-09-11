@@ -6,6 +6,7 @@ import com.example.msc_onlab.data.remote.InvitationApi
 import com.example.msc_onlab.data.remote.LoginApi
 import com.example.msc_onlab.data.remote.ProfileApi
 import com.example.msc_onlab.data.remote.RegisterApi
+import com.example.msc_onlab.data.remote.TaskApi
 import com.example.msc_onlab.data.remote.TeamApi
 import com.example.msc_onlab.data.repository.household.HouseholdRepository
 import com.example.msc_onlab.data.repository.household.HouseholdRepositoryImpl
@@ -17,6 +18,8 @@ import com.example.msc_onlab.data.repository.profile.ProfileRepository
 import com.example.msc_onlab.data.repository.profile.ProfileRepositoryImpl
 import com.example.msc_onlab.data.repository.register.RegisterRepository
 import com.example.msc_onlab.data.repository.register.RegisterRepositoryImpl
+import com.example.msc_onlab.data.repository.task.TaskRepository
+import com.example.msc_onlab.data.repository.task.TaskRepositoryImpl
 import com.example.msc_onlab.data.repository.team.TeamRepository
 import com.example.msc_onlab.data.repository.team.TeamRepositoryImpl
 import dagger.Module
@@ -97,6 +100,18 @@ object RepositoryModule {
     ): InvitationRepository {
         return InvitationRepositoryImpl(
             api = invitationApi,
+            app = app
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideTaskRepository(
+        taskApi: TaskApi,
+        app: Application
+    ): TaskRepository {
+        return TaskRepositoryImpl(
+            api = taskApi,
             app = app
         )
     }

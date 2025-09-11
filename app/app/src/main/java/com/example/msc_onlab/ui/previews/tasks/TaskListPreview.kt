@@ -24,7 +24,7 @@ private fun TaskListPreview() {
         Column {
             TaskBriefListItem(
                 title = "Wash the dishes",
-                id = "",
+                id = 0,
                 dueDate = "2024.06.12",
                 isDone = false,
                 onEdit = { id, title -> },
@@ -35,7 +35,7 @@ private fun TaskListPreview() {
 
             TaskBriefListItem(
                 title = "Wash the dishes",
-                id = "",
+                id = 0,
                 dueDate = "2024.06.16",
                 isDone = true,
                 onEdit = { id, title -> },

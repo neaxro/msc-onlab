@@ -5,7 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.msc_onlab.data.model.household.HouseholdTasksResponse
 import com.example.msc_onlab.data.model.household.getPathData
+import com.example.msc_onlab.data.model.task.v2.GetTasksResponseItem
+import com.example.msc_onlab.data.model.task.v2.TasksResponse
 import com.example.msc_onlab.data.repository.household.HouseholdRepository
+import com.example.msc_onlab.data.repository.task.TaskRepository
 import com.example.msc_onlab.domain.wrappers.Resource
 import com.example.msc_onlab.domain.wrappers.ScreenState
 import com.example.msc_onlab.helpers.LoggedPersonData
@@ -19,20 +22,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TasksViewModel @Inject constructor(
-    private val householdRepository: HouseholdRepository,
+    private val taskRepository: TaskRepository,
     private val applicationContext: Context
 ) : ViewModel() {
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.Loading())
     val screenState = _screenState.asStateFlow()
 
-    private val _tasks = MutableStateFlow<HouseholdTasksResponse?>(null)
+    private val _tasks = MutableStateFlow<List<GetTasksResponseItem>>(listOf())
     val tasks = _tasks.asStateFlow()
 
     private val _taskActionData = MutableStateFlow<TaskActionData>(TaskActionData())
     val taskActionData = _taskActionData.asStateFlow()
 
     init {
-        if(LoggedPersonData.SELECTED_HOUSEHOLD_ID != null) {
+        if(LoggedPersonData.SELECTED_TEAM_ID != null) {
             loadTasks()
         }
     }
@@ -41,7 +44,7 @@ class TasksViewModel @Inject constructor(
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            var result = householdRepository.getTasks(householdId = LoggedPersonData.SELECTED_HOUSEHOLD_ID!!)
+            val result = taskRepository.getTasks(LoggedPersonData.SELECTED_TEAM_ID!!)
 
             when(result){
                 is Resource.Success -> {
@@ -56,10 +59,9 @@ class TasksViewModel @Inject constructor(
         }
     }
 
-
-
-    private fun updateTask(taskId: String, state: Boolean){
+    private fun updateTask(taskId: Int, state: Boolean){
         _screenState.value = ScreenState.Loading()
+        /*
 
         viewModelScope.launch(Dispatchers.IO) {
             var result = householdRepository.patchTask(
@@ -86,6 +88,7 @@ class TasksViewModel @Inject constructor(
                 }
             }
         }
+         */
     }
 
     fun evoke(action: TasksAction){
@@ -101,7 +104,7 @@ class TasksViewModel @Inject constructor(
 }
 
 sealed class TasksAction{
-    data class UpdateTask(val taskId: String, val state: Boolean): TasksAction()
+    data class UpdateTask(val taskId: Int, val state: Boolean): TasksAction()
 }
 
 data class TaskActionData(

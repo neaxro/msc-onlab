@@ -26,7 +26,7 @@ sealed class AppScreens {
     object Profile : AppScreens()
 
     @Serializable
-    data class EditTask(val taskId: String) : AppScreens()
+    data class EditTask(val taskId: Int) : AppScreens()
 
     @Serializable
     object CreateTask : AppScreens()
