@@ -3,6 +3,12 @@ package com.example.msc_onlab.ui.feature.common
 import android.content.res.Resources.Theme
 import android.graphics.Picture
 import android.widget.Space
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,6 +17,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,26 +26,38 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.People
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
@@ -45,6 +65,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,6 +79,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TaskBriefListItem(
     task: GetTasksResponseItem,
@@ -65,6 +87,12 @@ fun TaskBriefListItem(
     onClick: (Int, Boolean) -> Unit,
 ){
     val profilePicture = "default"
+    var showDetails by rememberSaveable { mutableStateOf(false) }
+    val rotation by animateFloatAsState(
+        targetValue = if (showDetails) 90f else 0f,
+        label = "arrowRotation"
+    )
+
 
     Column (
         modifier = Modifier
@@ -78,18 +106,33 @@ fun TaskBriefListItem(
         Row(
             verticalAlignment = Alignment.Top
         ) {
-
-            Card(
-                modifier = Modifier.size(48.dp),
-                shape = CircleShape,
-                elevation = CardDefaults.elevatedCardElevation(2.dp)
+            Column (
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Image(
-                    painter = painterResource(id = ResourceLocator.getProfilePicture(profilePicture)),
-                    contentDescription = "Profile picture",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
+                Card(
+                    modifier = Modifier.size(48.dp),
+                    shape = CircleShape,
+                    elevation = CardDefaults.elevatedCardElevation(2.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = ResourceLocator.getProfilePicture(profilePicture)),
+                        contentDescription = "Profile picture",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                if(task.subtasks.isNotEmpty()) {
+                    IconButton(
+                        onClick = { showDetails = !showDetails }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowRight,
+                            contentDescription = null,
+                            modifier = Modifier.rotate(rotation)
+                        )
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.padding(horizontal = 10.dp))
@@ -117,6 +160,30 @@ fun TaskBriefListItem(
                     SubtaskBadge(task.subtasks.count { it.done }, task.subtasks.count())
                 }
 
+                AnimatedVisibility(
+                    visible = showDetails,
+                    enter = expandVertically() + fadeIn(),
+                    exit = shrinkVertically() + fadeOut()
+                ) {
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 5.dp)
+                    ) {
+                        FlowRow(
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            task.subtasks.forEach { subtask ->
+                                SubtaskChip(
+                                    title = subtask.title,
+                                    done = subtask.done,
+                                    modifier = Modifier.padding(3.dp)
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -143,6 +210,55 @@ fun ListItemDetail(
         )
     }
 }
+
+@Composable
+fun SubtaskChip(
+    title: String,
+    done: Boolean = false,
+    modifier: Modifier = Modifier
+) {
+    val bgColor = if (done) {
+        MaterialTheme.colorScheme.primaryContainer
+    } else {
+        MaterialTheme.colorScheme.errorContainer
+    }
+    val contentColor = if (done) {
+        MaterialTheme.colorScheme.onPrimaryContainer
+    } else {
+        MaterialTheme.colorScheme.onErrorContainer
+    }
+
+    Surface(
+        shape = RoundedCornerShape(5.dp),
+        color = bgColor,
+        modifier = modifier,
+        tonalElevation = if (done) 2.dp else 0.dp,
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 2.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            if (done) {
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = null,
+                    tint = contentColor,
+                    modifier = Modifier.size(12.dp)
+                )
+            }
+            Text(
+                text = title,
+                fontSize = 10.sp,
+                color = contentColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
 
 @Composable
 fun StatusBadge(
@@ -235,15 +351,30 @@ fun BadgePreview(){
         "DONE",
     )
 
+    val subtasks = listOf(
+        "subtask_1","subtask_5",
+        "subtask_2","subtask_6",
+        "subtask_3","subtask_7",
+        "subtask_4","subtask_8",
+    )
 
-    LazyColumn(
+    Row(
         modifier = Modifier.fillMaxSize()
     ) {
-        items(statuses){
-            StatusBadge(
-                status = it,
-                modifier = Modifier.padding(10.dp)
-            )
+        LazyColumn(
+        ) {
+            items(statuses){
+                StatusBadge(
+                    status = it,
+                    modifier = Modifier.padding(10.dp)
+                )
+            }
+        }
+
+        Column {
+            subtasks.forEach { s ->
+                SubtaskChip(s, done = true, modifier = Modifier.padding(5.dp))
+            }
         }
     }
 }
