@@ -67,7 +67,7 @@ fun CreateTaskScreen(
     Scaffold(
         topBar = {
             MyTopAppBar(
-                title = if(task.title.isNotEmpty()) task.title else "Create task",
+                title = task.title.ifEmpty { "Create task" },
                 screenState = viewModel.screenState.collectAsState(),
             )
         },
@@ -161,7 +161,7 @@ fun CreateTaskScreen(
                                 onClick = {
                                     controller?.hide()
                                     viewModel.evoke(CreateTasksAction.CreateTask)
-                                    // onNavigateBack()
+                                    onNavigateBack()
                                 },
                                 modifier = Modifier.width(250.dp),
                                 shape = Shapes.small,

@@ -34,13 +34,8 @@ class TasksViewModel @Inject constructor(
     private val _taskActionData = MutableStateFlow<TaskActionData>(TaskActionData())
     val taskActionData = _taskActionData.asStateFlow()
 
-    init {
-        if(LoggedPersonData.SELECTED_TEAM_ID != null) {
-            loadTasks()
-        }
-    }
-
     private fun loadTasks(){
+        LoggedPersonData.SELECTED_TEAM_ID ?: return
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -100,12 +95,17 @@ class TasksViewModel @Inject constructor(
                     state = action.state
                 )
             }
+
+            TasksAction.LoadTasks -> {
+                loadTasks()
+            }
         }
     }
 }
 
 sealed class TasksAction{
     data class UpdateTask(val taskId: Int, val state: Boolean): TasksAction()
+    object LoadTasks: TasksAction()
 }
 
 data class TaskActionData(

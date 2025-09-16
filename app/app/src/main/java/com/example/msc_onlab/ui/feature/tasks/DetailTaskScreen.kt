@@ -73,7 +73,7 @@ fun EditTaskScreen(
     val teamInfo = viewModel.teamInfo.collectAsState().value
     val errors = viewModel.errors.collectAsState().value
 
-    var selectedTabIndex by rememberSaveable { mutableStateOf<TaskEditPage>(TaskEditPage.SubtasksPage) }
+    var selectedTabIndex by rememberSaveable { mutableStateOf<TaskEditPage>(TaskEditPage.EditPage) }
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(

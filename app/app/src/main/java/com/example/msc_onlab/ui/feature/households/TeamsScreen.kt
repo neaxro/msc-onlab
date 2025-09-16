@@ -152,8 +152,8 @@ fun Teams(
                                 },
                                 onClick = { id ->
                                     viewModel.evoke(TeamAction.SelectTeam(id))
-                                    //onNavigateToTasks()       // TODO("Uncomment when safe")
-                                },
+                                    onNavigateToTasks()
+                                }
                             )
                             if(teams.last() != team){
                                 HorizontalDivider(modifier = Modifier.scale(0.9f))

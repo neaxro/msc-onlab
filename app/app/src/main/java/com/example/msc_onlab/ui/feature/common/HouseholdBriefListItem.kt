@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.msc_onlab.helpers.LoggedPersonData
 
 @Composable
 fun TeamBriefListItem(
@@ -36,10 +37,19 @@ fun TeamBriefListItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column {
-            Text(
-                text = title,
-                fontSize = 20.sp
-            )
+            if (LoggedPersonData.SELECTED_TEAM_ID == id){
+                Text(
+                    text = title,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            else {
+                Text(
+                    text = title,
+                    fontSize = 20.sp
+                )
+            }
             Spacer(modifier = Modifier.padding(vertical = 3.dp))
             Text(
                 text = description,

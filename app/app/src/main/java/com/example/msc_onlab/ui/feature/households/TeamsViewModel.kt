@@ -231,6 +231,7 @@ class TeamsViewModel @Inject constructor(
 
         _screenState.value = ScreenState.Loading()
         LoggedPersonData.SELECTED_TEAM_ID = teamId
+        _teamActionData.update { it.copy(selectedId = teamId) }
         _screenState.value = ScreenState.Success(message = "Team selected!", show = false)
     }
 }
@@ -258,6 +259,7 @@ data class TeamActionData(
     val showDeleteDialog: Boolean = false,
     val showCreateDialog: Boolean = false,
     val id: Int = 0,
+    val selectedId: Int = LoggedPersonData.SELECTED_TEAM_ID ?: -1,
     val title: String = "",
     val description: String = "",
 )
