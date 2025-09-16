@@ -63,7 +63,12 @@ class MembersViewModel @Inject constructor(
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val user = invitationRepository.findUser(username).data!!
+            val user = invitationRepository.findUser(username).data
+
+            if (user == null) {
+                _screenState.value = ScreenState.Error(message = "User not found!", show = true)
+                return@launch
+            }
 
             val invitationData = InvitationCreateData(
                 invited_user_id = user.id,
