@@ -5,22 +5,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.RemoveCircleOutline
 import androidx.compose.material.icons.rounded.TaskAlt
 import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -55,7 +49,7 @@ import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
 import com.example.msc_onlab.ui.feature.common.SmartOutlinedTextField
 import com.example.msc_onlab.ui.feature.common.StatusDropDownMenu
-import com.example.msc_onlab.ui.feature.common.SubtaskBriefListItem
+import com.example.msc_onlab.ui.feature.tasks.subtask.ViewSubtasksScreen
 import com.example.msc_onlab.ui.theme.MsconlabTheme
 import com.example.msc_onlab.ui.theme.Shapes
 
@@ -212,45 +206,12 @@ fun EditTaskScreen(
                         }
                     }
                     TaskEditPage.SubtasksPage -> {
-                        if(task.subtasks.isNotEmpty()) {
-                            LazyColumn(
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                items(task.subtasks) { subtask ->
-                                    SubtaskBriefListItem(
-                                        id = subtask.id,
-                                        isDone = subtask.done,
-                                        title = subtask.title,
-                                        onDoneButton = { id, isDone ->
-                                            viewModel.evoke(
-                                                EditTasksAction.ChangeSubtaskStatus(
-                                                    subtaskId = id,
-                                                    status = isDone
-                                                )
-                                            )
-                                        },
-                                        onDelete = { id ->
-                                            viewModel.evoke(EditTasksAction.DeleteSubtask(subtaskId = id))
-                                        }
-                                    )
-
-                                    if (task.subtasks.last() != subtask) {
-                                        HorizontalDivider()
-                                    }
-                                }
+                        ViewSubtasksScreen(
+                            task = task,
+                            requestRefresh = {
+                                viewModel.evoke(EditTasksAction.LoadTask)
                             }
-                        }
-                        else{
-                            Box(
-                                modifier = Modifier.fillMaxSize()
-                            ){
-                                Text(
-                                    text = "There are no subtasks for this task",
-                                    fontWeight = FontWeight.Light,
-                                    modifier = Modifier.align(Alignment.Center)
-                                )
-                            }
-                        }
+                        )
                     }
                 }
             }

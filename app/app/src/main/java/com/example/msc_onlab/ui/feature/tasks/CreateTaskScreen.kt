@@ -8,16 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -39,13 +34,12 @@ import com.example.msc_onlab.helpers.Constants
 import com.example.msc_onlab.helpers.isError
 import com.example.msc_onlab.ui.feature.common.AddNewSubtaskItem
 import com.example.msc_onlab.ui.feature.common.DatePickerDocked
-import com.example.msc_onlab.ui.feature.common.DeleteDialog
 import com.example.msc_onlab.ui.feature.common.MemberDropDownMenu
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
 import com.example.msc_onlab.ui.feature.common.SmartOutlinedTextField
-import com.example.msc_onlab.ui.feature.common.SubtaskBriefListItem
 import com.example.msc_onlab.ui.feature.common.SubtaskCreateListItem
+import com.example.msc_onlab.ui.feature.tasks.subtask.CreateSubtaskDialog
 import com.example.msc_onlab.ui.theme.Shapes
 
 @Composable

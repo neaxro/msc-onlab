@@ -4,6 +4,9 @@ import com.example.msc_onlab.data.model.task.v2.GetTasksResponseItem
 import com.example.msc_onlab.data.model.task.v2.TasksResponse
 import com.example.msc_onlab.data.model.task.v2.create.CreateTaskData
 import com.example.msc_onlab.data.model.task.v2.create.CreateTaskResponse
+import com.example.msc_onlab.data.model.task.v2.subtask.CreateSubtaskData
+import com.example.msc_onlab.data.model.task.v2.subtask.CreateSubtaskResponse
+import com.example.msc_onlab.data.model.task.v2.subtask.UpdateSubtaskData
 import com.example.msc_onlab.data.model.task.v2.update.UpdateTaskData
 import com.example.msc_onlab.helpers.LoggedPersonData
 import retrofit2.Response
@@ -52,5 +55,26 @@ interface TaskApi {
     suspend fun deleteTask(
         @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
         @Path("task_id") taskId: Int
+    ): Response<Unit>
+
+    @Headers("Content-Type: application/json")
+    @POST("/task/subtasks")
+    suspend fun createSubtask(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Body subtask: CreateSubtaskData
+    ): Response<CreateSubtaskResponse>
+
+    @Headers("Content-Type: application/json")
+    @PATCH("/task/subtasks")
+    suspend fun updateSubtask(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Body updateData: UpdateSubtaskData
+    ): Response<Unit>
+
+    @Headers("Content-Type: application/json")
+    @DELETE("/task/subtasks/{subtask_id}")
+    suspend fun deleteSubtask(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Path("subtask_id") subtaskId: Int
     ): Response<Unit>
 }

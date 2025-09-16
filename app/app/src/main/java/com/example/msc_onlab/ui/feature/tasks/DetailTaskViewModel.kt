@@ -282,6 +282,10 @@ class EditTaskViewModel @Inject constructor(
                 val selectedStatus = _teamInfo.value?.statuses?.first { status -> status.id == action.statusId }
                 _task.update { it?.copy(status = selectedStatus!!.name) }
             }
+
+            EditTasksAction.LoadTask -> {
+                getTask(taskId)
+            }
         }
     }
 }
@@ -296,6 +300,7 @@ sealed class EditTasksAction{
     data class DeleteSubtask(val subtaskId: Int) : EditTasksAction()
     object SaveTask : EditTasksAction()
     object DeleteTask : EditTasksAction()
+    object LoadTask : EditTasksAction()
 }
 
 data class EditTaskFieldErrors(

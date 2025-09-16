@@ -1,4 +1,4 @@
-package com.example.msc_onlab.ui.feature.tasks
+package com.example.msc_onlab.ui.feature.tasks.subtask
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

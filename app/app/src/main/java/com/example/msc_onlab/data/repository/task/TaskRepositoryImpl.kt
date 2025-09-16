@@ -5,6 +5,9 @@ import com.example.msc_onlab.data.model.task.v2.GetTasksResponseItem
 import com.example.msc_onlab.data.model.task.v2.TasksResponse
 import com.example.msc_onlab.data.model.task.v2.create.CreateTaskData
 import com.example.msc_onlab.data.model.task.v2.create.CreateTaskResponse
+import com.example.msc_onlab.data.model.task.v2.subtask.CreateSubtaskData
+import com.example.msc_onlab.data.model.task.v2.subtask.CreateSubtaskResponse
+import com.example.msc_onlab.data.model.task.v2.subtask.UpdateSubtaskData
 import com.example.msc_onlab.data.model.task.v2.transformDate
 import com.example.msc_onlab.data.model.task.v2.update.UpdateTaskData
 import com.example.msc_onlab.data.remote.TaskApi
@@ -114,6 +117,72 @@ class TaskRepositoryImpl(
             // Check server response
             val res = if(response.code() == 204){
                 Resource.Success(message = "Successfully deleted task!", data = Unit)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result
+    }
+
+    override suspend fun createSubtask(subtask: CreateSubtaskData): Resource<CreateSubtaskResponse> {
+        val result = try{
+            val response = api.createSubtask(subtask = subtask)
+
+            // Check server response
+            val res = if(response.code() == 201){
+                Resource.Success(message = "Successfully created new subtask!", data = response.body()!!)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result
+    }
+
+    override suspend fun updateSubtask(updateSubtaskData: UpdateSubtaskData): Resource<Unit> {
+        val result = try{
+            val response = api.updateSubtask(updateData = updateSubtaskData)
+
+            // Check server response
+            val res = if(response.code() == 204){
+                Resource.Success(message = "Successfully updated subtask!", data = Unit)
+            }
+            else{
+                // Server error
+                Resource.Error(message = response.errorBody()!!.string())
+            }
+
+            res
+        } catch (e: Exception){
+            // Network error
+            Resource.Error("Network error occurred.")
+        }
+
+        return result
+    }
+
+    override suspend fun deleteSubtask(subtaskId: Int): Resource<Unit> {
+        val result = try{
+            val response = api.deleteSubtask(subtaskId = subtaskId)
+
+            // Check server response
+            val res = if(response.code() == 204){
+                Resource.Success(message = "Successfully deleted subtask!", data = Unit)
             }
             else{
                 // Server error

@@ -44,7 +44,6 @@ fun SubtaskBriefListItem(
 ){
     Row(
         modifier = Modifier
-            .clickable { }
             .fillMaxWidth()
             .padding(10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
