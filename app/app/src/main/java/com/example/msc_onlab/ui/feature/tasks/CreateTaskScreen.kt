@@ -38,6 +38,7 @@ import com.example.msc_onlab.ui.feature.common.MemberDropDownMenu
 import com.example.msc_onlab.ui.feature.common.MySnackBarHost
 import com.example.msc_onlab.ui.feature.common.MyTopAppBar
 import com.example.msc_onlab.ui.feature.common.SmartOutlinedTextField
+import com.example.msc_onlab.ui.feature.common.SubtaskBriefListItem
 import com.example.msc_onlab.ui.feature.common.SubtaskCreateListItem
 import com.example.msc_onlab.ui.feature.tasks.subtask.CreateSubtaskDialog
 import com.example.msc_onlab.ui.theme.Shapes
@@ -178,6 +179,18 @@ fun CreateTaskScreen(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 itemsIndexed(task.subtasks) { index, subtask ->
+                                    SubtaskBriefListItem(
+                                        id = index,
+                                        isDone = subtask.done,
+                                        title = subtask.title,
+                                        onDoneButton = { id, isDone ->
+                                            viewModel.evoke(CreateTasksAction.UpdateSubtask(id, isDone))
+                                        },
+                                        onDelete = { id ->
+                                            viewModel.evoke(CreateTasksAction.DeleteSubtask(id))
+                                        }
+                                    )
+                                    /*
                                     SubtaskCreateListItem(
                                         number = index,
                                         title = subtask.title,
@@ -185,6 +198,8 @@ fun CreateTaskScreen(
                                             viewModel.evoke(CreateTasksAction.DeleteSubtask(id))
                                         }
                                     )
+
+                                     */
 
                                     if (task.subtasks.last() != subtask) {
                                         HorizontalDivider()

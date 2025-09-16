@@ -11,6 +11,7 @@ import com.example.msc_onlab.data.repository.team.TeamRepository
 import com.example.msc_onlab.domain.wrappers.Resource
 import com.example.msc_onlab.domain.wrappers.ScreenState
 import com.example.msc_onlab.helpers.DataFieldErrors
+import com.example.msc_onlab.helpers.DataFieldErrors.*
 import com.example.msc_onlab.helpers.LoggedPersonData
 import com.example.msc_onlab.helpers.or
 import com.example.msc_onlab.helpers.validateTaskDescription
@@ -128,7 +129,7 @@ class CreateTaskViewModel @Inject constructor(
                 _errors.update {
                     it.copy(
                         dueDate = if (action.dueDate.isEmpty()) {
-                            DataFieldErrors.TaskError("Cannot be empty!")
+                            TaskError("Cannot be empty!")
                         }
                         else{
                             DataFieldErrors.NoError
@@ -169,6 +170,32 @@ class CreateTaskViewModel @Inject constructor(
             CreateTasksAction.CreateTask -> {
                 createTask()
             }
+
+            is CreateTasksAction.UpdateSubtask -> {
+                val newSubtasks = _task.value.subtasks.toMutableList()
+                newSubtasks[action.number] = newSubtasks[action.number].copy(done = action.isDone)
+
+                _task.update {
+                    it.copy(subtasks = newSubtasks)
+                }
+            }
+
+/*
+            is CreateTasksAction.UpdateSubtask -> {
+                val subtask = _task.value.subtasks[action.number]
+                val subtasks = _task.value.subtasks.filterIndexed { index, subtask ->
+                    index != action.number
+                }
+                val newSubtasks = listOf(*subtasks.toTypedArray(), subtask.copy(done = action.isDone))
+
+                _task.update {
+                    it.copy(
+                        subtasks = newSubtasks
+                    )
+                }
+            }
+
+ */
         }
     }
 }
@@ -180,6 +207,7 @@ sealed class CreateTasksAction {
     data class UpdateDescription(val description: String) : CreateTasksAction()
     data class AddSubtask(val name: String) : CreateTasksAction()
     data class DeleteSubtask(val number: Int) : CreateTasksAction()
+    data class UpdateSubtask(val number: Int, val isDone: Boolean) : CreateTasksAction()
     object CreateTask : CreateTasksAction()
 }
 
