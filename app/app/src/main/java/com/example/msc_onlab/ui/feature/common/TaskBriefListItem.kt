@@ -178,7 +178,7 @@ fun TaskBriefListItem(
                                 SubtaskChip(
                                     title = subtask.title,
                                     done = subtask.done,
-                                    modifier = Modifier.padding(3.dp)
+                                    modifier = Modifier.padding(end = 3.dp, bottom = 3.dp)
                                 )
                             }
                         }
