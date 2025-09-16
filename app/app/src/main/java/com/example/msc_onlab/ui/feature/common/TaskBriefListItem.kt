@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
@@ -107,7 +108,15 @@ fun TaskBriefListItem(
                 ListItemDetail("Due date", task.due_date)
 
                 Spacer(modifier = Modifier.padding(vertical = 3.dp))
-                StatusBadge(task.status)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    StatusBadge(task.status)
+                    SubtaskBadge(task.subtasks.count { it.done }, task.subtasks.count())
+                }
+
             }
         }
     }
@@ -163,6 +172,32 @@ fun StatusBadge(
         )
     }
 }
+
+@Composable
+fun SubtaskBadge(
+    numDone: Int,
+    numTotal: Int,
+    modifier: Modifier = Modifier
+) {
+    val ratio = if (numTotal > 0) numDone.toFloat() / numTotal else 1f
+    val color = lerp(Color.Gray, Color(0xFF4CAF50), ratio.coerceIn(0f, 1f))
+
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .size(width = 50.dp, height = 25.dp)
+            .clip(RoundedCornerShape(5.dp))
+            .background(color = color)
+    ) {
+        Text(
+            text = "$numDone / $numTotal",
+            fontWeight = FontWeight.Normal,
+            color = Color.White
+        )
+    }
+}
+
 
 
 @Composable
