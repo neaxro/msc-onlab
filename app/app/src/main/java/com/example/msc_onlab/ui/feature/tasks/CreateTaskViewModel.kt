@@ -179,23 +179,6 @@ class CreateTaskViewModel @Inject constructor(
                     it.copy(subtasks = newSubtasks)
                 }
             }
-
-/*
-            is CreateTasksAction.UpdateSubtask -> {
-                val subtask = _task.value.subtasks[action.number]
-                val subtasks = _task.value.subtasks.filterIndexed { index, subtask ->
-                    index != action.number
-                }
-                val newSubtasks = listOf(*subtasks.toTypedArray(), subtask.copy(done = action.isDone))
-
-                _task.update {
-                    it.copy(
-                        subtasks = newSubtasks
-                    )
-                }
-            }
-
- */
         }
     }
 }
