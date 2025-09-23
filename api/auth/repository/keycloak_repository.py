@@ -28,20 +28,28 @@ class KeycloakRepository:
         token = self.keycloak_openid.token(username, password)
         return token
 
-    def register(self, first_name, last_name, email, username, password):
-        user_id = self.keycloak_admin.create_user(
-            {
-                "username": username,
-                "email": email,
-                "firstName": first_name,
-                "lastName": last_name,
-                "enabled": True,
-                "emailVerified": True,
-                "credentials": [
-                    {"type": "password", "value": password, "temporary": False}
-                ],
-            }
-        )
+    def register(
+        self,
+        first_name,
+        last_name,
+        email,
+        username,
+        password,
+        profile_picture="default",
+    ):
+        user_data = {
+            "username": username,
+            "email": email,
+            "firstName": first_name,
+            "lastName": last_name,
+            "enabled": True,
+            "emailVerified": True,
+            "attributes": {"locale": [""], "profilePicture": [profile_picture]},
+            "credentials": [
+                {"type": "password", "value": password, "temporary": False}
+            ],
+        }
+        user_id = self.keycloak_admin.create_user(user_data)
 
         return user_id
 
@@ -62,20 +70,21 @@ class KeycloakRepository:
 
         return user
 
-    def modify_user(self, user_id, first_name, last_name, email, password):
-        response = self.keycloak_admin.update_user(
-            user_id,
-            {
-                "email": email,
-                "firstName": first_name,
-                "lastName": last_name,
-                "enabled": True,
-                "emailVerified": True,
-                "credentials": [
-                    {"type": "password", "value": password, "temporary": False}
-                ],
-            },
-        )
+    def modify_user(
+        self, user_id, first_name, last_name, email, password, profile_picture
+    ):
+        user_data = {
+            "email": email,
+            "firstName": first_name,
+            "lastName": last_name,
+            "enabled": True,
+            "emailVerified": True,
+            "attributes": {"locale": [""], "profilePicture": [profile_picture]},
+            "credentials": [
+                {"type": "password", "value": password, "temporary": False}
+            ],
+        }
+        response = self.keycloak_admin.update_user(user_id, user_data)
 
         return response
 

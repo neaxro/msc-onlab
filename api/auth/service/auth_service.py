@@ -23,6 +23,7 @@ class AuthService:
         email = data.get("email")
         username = data.get("username")
         password = data.get("password")
+        profile_picture = data.get("profile_picture")
 
         if not all([first_name, last_name, email, username, password]):
             raise Exception(f'Missing fields for "{username}" user.')
@@ -33,6 +34,7 @@ class AuthService:
             email=email,
             username=username,
             password=password,
+            profile_picture=profile_picture if profile_picture else "default",
         )
 
     def get_user_by_id(self, user_id, metadata=False):
@@ -60,8 +62,9 @@ class AuthService:
         email = data.get("email")
         username = data.get("username")
         password = data.get("password")
+        profile_picture = data.get("profile_picture")
 
-        if not all([first_name, last_name, email, password]):
+        if not all([first_name, last_name, email, password, profile_picture]):
             raise Exception(f'Missing fields for "{username}" user.')
 
         return self.keycloak_repository.modify_user(
@@ -70,6 +73,7 @@ class AuthService:
             last_name=last_name,
             email=email,
             password=password,
+            profile_picture=profile_picture,
         )
 
     def enable_user(self, user_id):
