@@ -71,6 +71,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.msc_onlab.R
 import com.example.msc_onlab.data.model.household.HouseholdsBrief
+import com.example.msc_onlab.data.model.profile.Attributes
 import com.example.msc_onlab.data.model.task.v2.GetTasksResponseItem
 import com.example.msc_onlab.data.model.task.v2.Responsible
 import com.example.msc_onlab.helpers.ResourceLocator
@@ -85,7 +86,7 @@ fun TaskBriefListItem(
     task: GetTasksResponseItem,
     onEdit: (Int, String) -> Unit,
 ){
-    val profilePicture = "default"
+    val profilePicture = task.responsible.attributes.profilePicture.firstOrNull() ?: "default"
     var showDetails by rememberSaveable { mutableStateOf(false) }
     val rotation by animateFloatAsState(
         targetValue = if (showDetails) 90f else 0f,
@@ -318,7 +319,7 @@ fun SubtaskBadge(
 @Composable
 @Preview(showBackground = true)
 fun TaskBriefListItemPreview(){
-    val r = Responsible(listOf(), "asd@foo.bar", true, true, "Bob", "a213l123lk213", "Anderson", 0, listOf(), true, "bob")
+    val r = Responsible(Attributes(listOf("default")),listOf(), "asd@foo.bar", true, true, "Bob", "a213l123lk213", "Anderson", 0, listOf(), true, "bob")
     val t = listOf(
         GetTasksResponseItem("Sun, 16 Nov 2025 00:00:00 GMT", "Some description", "Sun, 16 Nov 2025 00:00:00 GMT", 1, r, "TODO", subtasks = listOf(), team_id = 0, "Test Task Test Task Test TaskTest Task"),
         GetTasksResponseItem("Sun, 16 Nov 2025 00:00:00 GMT", "Some description", "Sun, 16 Nov 2025 00:00:00 GMT", 1, r, "IN PROGRESS", subtasks = listOf(), team_id = 0, "Test Task"),

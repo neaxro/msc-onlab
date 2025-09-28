@@ -1,6 +1,7 @@
 package com.example.msc_onlab.data.model.profile
 
 data class GetProfileResponse(
+    val attributes: Attributes,
     val disableableCredentialTypes: List<Any>,
     val email: String,
     val emailVerified: Boolean,

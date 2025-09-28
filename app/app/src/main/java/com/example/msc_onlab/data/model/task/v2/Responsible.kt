@@ -1,6 +1,9 @@
 package com.example.msc_onlab.data.model.task.v2
 
+import com.example.msc_onlab.data.model.profile.Attributes
+
 data class Responsible(
+    val attributes: Attributes,
     val disableableCredentialTypes: List<Any>,
     val email: String,
     val emailVerified: Boolean,

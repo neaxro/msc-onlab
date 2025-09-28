@@ -114,7 +114,7 @@ fun MembersScreen(
                         firstName = member.firstName,
                         lastName = member.lastName,
                         email = member.email,
-                        responsibleProfilePictureName = "default"
+                        responsibleProfilePictureName = member.attributes.profilePicture.firstOrNull() ?: "default"
                     )
                     if(members.last() != member){
                         HorizontalDivider(modifier = Modifier.scale(0.9f))

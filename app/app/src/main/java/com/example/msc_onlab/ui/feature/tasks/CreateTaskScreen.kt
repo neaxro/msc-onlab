@@ -190,16 +190,6 @@ fun CreateTaskScreen(
                                             viewModel.evoke(CreateTasksAction.DeleteSubtask(id))
                                         }
                                     )
-                                    /*
-                                    SubtaskCreateListItem(
-                                        number = index,
-                                        title = subtask.title,
-                                        onDelete = { id ->
-                                            viewModel.evoke(CreateTasksAction.DeleteSubtask(id))
-                                        }
-                                    )
-
-                                     */
 
                                     if (task.subtasks.last() != subtask) {
                                         HorizontalDivider()

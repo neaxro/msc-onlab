@@ -1,6 +1,9 @@
 package com.example.msc_onlab.data.model.invitation
 
+import com.example.msc_onlab.data.model.profile.Attributes
+
 data class Inviter(
+    val attributes: Attributes,
     val disableableCredentialTypes: List<Any>,
     val email: String,
     val emailVerified: Boolean,

@@ -105,8 +105,9 @@ fun MemberDropDownMenu(
                             Card(
                                 modifier = Modifier.size(30.dp),
                             ) {
+                                val profilePicture = member.attributes.profilePicture.firstOrNull() ?: "default"
                                 Image(
-                                    painter = painterResource(id = ResourceLocator.getProfilePicture("default")),
+                                    painter = painterResource(id = ResourceLocator.getProfilePicture(profilePicture)),
                                     contentDescription = "Profile picture",
                                     contentScale = ContentScale.Crop,
                                 )

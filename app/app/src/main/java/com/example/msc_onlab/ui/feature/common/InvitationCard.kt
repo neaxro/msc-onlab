@@ -60,6 +60,7 @@ fun InvitationCard(
     modifier: Modifier = Modifier
 ) {
     val daysLeftBeforeExpiration = calculateDaysUntilExpiration(invitationData.expires)
+    val profilePicture = invitationData.inviter.attributes.profilePicture.firstOrNull() ?: "default"
 
     Card(
         modifier = modifier
@@ -91,7 +92,7 @@ fun InvitationCard(
                     elevation = CardDefaults.elevatedCardElevation(2.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = ResourceLocator.getProfilePicture("default")),
+                        painter = painterResource(id = ResourceLocator.getProfilePicture(profilePicture)),
                         contentDescription = "Profile picture",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()

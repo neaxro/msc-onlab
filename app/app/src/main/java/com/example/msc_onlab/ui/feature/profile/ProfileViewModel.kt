@@ -358,7 +358,7 @@ private fun GetProfileResponse.toTempData(): UpdateProfileTempData{
         email = this.email,
         firstName = this.firstName,
         lastName = this.lastName,
-        profilePicture = "default",
+        profilePicture = this.attributes.profilePicture.firstOrNull() ?: "default",
         username = this.username,
         oldPassword = "",
         newPassword = "",
@@ -372,6 +372,7 @@ private fun UpdateProfileTempData.toUpdateData(isPasswordChange: Boolean): Updat
         email = this.email,
         first_name = this.firstName,
         last_name = this.lastName,
-        password = if(isPasswordChange) this.newPassword else this.oldPassword
+        password = if(isPasswordChange) this.newPassword else this.oldPassword,
+        profile_picture = this.profilePicture
     )
 }

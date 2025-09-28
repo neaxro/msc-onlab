@@ -15,7 +15,7 @@ object LoggedPersonData {
             jwt = JWT(value)
             this.ID = jwt.getClaim("sub").asString()
             this.USERNAME = jwt.getClaim("preferred_username").asString()
-            this.PROFILE_PICTURE = "default"
+            this.PROFILE_PICTURE = jwt.getClaim("profilePicture").asString()
 
             field = value
         }

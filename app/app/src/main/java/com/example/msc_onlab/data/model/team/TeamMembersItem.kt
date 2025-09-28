@@ -1,6 +1,9 @@
 package com.example.msc_onlab.data.model.team
 
+import com.example.msc_onlab.data.model.profile.Attributes
+
 data class TeamMembersItem(
+    val attributes: Attributes,
     val disableableCredentialTypes: List<Any>,
     val email: String,
     val emailVerified: Boolean,

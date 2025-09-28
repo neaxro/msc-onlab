@@ -1,10 +1,12 @@
 package com.example.msc_onlab.data.model.invitation
 
+import com.example.msc_onlab.data.model.profile.Attributes
 import com.example.msc_onlab.data.model.task.v2.Responsible
 import kotlin.Any
 import kotlin.collections.List
 
 data class FindUserResponse(
+    val attributes: Attributes,
     val disableableCredentialTypes: List<Any>,
     val email: String,
     val emailVerified: Boolean,
@@ -30,6 +32,7 @@ fun FindUserResponse.toResponsible(): Responsible {
         notBefore = this.notBefore,
         requiredActions = this.requiredActions,
         totp = this.totp,
-        username = this.username
+        username = this.username,
+        attributes = this.attributes
     )
 }

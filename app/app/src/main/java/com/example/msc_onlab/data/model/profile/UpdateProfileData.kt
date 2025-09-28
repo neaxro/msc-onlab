@@ -5,5 +5,6 @@ data class UpdateProfileData(
     val first_name: String,
     val last_name: String,
     val password: String,
-    val username: String
+    val username: String,
+    val profile_picture: String,
 )
