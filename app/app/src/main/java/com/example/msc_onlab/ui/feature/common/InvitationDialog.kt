@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.House
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -35,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.msc_onlab.helpers.Constants
 import com.example.msc_onlab.helpers.DataFieldErrors
-import com.example.msc_onlab.helpers.validateHouseholdName
 import com.example.msc_onlab.helpers.validateUsername
 import com.example.msc_onlab.ui.theme.MsconlabTheme
 import com.example.msc_onlab.ui.theme.Shapes

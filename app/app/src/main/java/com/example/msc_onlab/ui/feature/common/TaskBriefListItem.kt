@@ -84,7 +84,6 @@ import java.util.Locale
 fun TaskBriefListItem(
     task: GetTasksResponseItem,
     onEdit: (Int, String) -> Unit,
-    onClick: (Int, Boolean) -> Unit,
 ){
     val profilePicture = "default"
     var showDetails by rememberSaveable { mutableStateOf(false) }
@@ -334,7 +333,6 @@ fun TaskBriefListItemPreview(){
             TaskBriefListItem(
                 task = it,
                 onEdit = {a, b -> },
-                onClick = {a, b -> }
             )
         }
     }

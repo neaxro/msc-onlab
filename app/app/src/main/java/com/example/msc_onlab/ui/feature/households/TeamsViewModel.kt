@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.msc_onlab.data.model.household.HouseholdCreateData
+import com.example.msc_onlab.data.model.team.CreateTeamData
 import com.example.msc_onlab.data.model.team.TeamUpdate
 import com.example.msc_onlab.data.model.team.TeamsBrief
 import com.example.msc_onlab.data.repository.household.HouseholdRepository
@@ -38,7 +39,7 @@ class TeamsViewModel @Inject constructor(
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            var result = teamRepository.getAllTeams()
+            val result = teamRepository.getAllTeams()
 
             when(result){
                 is Resource.Success -> {
@@ -64,7 +65,7 @@ class TeamsViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            var result = teamRepository.updateTeam(id, data)
+            val result = teamRepository.updateTeam(id, data)
 
             when(result){
                 is Resource.Success -> {
@@ -81,16 +82,16 @@ class TeamsViewModel @Inject constructor(
         }
     }
 
-    private fun createHousehold(title: String){
-        val householdData = HouseholdCreateData(title = title)
+    private fun createTeam(title: String){
+        val createData = CreateTeamData(name = title, description = "")
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            var result = householdRepository.createHousehold(newHouseholdData = householdData)
+            val result = teamRepository.createTeam(createData)
 
             when(result){
                 is Resource.Success -> {
-                    _screenState.value = ScreenState.Success(message = "Household created!", show = true)
+                    _screenState.value = ScreenState.Success(message = "Team created!", show = true)
                     val resultData = result.data!!
 
                     // Refresh list
@@ -103,11 +104,11 @@ class TeamsViewModel @Inject constructor(
         }
     }
 
-    private fun deleteHousehold(){
+    private fun deleteTeam(){
         _screenState.value = ScreenState.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
-            var result = teamRepository.deleteTeam(_teamActionData.value.id)
+            val result = teamRepository.deleteTeam(_teamActionData.value.id)
 
             when(result){
                 is Resource.Success -> {
@@ -144,13 +145,13 @@ class TeamsViewModel @Inject constructor(
                 }
             }
 
-            is TeamAction.CreateHousehold -> {
+            is TeamAction.CreateTeam -> {
                 _teamActionData.update {
                     it.copy(
                         showCreateDialog = false
                     )
                 }
-                createHousehold(title = action.title)
+                createTeam(title = action.title)
             }
 
             is TeamAction.ShowSheet -> {
@@ -217,7 +218,7 @@ class TeamsViewModel @Inject constructor(
                     )
                 }
 
-                deleteHousehold()
+                deleteTeam()
             }
 
             TeamAction.LoadTeams -> {
@@ -246,7 +247,7 @@ sealed class TeamAction{
     data class EditTeam(val newTitle: String, val newDescription: String) : TeamAction()
     object ShowCreateDialog : TeamAction()
     object HideCreateDialog : TeamAction()
-    data class CreateHousehold(val title: String) : TeamAction()
+    data class CreateTeam(val title: String) : TeamAction()
     object ShowDeleteDialog : TeamAction()
     object HideDeleteDialog : TeamAction()
     object DeleteTeam : TeamAction()

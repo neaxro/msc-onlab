@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.msc_onlab.helpers.Constants
 import com.example.msc_onlab.helpers.DataFieldErrors
-import com.example.msc_onlab.helpers.validateHouseholdName
+import com.example.msc_onlab.helpers.validateTeamdName
 import com.example.msc_onlab.ui.feature.common.SmartOutlinedTextField
 
 @Composable
@@ -91,7 +91,7 @@ fun CreateSubtaskDialog(
                         )
                     },
                     onValueChange = {
-                        val error = validateHouseholdName(householdName = it, context = context)
+                        val error = validateTeamdName(teamName = it, context = context)
                         isError = error !is DataFieldErrors.NoError
                         errorMessage = error.message
 

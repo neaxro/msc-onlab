@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Groups
 import androidx.compose.material.icons.rounded.House
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
@@ -30,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.msc_onlab.helpers.Constants
 import com.example.msc_onlab.helpers.DataFieldErrors
-import com.example.msc_onlab.helpers.validateHouseholdName
+import com.example.msc_onlab.helpers.validateTeamdName
 import com.example.msc_onlab.ui.feature.common.SmartOutlinedTextField
 
 @Composable
@@ -66,7 +67,7 @@ fun CreateTeamDialog(
                     verticalArrangement = Arrangement.Top
                 ) {
                     Text(
-                        text = "Create household",
+                        text = "Create team",
                         fontWeight = FontWeight.Bold
                     )
                     HorizontalDivider(modifier = Modifier.scale(0.9f))
@@ -78,12 +79,12 @@ fun CreateTeamDialog(
                     value = title,
                     label = {
                         Icon(
-                            imageVector = Icons.Rounded.House,
-                            contentDescription = "Household name"
+                            imageVector = Icons.Rounded.Groups,
+                            contentDescription = "Team name"
                         )
                     },
                     onValueChange = {
-                        val error = validateHouseholdName(householdName = it, context = context)
+                        val error = validateTeamdName(teamName = it, context = context)
                         isError = error !is DataFieldErrors.NoError
                         errorMessage = error.message
 

@@ -81,8 +81,8 @@ class TeamService:
 
     def insert(self, data, user_data):
         # Check data before creating anything
-        if not data["name"] or not data["description"]:
-            raise Exception("Name and description are required")
+        if not data["name"]:
+            raise Exception("Name is required")
 
         # Check for existing team
         existing_team = self.__get_by_name(data["name"])

@@ -60,12 +60,12 @@ fun validateLastname(lastname: String, @ApplicationContext context: Context): Da
     return DataFieldErrors.NoError
 }
 
-fun validateHouseholdName(householdName: String, @ApplicationContext context: Context): DataFieldErrors {
-    if(householdName.isEmpty()) return DataFieldErrors.HouseholdError("Household name cannot be empty!")
-    if(householdName.length < Constants.MIN_TEAM_NAME_LENGTH) return DataFieldErrors.HouseholdError("Household name is too short!")
-    if(householdName.length > Constants.MAX_TEAM_NAME_LENGTH) return DataFieldErrors.HouseholdError("Household name is too long!")
-    if(containsNumbers(householdName)) return DataFieldErrors.HouseholdError("Household name cannot contain numbers!")
-    if(containsSpecialCharacters(householdName)) return DataFieldErrors.HouseholdError("Household name cannot contain special characters!")
+fun validateTeamdName(teamName: String, @ApplicationContext context: Context): DataFieldErrors {
+    if(teamName.isEmpty()) return DataFieldErrors.TeamError("Team name cannot be empty!")
+    if(teamName.length < Constants.MIN_TEAM_NAME_LENGTH) return DataFieldErrors.TeamError("Team name is too short!")
+    if(teamName.length > Constants.MAX_TEAM_NAME_LENGTH) return DataFieldErrors.TeamError("Team name is too long!")
+    if(containsNumbers(teamName)) return DataFieldErrors.TeamError("Team name cannot contain numbers!")
+    if(containsSpecialCharacters(teamName)) return DataFieldErrors.TeamError("Team name cannot contain special characters!")
 
     return DataFieldErrors.NoError
 }
@@ -113,7 +113,7 @@ sealed class DataFieldErrors(val message: String){
     class EmailAddressError(msg: String): DataFieldErrors(message = msg)
     class FirstnameError(msg: String): DataFieldErrors(message = msg)
     class LastnameError(msg: String): DataFieldErrors(message = msg)
-    class HouseholdError(msg: String): DataFieldErrors(message = msg)
+    class TeamError(msg: String): DataFieldErrors(message = msg)
     class TaskError(msg: String): DataFieldErrors(message = msg)
 
 }

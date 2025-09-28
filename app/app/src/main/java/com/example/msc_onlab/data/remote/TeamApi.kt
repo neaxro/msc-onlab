@@ -1,21 +1,7 @@
 package com.example.msc_onlab.data.remote
 
-import com.example.msc_onlab.data.model.household.HouseholdCreateData
-import com.example.msc_onlab.data.model.household.HouseholdCreateResponse
-import com.example.msc_onlab.data.model.household.HouseholdDeleteResponse
-import com.example.msc_onlab.data.model.household.HouseholdDetailedResponse
-import com.example.msc_onlab.data.model.household.HouseholdMembersResponse
-import com.example.msc_onlab.data.model.household.HouseholdTasksResponse
-import com.example.msc_onlab.data.model.household.HouseholdsBrief
-import com.example.msc_onlab.data.model.household.HouseholdUpdateData
-import com.example.msc_onlab.data.model.household.HouseholdUpdateResponse
-import com.example.msc_onlab.data.model.members.MembersResponse
-import com.example.msc_onlab.data.model.task.TaskDeleteResponse
-import com.example.msc_onlab.data.model.task.TaskResponse
-import com.example.msc_onlab.data.model.task.create.CreateTaskData
-import com.example.msc_onlab.data.model.task.create.CreateTaskResponse
-import com.example.msc_onlab.data.model.task.patch.TaskPatchData
-import com.example.msc_onlab.data.model.task.patch.TaskPatchResponse
+import com.example.msc_onlab.data.model.team.CreateTeamData
+import com.example.msc_onlab.data.model.team.CreateTeamResponse
 import com.example.msc_onlab.data.model.team.TeamDeleteResponse
 import com.example.msc_onlab.data.model.team.TeamInfo
 import com.example.msc_onlab.data.model.team.TeamMembers
@@ -56,8 +42,15 @@ interface TeamApi {
     ): Response<TeamMembers>
 
     @Headers("Content-Type: application/json")
+    @POST("/team/teams")
+    suspend fun createTeam(
+        @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
+        @Body data: CreateTeamData
+    ): Response<CreateTeamResponse>
+
+    @Headers("Content-Type: application/json")
     @PATCH("/team/teams/{id}")
-    suspend fun updateHousehold(
+    suspend fun updateTeam(
         @Header("Authorization") token: String = "Bearer ${LoggedPersonData.TOKEN}",
         @Path("id") id: Int,
         @Body teamUpdate: TeamUpdate

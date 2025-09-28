@@ -56,9 +56,7 @@ fun TasksScreen(
     val lazyListState = rememberLazyListState()
 
     val tasks = viewModel.tasks.collectAsState().value
-    val tasksActionData = viewModel.taskActionData.collectAsState().value
 
-    val sheetState = rememberModalBottomSheetState()
 
     val isFabVisible = rememberSaveable { mutableStateOf(true) }
     val nestedScrollConnection = remember {
@@ -125,12 +123,6 @@ fun TasksScreen(
                             task = task,
                             onEdit = { id, title ->
                                 onEdit(id)
-                            },
-                            onClick = { id, newState ->
-                                viewModel.evoke(TasksAction.UpdateTask(
-                                    taskId = id,
-                                    state = newState
-                                ))
                             }
                         )
                         if(tasks.last() != task){

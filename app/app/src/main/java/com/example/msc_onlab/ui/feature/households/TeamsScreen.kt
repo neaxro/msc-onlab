@@ -198,7 +198,7 @@ fun Teams(
                     viewModel.evoke(TeamAction.HideCreateDialog)
                 },
                 onConfirmation = { title ->
-                    viewModel.evoke(TeamAction.CreateHousehold(title))
+                    viewModel.evoke(TeamAction.CreateTeam(title))
                 }
             )
         }
