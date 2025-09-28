@@ -56,6 +56,7 @@ class InvitationsViewModel @Inject constructor(
             when(result){
                 is Resource.Success -> {
                     _screenState.value = ScreenState.Success()
+                    loadInvitations()
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
@@ -73,6 +74,7 @@ class InvitationsViewModel @Inject constructor(
             when(result){
                 is Resource.Success -> {
                     _screenState.value = ScreenState.Success()
+                    loadInvitations()
                 }
                 is Resource.Error -> {
                     _screenState.value = ScreenState.Error(message = result.message!!)
@@ -89,12 +91,10 @@ class InvitationsViewModel @Inject constructor(
 
             is InvitationAction.AcceptInvite -> {
                 acceptInvitation(action.invitationToken)
-                loadInvitations()
             }
 
             is InvitationAction.DeclineInvite -> {
                 declineInvitation(action.invitationToken)
-                loadInvitations()
             }
         }
     }

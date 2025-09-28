@@ -25,12 +25,12 @@ fun InvitationsScreen(
     modifier: Modifier = Modifier
 ) {
     val lazyListState = rememberLazyListState()
+    val invitations = viewModel.invitations.collectAsState().value
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(invitations) {
         viewModel.evoke(InvitationAction.LoadInvitations)
     }
 
-    val invitations = viewModel.invitations.collectAsState().value
     if(invitations.isEmpty()) {
         Box(
             modifier = Modifier

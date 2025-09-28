@@ -7,7 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.msc_onlab.ui.feature.households.Teams
+import com.example.msc_onlab.ui.feature.teams.Teams
 import com.example.msc_onlab.ui.feature.members.MembersScreen
 import com.example.msc_onlab.ui.feature.profile.ProfileScreen
 import com.example.msc_onlab.ui.feature.tasks.CreateTaskScreen

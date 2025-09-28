@@ -1,4 +1,4 @@
-package com.example.msc_onlab.ui.feature.households
+package com.example.msc_onlab.ui.feature.teams
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -62,7 +62,7 @@ fun Teams(
     val teams = viewModel.teams.collectAsState().value
     val teamActionData = viewModel.teamActionData.collectAsState().value
 
-    var selectedTabIndex by rememberSaveable { mutableStateOf<TeamsPage>(TeamsPage.Households) }
+    var selectedTabIndex by rememberSaveable { mutableStateOf<TeamsPage>(TeamsPage.Teams) }
 
     // Bottom Sheet
     val sheetState = rememberModalBottomSheetState()
@@ -84,10 +84,6 @@ fun Teams(
                 return Offset.Zero
             }
         }
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.evoke(TeamAction.LoadTeams)
     }
 
     Scaffold(
@@ -133,7 +129,8 @@ fun Teams(
             }
 
             when(selectedTabIndex){
-                TeamsPage.Households -> {
+                TeamsPage.Teams -> {
+                    viewModel.evoke(TeamAction.LoadTeams)
                     if (teams != null && teams.isNotEmpty()) {
                     LazyColumn(
                         modifier = Modifier
@@ -224,6 +221,6 @@ fun Teams(
 }
 
 private enum class TeamsPage(val title: String, val icon: ImageVector){
-    Households("Teams", Icons.Rounded.TaskAlt),
+    Teams("Teams", Icons.Rounded.TaskAlt),
     Invitations("Invitations", Icons.Rounded.Edit),
 }

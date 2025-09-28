@@ -1,4 +1,4 @@
-package com.example.msc_onlab.ui.feature.households
+package com.example.msc_onlab.ui.feature.teams
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

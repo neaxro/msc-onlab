@@ -1,9 +1,8 @@
-package com.example.msc_onlab.ui.feature.households
+package com.example.msc_onlab.ui.feature.teams
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.msc_onlab.data.model.household.HouseholdCreateData
 import com.example.msc_onlab.data.model.team.CreateTeamData
 import com.example.msc_onlab.data.model.team.TeamUpdate
 import com.example.msc_onlab.data.model.team.TeamsBrief
