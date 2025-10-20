@@ -137,7 +137,7 @@ fun TasksScreen(
                         .fillMaxSize()
                 ) {
                     Text(
-                        text = "There is no task in household.",
+                        text = "There is no task in team.",
                         fontWeight = FontWeight.Light,
                         modifier = Modifier.align(Alignment.Center),
                     )
