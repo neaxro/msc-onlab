@@ -2,6 +2,7 @@ Flask
 Flask-RESTful
 pytest
 pytest-cov
+pytest-mock
 coveralls
 python-keycloak
 prometheus-client

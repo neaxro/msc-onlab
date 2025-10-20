@@ -7,3 +7,7 @@ python-keycloak
 prometheus-client
 gunicorn
 pymysql
+pytest
+pytest-mock
+pytest-cov
+faker
