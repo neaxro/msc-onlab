@@ -1,0 +1,40 @@
+(axel@pc-ubuntu)[~/git/msc-onlab] (microservices) $ k6 run k6/monolit/post_tasks.js 
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+     execution: local
+        script: k6/monolit/post_tasks.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 30 max VUs, 1m15s max duration (incl. graceful stop):
+              * default: 30 looping VUs for 45s (gracefulStop: 30s)
+
+
+     ✓ status 200
+     ✓ status field correct
+
+     checks.........................: 100.00% 1584 out of 1584
+     data_received..................: 189 kB  4.1 kB/s
+     data_sent......................: 543 kB  12 kB/s
+     http_req_blocked...............: avg=1.67ms   min=2.64µs   med=4.67µs  max=47.82ms  p(90)=6.19µs  p(95)=9.79µs 
+     http_req_connecting............: avg=855.14µs min=0s       med=0s      max=26.28ms  p(90)=0s      p(95)=0s     
+     http_req_duration..............: avg=1.23s    min=256.98ms med=1.19s   max=3.03s    p(90)=1.62s   p(95)=1.71s  
+       { expected_response:true }...: avg=1.23s    min=256.98ms med=1.19s   max=3.03s    p(90)=1.62s   p(95)=1.71s  
+     http_req_failed................: 0.00%   0 out of 792
+     http_req_receiving.............: avg=77.19µs  min=21.98µs  med=41.34µs max=16.46ms  p(90)=54.66µs p(95)=60.21µs
+     http_req_sending...............: avg=21.34µs  min=7.86µs   med=19.75µs max=106.75µs p(90)=27.26µs p(95)=31.89µs
+     http_req_tls_handshaking.......: avg=0s       min=0s       med=0s      max=0s       p(90)=0s      p(95)=0s     
+     http_req_waiting...............: avg=1.23s    min=256.79ms med=1.19s   max=3.03s    p(90)=1.62s   p(95)=1.71s  
+     http_reqs......................: 792     17.109567/s
+     iteration_duration.............: avg=1.73s    min=793.87ms med=1.69s   max=3.58s    p(90)=2.12s   p(95)=2.21s  
+     iterations.....................: 792     17.109567/s
+     vus............................: 10      min=10           max=30
+     vus_max........................: 30      min=30           max=30
+
+
+running (0m46.3s), 00/30 VUs, 792 complete and 0 interrupted iterations
+default ✓ [======================================] 30 VUs  45s

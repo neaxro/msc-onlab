@@ -1,0 +1,42 @@
+axel@pc-ubuntu)[~/git/msc-onlab] (microservices) $ k6 run k6/microservice/post_tasks.js 
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+     execution: local
+        script: k6/microservice/post_tasks.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 30 max VUs, 1m15s max duration (incl. graceful stop):
+              * default: 30 looping VUs for 45s (gracefulStop: 30s)
+
+
+     ✗ status 200
+      ↳  86% — ✓ 87 / ✗ 14
+     ✗ message correct
+      ↳  86% — ✓ 87 / ✗ 14
+
+     checks.........................: 86.13% 174 out of 202
+     data_received..................: 34 kB  502 B/s
+     data_sent......................: 197 kB 2.9 kB/s
+     http_req_blocked...............: avg=13.26ms min=2.76µs   med=5.9µs   max=47.27ms  p(90)=46.34ms p(95)=46.79ms
+     http_req_connecting............: avg=7.09ms  min=0s       med=0s      max=25.99ms  p(90)=25.48ms p(95)=25.57ms
+     http_req_duration..............: avg=16.84s  min=33.42ms  med=17.5s   max=45.5s    p(90)=34.07s  p(95)=38.2s  
+       { expected_response:true }...: avg=16.82s  min=1.06s    med=15.92s  max=45.5s    p(90)=35.36s  p(95)=38.2s  
+     http_req_failed................: 13.86% 14 out of 101
+     http_req_receiving.............: avg=58.41µs min=25.64µs  med=57.45µs max=117.75µs p(90)=74.3µs  p(95)=85.7µs 
+     http_req_sending...............: avg=31.55µs min=11.06µs  med=26.26µs max=104.06µs p(90)=49.23µs p(95)=69.77µs
+     http_req_tls_handshaking.......: avg=0s      min=0s       med=0s      max=0s       p(90)=0s      p(95)=0s     
+     http_req_waiting...............: avg=16.84s  min=33.35ms  med=17.5s   max=45.5s    p(90)=34.07s  p(95)=38.2s  
+     http_reqs......................: 101    1.508069/s
+     iteration_duration.............: avg=17.36s  min=534.12ms med=18s     max=46s      p(90)=34.57s  p(95)=38.7s  
+     iterations.....................: 101    1.508069/s
+     vus............................: 3      min=3          max=30
+     vus_max........................: 30     min=30         max=30
+
+
+running (1m07.0s), 00/30 VUs, 101 complete and 0 interrupted iterations
+default ✓ [======================================] 30 VUs  45s
